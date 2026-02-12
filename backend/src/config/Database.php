@@ -6,12 +6,10 @@ use PDO;
 class Database {
     public static function connect(): PDO {
         return new PDO(
-            "mysql:host=localhost;dbname=quizforge;charset=utf8",
-            "quizforge",
-            "qf2025*",
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]
+            "mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8",
+            $_ENV['DB_USER'],
+            $_ENV['DB_PASS'],
+            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
     }
 }
