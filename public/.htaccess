@@ -1,0 +1,10 @@
+RewriteEngine On
+
+# API → Slim
+RewriteCond %{REQUEST_URI} ^/api
+RewriteRule ^api/?(.*)$ /quizforge/backend/public/index.php [L,QSA]
+
+# Vue SPA fallback
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
