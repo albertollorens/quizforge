@@ -37,7 +37,7 @@ jobs:
           cp -r backend/* deploy/
           
           # Mover contenido de public a raíz
-          cp -r backend/public/* deploy/
+          cp -r backend/public/. deploy/
           
           # Eliminar carpeta public duplicada
           rm -rf deploy/public
@@ -77,3 +77,4 @@ jobs:
           package: .
 
           
+
