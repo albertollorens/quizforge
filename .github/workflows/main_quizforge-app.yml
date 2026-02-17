@@ -21,40 +21,34 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          # Mejor usar una versión estable compatible con Azure
+          php-version: '8.2'
 
       - name: Install backend dependencies
+        working-directory: ./backend
         run: |
-          cd backend
           composer install --no-dev --optimize-autoloader
-          
-      - name: Install frontend deps
+
+      - name: Install frontend deps and build
+        working-directory: ./frontend
         run: |
-          cd frontend
           npm install
           npm run build
 
       # -------- PREPARE DEPLOY --------
       - name: Prepare deploy folder
         run: |
+          # Crear carpeta de despliegue
           mkdir deploy
-          
-          # Copiar todo backend
-          cp -r backend/* deploy/
-          
-          # Mover contenido de public a raíz
-          cp -r backend/public/. deploy/
-          
-          # Eliminar carpeta public duplicada
-          rm -rf deploy/public
 
-      - name: Prepare artifacts
-        run: |
-          mkdir -p app
-          cp -R public/* app/ || true        # si tienes public/ estático
-          cp -R frontend/dist/* app/
-          cp -R backend app/backend
-          # aquí también podrías copiar web.config o .htaccess a app/
+          # Copiar TODO el backend tal cual (incluye public, vendor, src, etc.)
+          cp -r backend/* deploy/
+
+          # (Opcional pero recomendado) Sobrescribir el contenido de public
+          # con el build del frontend para servir el SPA desde Slim.
+          # Primero vaciamos public/, luego copiamos dist:
+          rm -rf deploy/public/*
+          cp -r frontend/dist/* deploy/public/
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
@@ -89,7 +83,3 @@ jobs:
           app-name: 'quizforge-app'
           slot-name: 'Production'
           package: .
-
-          
-
-
