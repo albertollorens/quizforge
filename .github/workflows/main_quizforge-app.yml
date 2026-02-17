@@ -27,6 +27,12 @@ jobs:
         run: |
           cd backend
           composer install --no-dev --optimize-autoloader
+          
+      - name: Install frontend deps
+        run: |
+          cd frontend
+          npm install
+          npm run build
 
       # -------- PREPARE DEPLOY --------
       - name: Prepare deploy folder
@@ -41,6 +47,14 @@ jobs:
           
           # Eliminar carpeta public duplicada
           rm -rf deploy/public
+
+      - name: Prepare artifacts
+        run: |
+          mkdir -p app
+          cp -R public/* app/ || true        # si tienes public/ estático
+          cp -R frontend/dist/* app/
+          cp -R backend app/backend
+          # aquí también podrías copiar web.config o .htaccess a app/
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
@@ -77,4 +91,5 @@ jobs:
           package: .
 
           
+
 
