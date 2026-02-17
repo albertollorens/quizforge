@@ -38,17 +38,22 @@ jobs:
       # -------- PREPARE DEPLOY --------
       - name: Prepare deploy folder
         run: |
-          # Crear carpeta de despliegue
-          mkdir deploy
+          # Crear carpetas base en deploy
+          mkdir -p deploy/backend
+          mkdir -p deploy/public
 
-          # Copiar TODO el backend tal cual (incluye public, vendor, src, etc.)
+          # Copiar TODO el backend (incluye public, vendor, src, etc.) en deploy/backend
           cp -r backend/* deploy/backend/
+      
+          # Copiar contenido de la carpeta public raíz del repo (si existe)
+          # Esto mantiene lo que ya tuvieras en public/ en local (index.html, .htaccess, etc.)
+          if [ -d "public" ]; then
+            cp -r public/* deploy/public/
+          fi
 
-          # (Opcional pero recomendado) Sobrescribir el contenido de public
-          # con el build del frontend para servir el SPA desde Slim.
-          # Primero vaciamos public/, luego copiamos dist:
-          rm -rf deploy/public/*
+          # Copiar el build del frontend (Vite) dentro de deploy/public (wwwroot/public en Azure)
           cp -r frontend/dist/* deploy/public/
+
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
@@ -83,4 +88,5 @@ jobs:
           app-name: 'quizforge-app'
           slot-name: 'Production'
           package: .
+
 
