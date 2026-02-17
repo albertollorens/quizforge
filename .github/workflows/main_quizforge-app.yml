@@ -42,7 +42,7 @@ jobs:
           mkdir deploy
 
           # Copiar TODO el backend tal cual (incluye public, vendor, src, etc.)
-          cp -r backend/* deploy/
+          cp -r backend/* deploy/backend/
 
           # (Opcional pero recomendado) Sobrescribir el contenido de public
           # con el build del frontend para servir el SPA desde Slim.
@@ -83,3 +83,4 @@ jobs:
           app-name: 'quizforge-app'
           slot-name: 'Production'
           package: .
+
