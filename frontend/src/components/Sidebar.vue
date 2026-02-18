@@ -1,6 +1,6 @@
 <template>
   <nav class="bg-dark text-white p-3" style="width: 250px;">
-    <img src="/logo.png" width="150px"/>
+    <img :src="logo" width="150px"/>
     <!--
     <h4 class="text-center mb-4">QuizForge</h4>
     -->
@@ -27,6 +27,7 @@
 
 <script setup>
 import router from '../router'
+import logo from '@/assets/logo.png'
 
 const logout = () => {
   localStorage.removeItem('token')
