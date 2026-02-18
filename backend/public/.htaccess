@@ -1,5 +1,13 @@
 RewriteEngine On
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+# 1️⃣ Rutes API → Slim
+RewriteCond %{REQUEST_URI} ^/api
+RewriteRule ^api/(.*)$ index.php [QSA,L]
+
+# 2️⃣ Fitxers existents (JS, CSS, assets)
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 3️⃣ Vue SPA fallback (totes les altres rutes)
+RewriteRule . /index.html [L]

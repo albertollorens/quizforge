@@ -1,0 +1,293 @@
+CONFIGURACIÓ APP quizforge
+
+Entorn:
+	local
+SO: 
+	Windows 10
+Servidor: 
+	Wampserver 3.4.0
+	Apache 2.4.65
+	PHP 8.3.28
+	MySQL 8.4.7
+
+1.- Configurar alias localhost en C:\Windows\SYstem32\drivers\etc\hosts:
+	┌─────────────────────────┐
+	|127.0.0.1 quizforge.local|
+	└─────────────────────────┘
+
+2.- Configurar un VirtualHost a htppd-vhosts.conf d'Apache perquè apunte al directori public del backend:
+   ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+	<VirtualHost *:80>
+		ServerName quizforge.local
+		DocumentRoot "d:/OneDrive - Conselleria d'Educació/Docent/Formació/DAW/2on CURS/PFC/quizforge/backend/public"
+
+		<Directory "d:/OneDrive - Conselleria d'Educació/Docent/Formació/DAW/2on CURS/PFC/quizforge/backend/public">
+			Options Indexes FollowSymLinks
+			AllowOverride All
+			Require all granted
+		</Directory>
+		
+		ErrorLog "logs/quizforge-error.log"
+		CustomLog "logs/quizforge-access.log" common
+	</VirtualHost>
+   └─────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+	*************************************************************************************
+	*  Anem a servir el frontend (Vue + Vite) compilat des del directori backend/public *
+	*  que és on està definit el DocumentRoot d'Apache									*
+	*************************************************************************************
+
+3.- Estructura de projecte
+	projecte-app/	
+			backend/									
+					public/								
+							index.php 					=> Punt d'entrada del backend. Inicialitza Slim, carrega middlewares (CORS, body parser) i registra rutes.
+							assets/						=> Còpia compilada del frontend							
+							index.html					=> App Vue
+							favicon.ico
+							logo.png
+					src/								=> Slim + PHP + MySQL
+							config/
+									Database.php		=> Configuració i creació de la connexió PDO a MySQL.
+									Settings.php		=> Guarda configuració global (secret JWT, paràmetres generals).
+							Controllers/
+									LoginController.php => Controlador d'autenticació: login, registre i generació de JWT.
+							Middleware/
+									AuthMiddleware.php  => Middleware que valida el JWT en rutes protegides
+									CORSMiddleware.php  => Permet cridaes des de Vue (mateix domini localhost)
+							Models/
+									User.php			=> Model d'usuari. Accés a dades de la taula users.
+							routes/
+									api.php				=> Definició de rutes REST (/login, /register, /dashboard) i vinculació amb controladors.
+					vendor/
+							llibreries...
+							autoload.php				=> Autocàrrega de classes PHP gestionada per Composer.
+					.env
+					composer.json						=> Defineix dependèncias PHP (Slim, PSR-7, JWT) i autoloading.
+					composer.lock
+			database/
+					projecte-db.sql
+			frontend/									=> Vue + Vite
+					dist/								=> Vue compilat
+					node_modules/
+					src/
+						services/
+								authservice.js			=> Configuració base d' Axios (URL backend, token JWT).
+						router/
+								index.js				=> Definició de rutes i protecció mitjançant guards.
+						App.vue							=> Component arrel. Conté layout principal.
+						main.js 						=> Inici de Vue, càrrega Bootstrap i router
+					index.html
+					package-lock.json
+					package.json						=> Dependèncias JS (Vue, Bootstrap, Axios…).
+					vite.config.js						=> Configuració del bundler Vite.
+			.gitignore
+			README.md
+			
+	Aclaracions:
+		Axios		=> El frontend es comunica amb el backend mitjançant peticions HTTP REST.
+		JWT			=> El backend emet un token JWT després del login i el frontend l'emmagatzema i reutilitza.
+		Middleware	=> El backend valida el JWT abans de permitre accés a rutes protegides.
+		CORS		=> Permet comunicació entre localhost:5173 (Vue) y localhost:8080 (Slim). (ESBORRAR, ja no és necessari)
+
+	Rutes API/REST:
+		POST 	/api/login
+		POST 	/api/register
+		GET  	/api/dashboard  	(con JWT)
+		GET  	/api/quizzes    	(con JWT)
+		POST 	/api/quizzes   		(con JWT)
+		PUT	 	/api/quizzes/{id}   (con JWT)
+		DELETE	/api/quizzes/{id}   (con JWT)
+		GET		/quizzes/{id}/export/gift	Exportar GIFT
+		GET		/quizzes/{id}/export/xml	Exportar XML
+
+4.- Configuració de la redirecció d'Apache en backend/public/.htaccess:
+   ┌────────────────────────────────────────────┐
+	RewriteEngine On							 
+												 
+	# 1 Rutes API → Slim						 
+	RewriteCond %{REQUEST_URI} ^/api			 
+	RewriteRule ^api/(.*)$ index.php [QSA,L]	 
+												 
+	# 2 Fitxers existents (JS, CSS, assets)		 
+	RewriteCond %{REQUEST_FILENAME} -f [OR]		 
+	RewriteCond %{REQUEST_FILENAME} -d			 
+	RewriteRule ^ - [L]							 
+												 
+	# 3 Vue SPA fallback (totes les altres rutes)
+	RewriteRule . /index.html [L]				 
+   └────────────────────────────────────────────┘
+
+5.- Esquema inici:
+	Navegador
+		│
+		▼
+	http://quizforge.local
+		│  Apache → public/index.html
+		▼
+	index.html
+		│  main.js → createApp + router
+		▼
+	Vue App
+		│  rutas definidas en router/index.js
+		▼
+	/       → redirige a /login
+	/login  → renderiza Login.vue
+
+6.- Diagrama de flux login:
+	1️.- Usuari obri el navegador
+	   http://quizforge.local/
+			│
+			▼
+	2️.- Apache serveix index.html (Vue SPA)
+			│
+			▼
+	3️.- main.js → createApp + router
+			│
+			▼
+	4️.- Vue Router avalua la ruta "/"
+			│
+			└─> redirigeix automàticament a "/login"
+					│
+					▼
+	5️.- Renderitza Login.vue
+	   (Formulari amb email + contrasenya)
+			│
+			▼
+	6️.- L’usuari ompli el formulari i prem "Entrar"
+			│
+			▼
+	7️.- Mètode login() en Login.vue
+	   ┌───────────────────────────────────────────────┐
+	   │ Axios POST /api/login                         │
+	   │ body: { email: "usuari", password: "..." }    │
+	   └───────────────────────────────────────────────┘
+			│
+			▼
+	8️.- El backend Slim rep la petició POST /api/login
+	   (D:\...\quizforge\backend\public\index.php)
+			│
+			▼
+	9️.- AuthController verifica les credencials en MySQL
+	   ┌──────────────────────────────┐
+	   │ SELECT * FROM users WHERE    │
+	   │ email = ? AND password = ?   │
+	   └──────────────────────────────┘
+			│
+			├─ credencials correctes
+			│      ▼
+			│  Retorna JSON:
+			│  { success: true, token: "JWT..." }
+			│
+			└─ credencials incorrectes
+				   ▼
+			  Retorna JSON:
+			  { success: false, error: "Credencials incorrectes" }
+			│
+			▼
+	10.- Vue rep la resposta en Axios
+			│
+			├─ success = true → guarda el token en localStorage
+			│                  → Vue Router redirigeix a "/dashboard"
+			│
+			└─ success = false → mostra missatge d’error en Login.vue
+			▼
+	11.- L’usuari veu Dashboard.vue o el missatge d’error
+
+7.- Fitxers importants per ordre d'execució: 
+	=> Fitxers principals de l’aplicació QuizForge, ordenats segons el flux d’execució des que l’usuari accedeix al sistema 
+	fins que es processa una petició al backend.
+	
+	1️.- backend/public/index.html => És el primer fitxer que serveix Apache quan l’usuari accedeix a: http://quizforge.local/
+		Aquest fitxer correspon a la SPA (Single Page Application) generada amb Vue després de la compilació (npm run build).
+		Conté:
+			El contenidor principal <div id="app"></div>
+			L’enllaç als fitxers JavaScript i CSS compilats dins /assets
+			La càrrega del mòdul principal de Vue
+		=>La seua funció és inicialitzar l’aplicació frontend.
+
+	2.- frontend/src/main.js => És el punt d’entrada del frontend Vue.
+		Funcions principals:
+			Crear la instància de Vue amb createApp()
+			Registrar el router
+			Muntar l’aplicació en el contenidor #app
+		Exemple funcional:
+			createApp(App)
+				.use(router)
+				.mount('#app')
+		=>Aquest fitxer inicia el cicle de vida de la SPA.
+
+	3.- frontend/src/router/index.js => Gestiona la navegació interna de l’aplicació mitjançant Vue Router.
+		Funcionalitats:
+			Definició de rutes públiques (/login, /register)
+			Definició de rutes protegides (/dashboard)
+			Guard global (beforeEach) que verifica si l’usuari està autenticat mitjançant JWT
+		=>Aquest fitxer determina quina vista es renderitza segons la URL.
+
+	4.- frontend/src/views/Login.vue => Component encarregat de mostrar el formulari d’autenticació.
+		Funcions principals:
+			Recollir email i contrasenya
+			Executar el mètode login()
+			Mostrar missatges d’error en cas de credencials incorrectes
+			Redirigir a /dashboard si el login és correcte
+		=>És el primer component interactiu que utilitza l’usuari.
+
+	5.- frontend/src/services/authService.js => Servei encarregat de la comunicació amb el backend.
+		Funcions:
+			Realitzar peticions HTTP amb Axios (POST /api/login)
+			Guardar el token JWT en localStorage
+			Recuperar l’usuari autenticat
+			Verificar si existeix sessió activa
+		=>Actua com a capa intermèdia entre els components Vue i el backend.
+
+	6.- backend/public/index.php => És el punt d’entrada del backend construït amb Slim Framework.
+		Funcionalitats:
+			Carregar dependències amb Composer
+			Configurar middlewares:
+				BodyParsingMiddleware (processament JSON)
+				RoutingMiddleware
+				ErrorMiddleware
+			Registrar rutes definides en src/routes/api.php
+			Executar l’aplicació amb $app->run()
+		=>Aquest fitxer rep totes les peticions dirigides a /api/*.
+
+	7.- backend/src/routes/api.php => Defineix les rutes REST de l’aplicació.
+		Exemples:
+			POST /api/login
+			POST /api/register
+			GET /api/quizzes (protegida amb JWT)
+		=>Agrupa les rutes sota el prefix /api i aplica middleware d’autenticació quan és necessari.
+
+	8.- backend/src/Controllers/LoginController.php => Controlador responsable de la lògica d’autenticació.
+		Funcions:
+			Rebre dades del formulari (email i contrasenya)
+			Validar credencials
+			Generar token JWT en cas d’èxit
+			Retornar resposta JSON
+		=>Gestiona la lògica de negoci relacionada amb l’accés d’usuaris.
+
+	9.- backend/src/Models/User.php => Model encarregat de la interacció amb la base de dades.
+		Funcions:
+			Executar consultes SQL (SELECT, INSERT)
+			Buscar usuari per email
+			Validar credencials
+		=>Separa l’accés a dades de la lògica del controlador.
+
+	10.- backend/src/config/Database.php => Classe encarregada de crear la connexió PDO amb MySQL.
+		Funcions:
+			Configurar credencials de connexió
+			Retornar instància PDO
+			Gestionar possibles errors de connexió
+		=>És la base de la capa de persistència.
+
+Resum del flux d’execució:
+1. Apache serveix index.html
+2. Vue inicialitza l’aplicació (main.js)
+3. Vue Router determina la vista (Login.vue)
+4. L’usuari envia el formulari
+5. authService.js envia POST /api/login
+6. index.php (Slim) rep la petició
+7. LoginController valida dades mitjançant User.php
+8. Es retorna JSON amb JWT
+9. Vue guarda el token i redirigeix a /dashboard
+

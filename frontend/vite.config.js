@@ -1,17 +1,25 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  server: {
+  build: {
+    outDir: resolve(__dirname, '../backend/public'),
+    emptyOutDir: true
+  }
+})
+
+
+//Per a treballar amb npm run dev redireccionant les peticions a la api al servidor wamp
+/*server: {
     port: 5173,             // Puerto del frontend dev
     proxy: {
       // Todo lo que vaya a /api será redirigido a Slim
       '/api': {
         target: 'http://quizforge.local', // URL de tu backend Slim
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '/api')
+        //rewrite: path => path.replace(/^\/api/, '/api')
       }
     }
-  }
-})
+  }*/

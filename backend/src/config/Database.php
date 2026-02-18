@@ -2,13 +2,17 @@
 namespace App\Config;
 
 use PDO;
+use Dotenv;
 
 class Database {
     public static function connect(): PDO {
+        // Looing for .env at the root directory
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../', '.env');
+        $dotenv->load(); 
         return new PDO(
-            "mysql:host=" . $_ENV['DB_HOST'] . ";dbname=" . $_ENV['DB_NAME'] . ";charset=utf8",
-            $_ENV['DB_USER'],
-            $_ENV['DB_PASS'],
+            "mysql:host=localhost;dbname=quizforge;charset=utf8",
+            "root",
+            "",
             [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
         );
     }
