@@ -16,50 +16,61 @@ jobs:
       contents: read #This is required for actions/checkout
 
     steps:
+      # 1.- Checkout del codi
       - uses: actions/checkout@v4
 
+      # 2.- Configurar PHP per al backend
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
-        with:
-          # Mejor usar una versión estable compatible con Azure
-          php-version: '8.2'
+        with:          
+          php-version: '8.4'
+          extensions: mbstring, pdo, pdo_mysql
 
+      # 3.- Instal·lar dependèndies PHP
       - name: Install backend dependencies
         working-directory: ./backend
         run: |
           composer install --no-dev --optimize-autoloader
 
-      - name: Install frontend deps and build
+      # 4️.- Configurar Node.js per al frontend
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 5️.- Instal·lar dependències del frontend i compilar
+      - name: Build frontend
         working-directory: ./frontend
         run: |
-          npm install
+          npm ci
           npm run build
 
-      # -------- PREPARE DEPLOY --------
+      # 6.- Preparar carpeta de deploy
       - name: Prepare deploy folder
         run: |
-          # Crear carpetas base en deploy
-          mkdir -p deploy/backend
-          mkdir -p deploy/public
+          # Crear carpeta neta
+          rm -rf deploy
+          mkdir deploy          
 
-          # Copiar TODO el backend (incluye public, vendor, src, etc.) en deploy/backend
-          cp -r backend/* deploy/backend/
-      
-          # Copiar contenido de la carpeta public raíz del repo (si existe)
-          # Esto mantiene lo que ya tuvieras en public/ en local (index.html, .htaccess, etc.)
-          if [ -d "public" ]; then
-            cp -r public/* deploy/public/
-          fi
+          # Copiar contingut backend/public a wwwroot
+          cp -r backend/public/* deploy/
 
-          # Copiar el build del frontend (Vite) dentro de deploy/public (wwwroot/public en Azure)
-          cp -r frontend/dist/* deploy/public/
+          # Copiar src i vendor a wwwroot
+          cp -r backend/src deploy/src
+          cp -r backend/vendor deploy/vendor
 
+          # Copiar fitxers necessaris
+          cp backend/composer.json deploy/
 
+          # Copiar build Vue a wwwroot
+          cp -r frontend/dist/* deploy/
+
+      # 7.- Pujar artifact per al següent job
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
-          name: php-app
-          path: deploy
+          name: quizforge-deploy
+          path: deploy/
 
   deploy:
     runs-on: ubuntu-latest
@@ -69,11 +80,13 @@ jobs:
       contents: read #This is required for actions/checkout
 
     steps:
-      - name: Download artifact from build job
+      # 1.- Descarregar artifact
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: php-app
+          name: quizforge-deploy
       
+      # 2.- Login a Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -81,6 +94,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1CCE4FABA6724660BA3FF7775A65E71C }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9BEB573D34B14D4BBE028AE5C7CBF505 }}
 
+      # 3.- Deploy a Azure App Service
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
@@ -88,5 +102,4 @@ jobs:
           app-name: 'quizforge-app'
           slot-name: 'Production'
           package: .
-
 

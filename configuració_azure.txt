@@ -31,99 +31,118 @@ Servidor: Nginx
 			Versió	  => 8.4
    └─────────────────────────────────────────────────────────────────────────┘
 
-3.- Workflow (pipeline) de Github Actions per a desplegament automàtic en Azure:
+3.- Workflow (pipeline) de Github Actions per a desplegament automàtic en Azure (.github/workflows/main_quizforge-app.yml):
    ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 	# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-	# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More GitHub Actions for Azure: https://github.com/Azure/actions
 
-	name: Build and deploy PHP app to Azure Web App - quizforge-app
+name: Build and deploy PHP app to Azure Web App - quizforge-app
 
-	on:
-	  push:
-		branches:
-		  - main
-	  workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
-	jobs:
-	  build:
-		runs-on: ubuntu-latest
-		permissions:
-		  contents: read #This is required for actions/checkout
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
 
-		steps:
-		  - uses: actions/checkout@v4
+    steps:
+      # 1.- Comprovar el codi
+      - uses: actions/checkout@v4
 
-		  - name: Setup PHP
-			uses: shivammathur/setup-php@v2
-			with:
-			  # Mejor usar una versión estable compatible con Azure
-			  php-version: '8.2'
+      # 2.- Configurar PHP per al backend
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:          
+          php-version: '8.4'
+          extensions: mbstring, pdo, pdo_mysql
 
-		  - name: Install backend dependencies
-			working-directory: ./backend
-			run: |
-			  composer install --no-dev --optimize-autoloader
+      # 3.- Instal·lar dependèndies PHP
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: |
+          composer install --no-dev --optimize-autoloader
 
-		  - name: Install frontend deps and build
-			working-directory: ./frontend
-			run: |
-			  npm install
-			  npm run build
+      # 4️.- Configurar Node.js per al frontend
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-		  # -------- PREPARE DEPLOY --------
-		  - name: Prepare deploy folder
-			run: |
-			  # Crear carpetas base en deploy
-			  mkdir -p deploy/backend
-			  mkdir -p deploy/public
+      # 5️.- Instal·lar dependències del frontend i compilar
+      - name: Build frontend
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
 
-			  # Copiar TODO el backend (incluye public, vendor, src, etc.) en deploy/backend
-			  cp -r backend/* deploy/backend/
-		  
-			  # Copiar contenido de la carpeta public raíz del repo (si existe)
-			  # Esto mantiene lo que ya tuvieras en public/ en local (index.html, .htaccess, etc.)
-			  if [ -d "public" ]; then
-				cp -r public/* deploy/public/
-			  fi
+      # 6.- Preparar carpeta de deploy
+      - name: Prepare deploy folder
+        run: |
+          # Crear carpeta neta
+          rm -rf deploy
+          mkdir -p deploy/backend
+          mkdir -p deploy/public
 
-			  # Copiar el build del frontend (Vite) dentro de deploy/public (wwwroot/public en Azure)
-			  cp -r frontend/dist/* deploy/public/
+          # Copiar backend complet (inclou public, vendor, src, etc.) en deploy/backend
+          cp -r backend/* deploy/backend/          
 
+          # Copiar el build del frontend (Vite) dins de deploy/public (wwwroot/public en Azure)
+          cp -r frontend/dist/* deploy/public/
 
-		  - name: Upload artifact for deployment
-			uses: actions/upload-artifact@v4
-			with:
-			  name: php-app
-			  path: deploy
+      # 7.- Pujar artifact per al següent job
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: quizforge-deploy
+          path: deploy/
 
-	  deploy:
-		runs-on: ubuntu-latest
-		needs: build
-		permissions:
-		  id-token: write #This is required for requesting the JWT
-		  contents: read #This is required for actions/checkout
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
-		steps:
-		  - name: Download artifact from build job
-			uses: actions/download-artifact@v4
-			with:
-			  name: php-app
-		  
-		  - name: Login to Azure
-			uses: azure/login@v2
-			with:
-			  client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_81D8FB210EED4A7F8BCA025B99BEF0D3 }}
-			  tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1CCE4FABA6724660BA3FF7775A65E71C }}
-			  subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9BEB573D34B14D4BBE028AE5C7CBF505 }}
+    steps:
+      # 1.- Descarregar artifact
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: quizforge-deploy
+      
+      # 2.- Login a Azure
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_81D8FB210EED4A7F8BCA025B99BEF0D3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1CCE4FABA6724660BA3FF7775A65E71C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9BEB573D34B14D4BBE028AE5C7CBF505 }}
 
-		  - name: 'Deploy to Azure Web App'
-			uses: azure/webapps-deploy@v3
-			id: deploy-to-webapp
-			with:
-			  app-name: 'quizforge-app'
-			  slot-name: 'Production'
-			  package: .
+      # 3.- Deploy a Azure App Service
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        with:
+          app-name: 'quizforge-app'
+          slot-name: 'Production'
+          package: deploy/
    └───────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+   =>Explicació ràpida:
+		1.- Build frontend: compila Vue amb Vite i genera dist/.
+		2.- Preparar deploy:
+			deploy/backend/ → backend complet amb Slim, vendor/, src/ i public/.
+			deploy/public/ → build de Vue.
+		3.- Upload/download artifact: permet separar build i deploy en jobs diferents.
+		4.- Deploy: Azure Web App rep només la carpeta preparada (deploy/).
+		5.- Secrets necessaris a GitHub: 
+			AZUREAPPSERVICE_CLIENTID
+			AZUREAPPSERVICE_TENANTID
+			AZUREAPPSERVICE_SUBSCRIPTIONID
    
 4.- Configurar .gitignore:
 ┌──────────────────────┐
@@ -147,3 +166,6 @@ vendor/
 .DS_Store
 Thumbs.db
 └──────────────────────┘
+
+5.- A Azure, configura backend/public/ com a document root si vols que Slim interprete /api correctament.
+6.- El .htaccess dins backend/public/ ha de redirigir /api a index.php i servir Vue SPA per la resta de rutes.
