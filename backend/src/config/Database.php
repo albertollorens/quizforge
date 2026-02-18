@@ -19,13 +19,14 @@ class Database {
         $db   = getenv('DB_NAME') ?: 'quizforge';
         $user = getenv('DB_USER') ?: 'quizforgeuser';
         $pass = getenv('DB_PASS') ?: 'qf2025*';
+        $port = getenv('DB_PORT') ?: 3306;
 
         if (!$host || !$db || !$user) {
             throw new Exception("Database configuration incomplete. Check environment variables.");
         }
 
         // ---------- 3. Connexió PDO ----------
-        $dsn = "mysql:host=$host;dbname=$db;charset=utf8";
+        $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8";
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
