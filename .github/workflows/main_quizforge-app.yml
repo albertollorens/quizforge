@@ -50,9 +50,9 @@ jobs:
         run: |
           # Crear carpeta neta
           rm -rf deploy
-          mkdir deploy          
+          mkdir -p deploy          
 
-          # Copiar contingut backend/public a wwwroot
+          # Copiar contingut backend/public (inclós Vue build) a wwwroot
           cp -r backend/public/* deploy/
 
           # Copiar src i vendor a wwwroot
@@ -61,9 +61,6 @@ jobs:
 
           # Copiar fitxers necessaris
           cp backend/composer.json deploy/
-
-          # Copiar build Vue a wwwroot
-          cp -r frontend/dist/* deploy/
 
       # 7.- Pujar artifact per al següent job
       - name: Upload artifact for deployment
