@@ -48,36 +48,39 @@ Editar `httpd-vhosts.conf` perquè apunte a `backend/public`:
 
 # 3️⃣ Estructura del projecte
 
+# Estructura visual del projecte `projecte-app`
+
+```text
 projecte-app/
 │
-├── backend/
-│   ├── public/
-│   │   ├── index.php
-│   │   ├── index.html
-│   │   ├── assets/
+├── backend/                     # Backend PHP Slim
+│   ├── public/                  # Fitxers públics
+│   │   ├── index.php            # Entry point Slim
+│   │   ├── index.html           # Landing/HTML estàtic
+│   │   ├── assets/              # CSS, JS, imatges
 │   │   ├── favicon.ico
 │   │   └── logo.png
 │   │
-│   ├── src/
-│   │   ├── config/
+│   ├── src/                     # Codi PHP principal
+│   │   ├── config/              # Configuració
 │   │   │   ├── Database.php
 │   │   │   └── Settings.php
-│   │   ├── Controllers/
-│   │   ├── Middleware/
-│   │   ├── Models/
-│   │   └── routes/api.php
+│   │   ├── Controllers/         # Controladors Slim
+│   │   ├── Middleware/          # Middleware Slim
+│   │   ├── Models/              # Models
+│   │   └── routes/api.php       # Rutes API
 │   │
-│   ├── vendor/
-│   ├── .env
+│   ├── vendor/                  # Dependències Composer
+│   ├── .env                     # Variables entorn
 │   ├── composer.json
 │   └── composer.lock
 │
-├── database/
+├── database/                     # SQL / Backup
 │   └── projecte-db.sql
 │
-├── frontend/
-│   ├── dist/
-│   ├── node_modules/
+├── frontend/                     # Frontend Vue + Vite
+│   ├── dist/                     # Build producció
+│   ├── node_modules/             # Dependències NPM
 │   ├── src/
 │   │   ├── services/authservice.js
 │   │   ├── router/index.js
@@ -89,6 +92,7 @@ projecte-app/
 │
 ├── .gitignore
 └── README.md
+
 
 ------------------------------------------------------------------------
 
