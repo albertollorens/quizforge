@@ -93,5 +93,5 @@ jobs:
         with:
           app-name: 'quizforge-app'
           slot-name: 'Production'
-          package: deploy/
+          package: .
 
