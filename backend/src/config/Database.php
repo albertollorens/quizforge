@@ -17,7 +17,7 @@ class Database {
         // ---------- 2. Llegir variables d’entorn ----------
         $host = getenv('DB_HOST') ?: 'localhost';
         $db   = getenv('DB_NAME') ?: 'quizforge';
-        $user = getenv('DB_USER') ?: 'quizforgeuser';
+        $user = getenv('DB_USER') ?: 'quizforge';
         $pass = getenv('DB_PASS') ?: 'qf2025*';
         $port = getenv('DB_PORT') ?: 3306;
 

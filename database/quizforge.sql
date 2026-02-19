@@ -9,6 +9,18 @@ CREATE DATABASE IF NOT EXISTS quizforge
 USE quizforge;
 
 -- ============================================
+-- CREACIÓN DE USUARIO Y PERMISOS
+-- ============================================
+-- Crear usuari
+CREATE USER 'quizforgeuser'@'%' IDENTIFIED BY 'qf2025*';
+
+-- Donar tots els privilegis sobre la base de dades quizforge-db
+GRANT ALL PRIVILEGES ON `quizforge-db`.* TO 'quizforgeuser'@'%';
+
+-- Aplicar canvis
+FLUSH PRIVILEGES;
+
+-- ============================================
 -- TABLA USUARIOS
 -- ============================================
 
@@ -84,4 +96,4 @@ CREATE TABLE answers (
 
 CREATE INDEX idx_quizzes_user ON quizzes(user_id);
 CREATE INDEX idx_questions_quiz ON questions(quiz_id);
-CREATE INDEX idx_answers_question ON answers(question
+CREATE INDEX idx_answers_question ON answers(question_id);
