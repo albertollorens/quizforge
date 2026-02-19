@@ -58,8 +58,14 @@ jobs:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
 
-    steps:      
-      # 1.- Login a Azure
+    steps:
+      # 1.- Download artifact
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release
+
+      # 2.- Login a Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -67,7 +73,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1CCE4FABA6724660BA3FF7775A65E71C }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9BEB573D34B14D4BBE028AE5C7CBF505 }}
 
-      # 2.- Deploy a Azure App Service
+      # 3.- Deploy a Azure App Service
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
