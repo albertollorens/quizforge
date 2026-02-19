@@ -15,7 +15,7 @@
 
 Editar el fitxer:
 
-C:`\Windows`{=tex}`\System32`{=tex}`\drivers`{=tex}`\etc`{=tex}`\hosts`{=tex}
+`C:\Windows\System32\drivers\etc\hosts`
 
 Afegir:
 
@@ -27,8 +27,9 @@ Afegir:
 
 Editar `httpd-vhosts.conf` perquè apunte a `backend/public`:
 
-\<VirtualHost \*:80\> ServerName quizforge.local DocumentRoot
-"d:/ruta/al/projecte/backend/public"
+<VirtualHost \*:80\> 
+    ServerName quizforge.local 
+    DocumentRoot "d:/ruta/al/projecte/backend/public"
 
     <Directory "d:/ruta/al/projecte/backend/public">
         Options Indexes FollowSymLinks
@@ -38,8 +39,7 @@ Editar `httpd-vhosts.conf` perquè apunte a `backend/public`:
 
     ErrorLog "logs/quizforge-error.log"
     CustomLog "logs/quizforge-access.log" common
-
-`</VirtualHost>`{=html}
+</VirtualHost>
 
 > El frontend (Vue + Vite) compilat es serveix des de `backend/public`.
 
@@ -47,10 +47,47 @@ Editar `httpd-vhosts.conf` perquè apunte a `backend/public`:
 
 # 3️⃣ Estructura del projecte
 
-projecte-app/ │ ├── backend/ │ ├── public/ │ ├── src/ │ ├── vendor/ │
-├── .env │ ├── composer.json │ └── composer.lock │ ├── database/ │ └──
-projecte-db.sql │ ├── frontend/ │ ├── dist/ │ ├── src/ │ ├──
-package.json │ └── vite.config.js │ ├── .gitignore └── README.md
+projecte-app/
+│
+├── backend/
+│   ├── public/
+│   │   ├── index.php
+│   │   ├── index.html
+│   │   ├── assets/
+│   │   ├── favicon.ico
+│   │   └── logo.png
+│   │
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── Database.php
+│   │   │   └── Settings.php
+│   │   ├── Controllers/
+│   │   ├── Middleware/
+│   │   ├── Models/
+│   │   └── routes/api.php
+│   │
+│   ├── vendor/
+│   ├── .env
+│   ├── composer.json
+│   └── composer.lock
+│
+├── database/
+│   └── projecte-db.sql
+│
+├── frontend/
+│   ├── dist/
+│   ├── node_modules/
+│   ├── src/
+│   │   ├── services/authservice.js
+│   │   ├── router/index.js
+│   │   ├── App.vue
+│   │   └── main.js
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+│
+├── .gitignore
+└── README.md
 
 ------------------------------------------------------------------------
 
@@ -59,7 +96,7 @@ package.json │ └── vite.config.js │ ├── .gitignore └── REA
 -   **Axios** → Comunicació frontend/backend via HTTP REST\
 -   **JWT** → Token generat pel backend després del login\
 -   **Middleware** → Valida el JWT en rutes protegides\
--   **CORS** → No és necessari si frontend i backend comparteixen domini
+-   **CORS** → Permet comunicació entre localhost:5173 i localhost:8080 (No és necessari si frontend i backend comparteixen domini)
 
 ------------------------------------------------------------------------
 
@@ -83,23 +120,35 @@ package.json │ └── vite.config.js │ ├── .gitignore └── REA
 
 RewriteEngine On
 
-# API → Slim
+# 1. Rutes API → Slim
+RewriteCond %{REQUEST_URI} ^/api
+RewriteRule ^api/(.*)$ index.php [QSA,L]
 
-RewriteCond %{REQUEST_URI} \^/api RewriteRule \^api/(.\*)\$ index.php
-\[QSA,L\]
+# 2. Fitxers existents
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
 
-# Fitxers existents
-
-RewriteCond %{REQUEST_FILENAME} -f \[OR\] RewriteCond
-%{REQUEST_FILENAME} -d RewriteRule \^ - \[L\]
-
-# Vue SPA fallback
-
-RewriteRule . /index.html \[L\]
+# 3. Vue SPA fallback
+RewriteRule . /index.html [L]
 
 ------------------------------------------------------------------------
 
-# 6️⃣ Flux d'execució del login
+# 6️⃣ Esquema d'inici de l'aplicació
+Navegador
+   ↓
+http://quizforge.local
+   ↓ (Apache)
+public/index.html
+   ↓
+Vue (main.js + router)
+   ↓
+/  → redirigeix a /login
+/login → Login.vue
+
+------------------------------------------------------------------------
+
+# 7 Flux d'execució del login
 
 1.  L'usuari accedeix a http://quizforge.local\
 2.  Apache serveix index.html\
@@ -115,6 +164,4 @@ RewriteRule . /index.html \[L\]
 
 # Resum
 
-Entorn local basat en Apache amb DocumentRoot apuntant a
-`backend/public`, frontend compilat amb Vite i backend Slim exposant API
-REST protegida amb JWT.
+Entorn local basat en Apache amb DocumentRoot apuntant a `backend/public`, frontend compilat amb Vite i backend Slim exposant API REST protegida amb JWT.
