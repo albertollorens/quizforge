@@ -48,7 +48,13 @@ require __DIR__ . '/../src/routes/api.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$app->options('/{routes:.+}', function ($request, $response) {
-    return $response;
-});
-$app->run();
+// Si no és /api, servir Vue
+if (!str_starts_with($_SERVER['REQUEST_URI'], '/api')) {
+    readfile(__DIR__ . '/index.html');
+    exit;
+} else {
+    $app->options('/{routes:.+}', function ($request, $response) {
+        return $response;
+    });
+    $app->run();
+}

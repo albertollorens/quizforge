@@ -36,8 +36,8 @@ jobs:
         run: |
           rm -rf deploy
           mkdir deploy
-          # Copiem directament el contingut de backend a deploy, sense subcarpeta backend
-          cp -r backend/* deploy/
+          # Copiem directament el backend a deploy
+          cp -r backend deploy/
       
       # 5.- Create ZIP per a Azure
       - name: Create deployment zip
