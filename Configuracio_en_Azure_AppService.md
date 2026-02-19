@@ -12,7 +12,7 @@
 
 Grup de recursos: quizeforgegroup
 ---------------------------------
-|:----------------------|:-----------------------------------------------|
+|-----------------------|------------------------------------------------|
 | **APP**               | quizforge-app                                  |
 | **Zona**              | Spain Central                                  |
 | **Subscripció**       | Azure for Students                             |
@@ -28,16 +28,17 @@ Grup de recursos: quizeforgegroup
 
 Centre d'implementació => Configuració
 ---------------------------------------
-**Origen:** GitHub -> alblloboi (connectar amb compte d'usuari)  
-**Organització:** albertollorens  
-**Repositori:** quizforge  
-**Rama:** main
+|-----------------|-----------------------------------------------|
+| **Origen**      | GitHub -> alblloboi (connectar amb compte d'usuari) |
+| **Organització**| albertollorens                                |
+| **Repositori**  | quizforge                                     |
+| **Rama**        | main                                          |
 
 Compilació:
 -----------
-**Proveïdor:** Acciones de GitHub  
-**Pila:** PHP  
-**Versió:** 8.4
+| **Proveïdor** | Acciones de GitHub     |
+| **Pila**      | PHP                    |
+| **Versió**    | 8.4                    |
 
 ---
 
@@ -52,6 +53,15 @@ on:
   push:
     branches:
       - main
+	paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - '.github/workflows/**'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'package.json'
+      - 'vite.config.js'
+      - '.env'
   workflow_dispatch:
 
 jobs:
@@ -114,15 +124,11 @@ jobs:
 # Explicació ràpida:
 
 1.- Build frontend: compila Vue amb Vite → genera dist/.
-
 2.- Preparar deploy:
 				deploy/backend/ → backend complet amb Slim, vendor/, src/ i public/.
 				deploy/public/ → build de Vue.
-
 3.- Upload/download artifact: permet separar build i deploy en jobs diferents.
-
 4.- Deploy: Azure Web App rep només la carpeta preparada (deploy/).
-
 5.- Secrets necessaris a GitHub:
 	· AZUREAPPSERVICE_CLIENTID
 	· AZUREAPPSERVICE_TENANTID
@@ -188,6 +194,7 @@ server {
 cp /home/site/wwwroot/default /etc/nginx/sites-available/default && service nginx reload
 
 ## 6. Esquema visual: pipeline i estructura de carpetes ##
+```text
 quizforge (repo GitHub)
 ├─ backend/
 │  ├─ src/
@@ -201,8 +208,10 @@ quizforge (repo GitHub)
 │     └─ main_quizforge-app.yml
 ├─ .gitignore
 └─ .env            # no pujat a GitHub
+```
 
-#Pipeline de deploy:
+# Pipeline de deploy:
+```text
 push a main
       │
       ▼
@@ -221,3 +230,4 @@ Deploy Job
       ├─ Download artifact
       ├─ Login Azure
       └─ Deploy a quizforge-app (App Service)
+```
