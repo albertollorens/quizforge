@@ -210,9 +210,10 @@ Configuració de servidor en entorn Linux
 
 # Annex A -- Estructura del Projecte
 
-projecte-app/ │ 
-              ├── backend/ 
-              ├── frontend/ 
-              ├── database/ 
-              └──.github/workflows/
+projecte-app/ 
+            │ 
+            ├── backend/ 
+            ├── frontend/ 
+            ├── database/ 
+            └──.github/workflows/
 
