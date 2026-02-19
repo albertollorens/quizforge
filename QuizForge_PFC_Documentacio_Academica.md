@@ -1,7 +1,4 @@
-# quizforge
-GIFT &amp; XML generator for Moodle quiz 
-
-# QuizForge -- Documentació
+# QuizForge -- Documentació Acadèmica
 
 ## Projecte Final de Cicle (PFC)
 
@@ -210,9 +207,5 @@ Configuració de servidor en entorn Linux
 
 # Annex A -- Estructura del Projecte
 
-projecte-app/ │ 
-              ├── backend/ 
-              ├── frontend/ 
-              ├── database/ 
-              └──.github/workflows/
-
+projecte-app/ │ ├── backend/ ├── frontend/ ├── database/ └──
+.github/workflows/

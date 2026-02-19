@@ -48,7 +48,7 @@ Servidor:
 							logo.png
 					src/								=> Slim + PHP + MySQL
 							config/
-									Database.php		=> Configuració i creació de la connexió PDO a MySQL.
+									Database.php		=> Configuració i creació de la connexió PDO a MySQL. (Cerfiticat SSL per a connectar-se en Azure!!!)
 									Settings.php		=> Guarda configuració global (secret JWT, paràmetres generals).
 							Controllers/
 									LoginController.php => Controlador d'autenticació: login, registre i generació de JWT.
