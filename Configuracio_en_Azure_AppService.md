@@ -1,10 +1,11 @@
 # Configuració App QuizForge (Azure)
 
-**Entorn:** Azure App Service  
-**SO:** Linux  
-**Servidor:** Nginx (configurar document root en fitxer de configuració `default`)  
-**PHP:** 8.4  
-**MySQL:** 8.4.7  
+|------------|-----------------------------------------------------------|
+| **Entorn** | Azure App Service                                         |
+| **SO**     | Linux                                                     |
+| **Servidor** | Nginx (configurar document root en fitxer de configuració `default`) |
+| **PHP**    | 8.4                                                       |
+| **MySQL**  | 8.4.7                                                     |
 
 ---
 
@@ -26,7 +27,7 @@ Grup de recursos: quizeforgegroup
 
 ## 2. Configurar deploy de `quizforge-app`
 
-Centre d'implementació => Configuració
+# Centre d'implementació => Configuració
 ---------------------------------------
 |-----------------|-----------------------------------------------|
 | **Origen**      | GitHub -> alblloboi (connectar amb compte d'usuari) |
@@ -34,8 +35,8 @@ Centre d'implementació => Configuració
 | **Repositori**  | quizforge                                     |
 | **Rama**        | main                                          |
 
-Compilació:
------------
+# Compilació:
+|---------------|------------------------|
 | **Proveïdor** | Acciones de GitHub     |
 | **Pila**      | PHP                    |
 | **Versió**    | 8.4                    |
@@ -160,8 +161,7 @@ Thumbs.db
 ```
 
 ## 5. Configurar Nginx document root ##
-Document root: backend/public/
-Fitxer de configuració: /home/site/wwwroot/default
+**Fitxer de configuració:** /home/site/wwwroot/default
 ```yaml
 server {
     listen 8080;

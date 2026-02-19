@@ -1,13 +1,13 @@
 # CONFIGURACIÓ APP QuizForge
 
 ## Entorn
-
--   **Tipus:** Local\
--   **SO:** Windows 10\
--   **Servidor:** WampServer 3.4.0\
--   **Apache:** 2.4.65\
--   **PHP:** 8.3.28\
--   **MySQL:** 8.4.7
+|------------|-----------------|
+| **Tipus**  | Local           |
+| **SO**     | Windows 10      |
+| **Servidor** | WampServer 3.4.0 |
+| **Apache** | 2.4.65          |
+| **PHP**    | 8.3.28          |
+| **MySQL**  | 8.4.7           |
 
 ------------------------------------------------------------------------
 
