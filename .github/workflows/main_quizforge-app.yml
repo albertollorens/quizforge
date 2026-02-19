@@ -24,7 +24,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:          
           php-version: '8.4'
-          extensions: mbstring, pdo, pdo_mysql
 
       # 3.- Instal·lar dependèndies PHP
       - name: Install backend dependencies
@@ -32,27 +31,23 @@ jobs:
         run: |
           composer install --no-dev --optimize-autoloader
 
-      # 4️.- Configurar Node.js per al frontend
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      # 5️.- Instal·lar dependències del frontend i compilar
+      # 4.- Instal·lar dependències del frontend i compilar
       - name: Build frontend
         working-directory: ./frontend
         run: |
           npm ci
           npm run build
 
-      # 6.- Preparar carpeta de deploy
+      # 5.- Preparar carpeta de deploy
       - name: Prepare deploy folder
         run: |
-          # Crear carpeta neta
-          rm -rf deploy
-          mkdir -p deploy          
+          # Crear carpeta deploy          
+          mkdir -p deploy
+          
+          # 🔥 Netejar wwwroot abans de copiar el nou deploy
+          rm -rf deploy/*
 
-          # Copiar contingut backend/public (inclós Vue build) a wwwroot
+          # Copiar contingut backend/public (inclós Vue build, index.php, .htaccess) a wwwroot
           cp -r backend/public/* deploy/
 
           # Copiar src i vendor a wwwroot
@@ -60,7 +55,7 @@ jobs:
           cp -r backend/vendor deploy/vendor
 
           # Copiar fitxers necessaris
-          cp backend/composer.json deploy/
+          cp backend/composer.* deploy/
 
       # 7.- Pujar artifact per al següent job
       - name: Upload artifact for deployment
@@ -98,5 +93,5 @@ jobs:
         with:
           app-name: 'quizforge-app'
           slot-name: 'Production'
-          package: .
+          package: deploy/
 
