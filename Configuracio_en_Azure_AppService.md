@@ -12,13 +12,15 @@
 
 Grup de recursos: quizeforgegroup
 ---------------------------------
-APP        => quizforge-app
-Zona       => Spain Central
-Subscripció => Azure for Students
-S.O.       => Linux
-Server     => quizforge-server
-BD         => quizforge-db
-             Punto de conexión: quizforge-server.mysql.database.azure.com
+|:----------------------|:-----------------------------------------------|
+| **APP**               | quizforge-app                                  |
+| **Zona**              | Spain Central                                  |
+| **Subscripció**       | Azure for Students                             |
+| **S.O.**              | Linux                                          |
+| **Server**            | quizforge-server                               |
+| **BD**                | quizforge-db                                   |
+| **Punto de conexión** | quizforge-server.mysql.database.azure.com      |
+
 
 ---
 
@@ -26,16 +28,16 @@ BD         => quizforge-db
 
 Centre d'implementació => Configuració
 ---------------------------------------
-Origen: GitHub -> alblloboi (connectar amb compte d'usuari)  
-Organització: albertollorens  
-Repositori: quizforge  
-Rama: main
+**Origen:** GitHub -> alblloboi (connectar amb compte d'usuari)  
+**Organització:** albertollorens  
+**Repositori:** quizforge  
+**Rama:** main
 
 Compilació:
 -----------
-Proveïdor: Acciones de GitHub  
-Pila: PHP  
-Versió: 8.4
+**Proveïdor:** Acciones de GitHub  
+**Pila:** PHP  
+**Versió:** 8.4
 
 ---
 
@@ -107,6 +109,7 @@ jobs:
           app-name: 'quizforge-app'
           package: release.zip
           clean: false
+```
 
 # Explicació ràpida:
 
@@ -148,6 +151,7 @@ vendor/
 # OS
 .DS_Store
 Thumbs.db
+```
 
 ## 5. Configurar Nginx document root ##
 Document root: backend/public/
@@ -178,11 +182,12 @@ server {
         fastcgi_read_timeout 3600;
     }
 }
+```
 
-Startup command a Azure:
+#Startup command a Azure:
 cp /home/site/wwwroot/default /etc/nginx/sites-available/default && service nginx reload
 
-6. Esquema visual: pipeline i estructura de carpetes
+## 6. Esquema visual: pipeline i estructura de carpetes ##
 quizforge (repo GitHub)
 ├─ backend/
 │  ├─ src/
@@ -197,7 +202,7 @@ quizforge (repo GitHub)
 ├─ .gitignore
 └─ .env            # no pujat a GitHub
 
-Pipeline de deploy:
+#Pipeline de deploy:
 push a main
       │
       ▼

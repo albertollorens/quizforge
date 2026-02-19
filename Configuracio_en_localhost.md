@@ -27,7 +27,8 @@ Afegir:
 
 Editar `httpd-vhosts.conf` perquè apunte a `backend/public`:
 
-<VirtualHost \*:80\> 
+```yaml
+<VirtualHost \*:80\>
     ServerName quizforge.local 
     DocumentRoot "d:/ruta/al/projecte/backend/public"
 
@@ -40,7 +41,7 @@ Editar `httpd-vhosts.conf` perquè apunte a `backend/public`:
     ErrorLog "logs/quizforge-error.log"
     CustomLog "logs/quizforge-access.log" common
 </VirtualHost>
-
+```
 > El frontend (Vue + Vite) compilat es serveix des de `backend/public`.
 
 ------------------------------------------------------------------------
@@ -102,36 +103,36 @@ projecte-app/
 
 # 4️⃣ Rutes API REST
 
-  Mètode   Ruta                          Protegida
-  -------- ----------------------------- -----------
-  POST     /api/login                    ❌
-  POST     /api/register                 ❌
-  GET      /api/dashboard                ✅
-  GET      /api/quizzes                  ✅
-  POST     /api/quizzes                  ✅
-  PUT      /api/quizzes/{{id}}           ✅
-  DELETE   /api/quizzes/{{id}}           ✅
-  GET      /quizzes/{{id}}/export/gift   ✅
-  GET      /quizzes/{{id}}/export/xml    ✅
+  | Mètode | Ruta | Protegida |
+  | :------- | :-------------------------- | :----- |
+  | POST     | /api/login                  |   ❌  | 
+  | POST     | /api/register               |   ❌  | 
+  | GET      | /api/dashboard              |   ✅  | 
+  | GET      | /api/quizzes                |   ✅  | 
+  | POST     | /api/quizzes                |   ✅  | 
+  | PUT      | /api/quizzes/{{id}}         |   ✅  | 
+  | DELETE   | /api/quizzes/{{id}}         |   ✅  | 
+  | GET      | /quizzes/{{id}}/export/gift |   ✅  | 
+  | GET      | /quizzes/{{id}}/export/xml  |   ✅  | 
 
 ------------------------------------------------------------------------
 
 # 5️⃣ Configuració .htaccess
-
+```yaml
 RewriteEngine On
 
-# 1. Rutes API → Slim
+/#1. Rutes API → Slim
 RewriteCond %{REQUEST_URI} ^/api
 RewriteRule ^api/(.*)$ index.php [QSA,L]
 
-# 2. Fitxers existents
+/#2. Fitxers existents
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# 3. Vue SPA fallback
+/#3. Vue SPA fallback
 RewriteRule . /index.html [L]
-
+```
 ------------------------------------------------------------------------
 
 # 6️⃣ Esquema d'inici de l'aplicació
@@ -164,4 +165,4 @@ Vue (main.js + router)
 
 # Resum
 
-Entorn local basat en Apache amb DocumentRoot apuntant a `backend/public`, frontend compilat amb Vite i backend Slim exposant API REST protegida amb JWT.
+> Entorn local basat en Apache amb DocumentRoot apuntant a `backend/public`, frontend compilat amb Vite i backend Slim exposant API REST protegida amb JWT.
