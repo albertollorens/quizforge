@@ -136,20 +136,22 @@ RewriteRule . /index.html [L]
 ------------------------------------------------------------------------
 
 # 6️⃣ Esquema d'inici de l'aplicació
-Navegador
-   ↓
-http://quizforge.local
-   ↓ (Apache)
-public/index.html
-   ↓
-Vue (main.js + router)
-   ↓
-/  → redirigeix a /login
-/login → Login.vue
+
+Navegador  
+   ↓  
+`http://quizforge.local`  
+   ↓ (Apache)  
+`public/index.html`  
+   ↓  
+Vue (`main.js` + `router`)  
+   ↓  
+`/`  → redirigeix a `/login`  
+`/login` → `Login.vue`
+
 
 ------------------------------------------------------------------------
 
-# 7 Flux d'execució del login
+# 7️⃣ Flux d'execució del login
 
 1.  L'usuari accedeix a http://quizforge.local\
 2.  Apache serveix index.html\
