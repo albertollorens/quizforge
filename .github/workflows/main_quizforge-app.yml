@@ -81,5 +81,5 @@ jobs:
         with:
           app-name: 'quizforge-app'
           package: release.zip
-          clean: true
+          clean: false
 
