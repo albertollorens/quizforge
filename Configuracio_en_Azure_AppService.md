@@ -12,8 +12,9 @@
 
 ## 1. Crear App Service + Base de dades
 
-Grup de recursos: quizeforgegroup
+**Grup de recursos: quizeforgegroup**
 ---------------------------------
+| Clau                  | Valor                                          |
 |-----------------------|------------------------------------------------|
 | **APP**               | quizforge-app                                  |
 | **Zona**              | Spain Central                                  |
@@ -28,8 +29,9 @@ Grup de recursos: quizeforgegroup
 
 ## 2. Configurar deploy de `quizforge-app`
 
-# Centre d'implementació => Configuració
+**Centre d'implementació => Configuració**
 ---------------------------------------
+| Clau            | Valor                                         |
 |-----------------|-----------------------------------------------|
 | **Origen**      | GitHub -> alblloboi (connectar amb compte d'usuari) |
 | **Organització**| albertollorens                                |
@@ -37,6 +39,7 @@ Grup de recursos: quizeforgegroup
 | **Rama**        | main                                          |
 
 # Compilació:
+| Clau          | Valor                  |
 |---------------|------------------------|
 | **Proveïdor** | Acciones de GitHub     |
 | **Pila**      | PHP                    |
