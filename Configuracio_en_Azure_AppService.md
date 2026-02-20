@@ -14,6 +14,7 @@
 
 **Grup de recursos: quizeforgegroup**
 ---------------------------------
+
 | Clau                  | Valor                                          |
 |-----------------------|------------------------------------------------|
 | **APP**               | quizforge-app                                  |
@@ -31,6 +32,7 @@
 
 **Centre d'implementació => Configuració**
 ---------------------------------------
+
 | Clau            | Valor                                         |
 |-----------------|-----------------------------------------------|
 | **Origen**      | GitHub -> alblloboi (connectar amb compte d'usuari) |
@@ -39,6 +41,7 @@
 | **Rama**        | main                                          |
 
 # Compilació:
+
 | Clau          | Valor                  |
 |---------------|------------------------|
 | **Proveïdor** | Acciones de GitHub     |
