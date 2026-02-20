@@ -1,5 +1,6 @@
 # Configuració App QuizForge (Azure)
 
+| Clau       | Valor                                                     |
 |------------|-----------------------------------------------------------|
 | **Entorn** | Azure App Service                                         |
 | **SO**     | Linux                                                     |
@@ -124,16 +125,17 @@ jobs:
 
 # Explicació ràpida:
 
-1.- Build frontend: compila Vue amb Vite → genera dist/.
-2.- Preparar deploy:
-				deploy/backend/ → backend complet amb Slim, vendor/, src/ i public/.
-				deploy/public/ → build de Vue.
-3.- Upload/download artifact: permet separar build i deploy en jobs diferents.
-4.- Deploy: Azure Web App rep només la carpeta preparada (deploy/).
-5.- Secrets necessaris a GitHub:
-	· AZUREAPPSERVICE_CLIENTID
-	· AZUREAPPSERVICE_TENANTID
-	· AZUREAPPSERVICE_SUBSCRIPTIONID
+1. Build frontend: compila Vue amb Vite → genera `dist/`.
+2. Preparar deploy:
+   - `deploy/backend/` → backend complet amb Slim, `vendor/`, `src/` i `public/`.
+   - `deploy/public/` → build de Vue.
+3. Upload/download artifact: permet separar build i deploy en jobs diferents.
+4. Deploy: Azure Web App rep només la carpeta preparada (`deploy/`).
+5. Secrets necessaris a GitHub:
+   - `AZUREAPPSERVICE_CLIENTID`
+   - `AZUREAPPSERVICE_TENANTID`
+   - `AZUREAPPSERVICE_SUBSCRIPTIONID`
+
 
 --- 
 
