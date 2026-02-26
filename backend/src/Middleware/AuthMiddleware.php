@@ -29,7 +29,7 @@ class AuthMiddleware {
         $token = $matches[1];
 
         // Obtindre clau secreta des de config/Settings        
-        $secret = Settings::$jwt_secret;        
+        $secret = Settings::jwtSecret();        
 
         if (!$secret || !is_string($secret)) {
             $res = new Response();

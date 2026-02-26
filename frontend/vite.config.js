@@ -13,6 +13,17 @@ export default defineConfig({
   build: {
     outDir: resolve(__dirname, '../backend/public'),
     emptyOutDir: true
+  },
+  server: {
+    port: 5173,             // Puerto del frontend dev
+    proxy: {
+      // Todo lo que vaya a /api será redirigido a Slim
+      '/api': {
+        target: 'http://quizforge.local', // URL de tu backend Slim
+        changeOrigin: true,
+        //rewrite: path => path.replace(/^\/api/, '/api')
+      }
+    }
   }
 })
 

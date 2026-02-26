@@ -43,7 +43,7 @@ class LoginController {
             'username' => $user['name'],      // Username d'usuari
         ];
 
-        $jwt = JWT::encode($payload, Settings::$jwt_secret, 'HS256');
+        $jwt = JWT::encode($payload, Settings::jwtSecret(), 'HS256');
 
         $response->getBody()->write(json_encode([
             'message' => 'Login correcto',
@@ -89,7 +89,7 @@ class LoginController {
     // Validar token JWT (per a usar com middleware)
     public static function validateToken(string $token) {
         try {
-            $decoded = JWT::decode($token, new Key(Settings::$jwt_secret, 'HS256'));
+            $decoded = JWT::decode($token, new Key(Settings::jwtSecret(), 'HS256'));
             return $decoded;
         } catch (\Exception $e) {
             return false;

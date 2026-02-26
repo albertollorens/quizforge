@@ -5,6 +5,7 @@ import router from './router'
 // Bootstrap base
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 // SB Admin
 import './assets/sbadmin/css/sb-admin-2.min.css'

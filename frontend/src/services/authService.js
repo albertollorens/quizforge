@@ -11,6 +11,16 @@ export default {
     return axios.post(`${API_URL}/register`, { username, email, password });
   },
 
+  async updateProfile(data) {
+    const user = this.getUser()
+    if (!user) throw new Error('Usuari no loguejat')
+
+    const response = await api.put(`/users/${user.id}`, data)
+    // Actualitzem localStorage
+    localStorage.setItem('user', JSON.stringify(response.data))
+    return response.data
+  },
+
   saveToken(token) {
     localStorage.setItem('jwt_token', token);
     
@@ -34,6 +44,7 @@ export default {
 
   logout() {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user')
   },
 
   isAuthenticated() {

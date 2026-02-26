@@ -4,12 +4,15 @@ import { createRouter, createWebHistory } from "vue-router";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Dashboard from "../views/Dashboard.vue";
+import Profile from "../views/Profile.vue";
 
 // Layout
 import DashboardLayout from "../layouts/DashboardLayout.vue";
 
 // Serveis
 import authService from "../services/authService";
+import QuizBuilder from "../components/QuizBuilder.vue";
+import AIGenerator from "../components/AIGenerator.vue";
 
 const routes = [
   // 🔓 Públiques
@@ -24,11 +27,22 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
+        path: "profile",
+        component: Profile
+      },
+      {
         path: "dashboard",
         component: Dashboard
+      },
+      {
+        path: "nouquiz",
+        component: QuizBuilder,
+        props: true
+      },
+      {
+        path: "/aiquiz",
+        component: AIGenerator
       }
-      // ací més vistes:
-      // { path: "quizzes", component: Quizzes }
     ]
   }
 ];

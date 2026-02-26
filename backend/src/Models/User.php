@@ -25,4 +25,9 @@ class User {
 
         return $stmt->execute([$username, $email, $hash]);
     }
+
+    public function update(int $id, string $username, string $email, string $password) {        
+        $stmt = $this->db->prepare("UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?");
+        $stmt->execute([$username, $email, $password, $id]);
+    }
 }

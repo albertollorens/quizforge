@@ -1,90 +1,126 @@
-<template>
-  <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Dashboard</h1>
-      <div class="">
-        <button class="btn btn-primary" @click="newquiz">Nou quiz</button>
-        <!--<button class="btn btn-danger" @click="logout">Sortir</button>-->
-      </div>
-    </div>
-
-    <div v-if="loading" class="text-center my-5">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-
-    <div v-else>
-      <div v-if="quizzes.length === 0" class="alert alert-info">
-        No hay quizzes disponibles.
-      </div>
-
-      <div class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col" v-for="quiz in quizzes" :key="quiz.id">
-          <div class="card h-100">
-            <div class="card-body">
-              <h5 class="card-title">{{ quiz.title }}</h5>
-              <p class="card-text">{{ quiz.description }}</p>
-            </div>
-            <div class="card-footer text-end">
-              <button class="btn btn-primary btn-sm">Vore Quiz</button>
-              <button class="btn btn-danger btn-sm">Esborrar Quiz</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="error" class="alert alert-danger mt-4">{{ error }}</div>
-  </div>
-</template>
-
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import authService from '../services/authService'
-import axios from 'axios'
+import { ref, computed, onMounted } from 'vue'
+import QuizList from '@/components/QuizList.vue'
+import QuizBuilder from '@/components/QuizBuilder.vue'
+import {
+  getUserQuizzes,
+  createQuiz,
+  updateQuiz,
+  getQuiz,
+  deleteQuiz
+} from '@/services/quizService'
 
-const router = useRouter()
 const quizzes = ref([])
-const loading = ref(true)
-const error = ref('')
+const currentView = ref('list')
+const editingQuiz = ref(null)
+const loading = ref(false)
 
-const fetchQuizzes = async () => {
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+const builderMode = computed(
+  () => editingQuiz.value ? 'edit' : 'create'
+)
+
+
+async function loadQuizzes() {
   loading.value = true
-  error.value = ''
+  await delay(800) // ← retard artificial
   try {
-    const res = await axios.get('/api/quizzes', {
-      headers: {
-        Authorization: `Bearer ${authService.getToken()}`
-      }
-    })
-    quizzes.value = res.data.data // depende de cómo devuelva tu backend
-  } catch (err) {
-    if (err.response?.status === 401) {
-      authService.logout()
-      router.push('/login')
-    } else {
-      error.value = err.response?.data?.error || 'Error al cargar quizzes'
-    }
+    const res = await getUserQuizzes()
+    quizzes.value = res.data.data
+  } catch (error) {
+    console.error(error)
   } finally {
     loading.value = false
   }
 }
 
-const logout = () => {
-  authService.logout()
-  router.push('/login')
+onMounted(loadQuizzes)
+
+function handleNewQuiz() {
+  editingQuiz.value = null
+  currentView.value = 'builder'
 }
 
-onMounted(fetchQuizzes)
+async function handleEditQuiz(id) {
+  const res = await getQuiz(id)
+  editingQuiz.value = res.data
+  currentView.value = 'builder'
+}
+
+function handleCancelQuiz() {
+  editingQuiz.value = null
+  currentView.value = 'list'
+}
+
+async function handleSaveQuiz(payload) {
+  if (payload.id) {
+    await updateQuiz(payload.id, payload)
+  } else {
+    await createQuiz(payload)
+  }
+
+  await loadQuizzes()
+  currentView.value = 'list'
+}
+
+async function handleDeleteQuiz(id) {
+  await deleteQuiz(id)
+  await loadQuizzes()
+}
+
 </script>
 
-<style scoped>
-.card {
-  transition: transform 0.2s;
+<template>
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h2>Dashboard</h2>
+      <button class="btn btn-primary mb-3" 
+        v-if="currentView === 'list'" 
+        @click="handleNewQuiz">
+        <i class="bi bi-plus-circle"></i> Nou Quiz
+      </button>
+
+      <button class="btn btn-secondary mb-3" 
+        v-if="currentView === 'builder'" 
+        @click="handleCancelQuiz"> 
+        <i class="bi bi-arrow-left"></i> Tornar 
+      </button>
+    </header>
+
+    <section class="dashboard-content"> 
+      <!-- Llistat de quizzes -->
+      <QuizList 
+        v-if="currentView === 'list'" 
+        :quizzes="quizzes" 
+        :loading="loading"
+        @edit="handleEditQuiz" 
+        @delete="handleDeleteQuiz" />
+
+      <QuizBuilder 
+        v-if="currentView === 'builder'" 
+        :key="editingQuiz?.id || 'new'" :quiz="editingQuiz" :mode="builderMode"
+        @cancel="handleCancelQuiz" 
+        @save="handleSaveQuiz" />
+    </section>
+  </div>
+</template>
+
+<style scoped> 
+.dashboard-container { 
+  padding: 2rem; 
+} 
+
+.dashboard-header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 2rem; 
 }
-.card:hover {
-  transform: translateY(-5px);
+
+.dashboard-content { 
+  margin-top: 1rem; 
 }
 </style>

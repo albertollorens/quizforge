@@ -1,15 +1,18 @@
 <?php
-
 require '../vendor/autoload.php';
-require '../src/config/Database.php';
 
+use App\Config\Settings;
+Settings::init();
 use Slim\Factory\AppFactory; //Slim Fwk 4
 use App\Middleware\CorsMiddleware; //CORS
 use App\Config\Database;
 use App\Controllers\LoginController;
 use App\Controllers\QuizController;
+use App\Controllers\OpenAIController;
+use App\Services\OpenAIService;
 use App\Models\User;
 use App\Models\Quiz;
+use App\Models\Question;
 
 $app = AppFactory::create();
 
@@ -36,9 +39,12 @@ $app->add(function ($request, $handler) {
 // Crear instàncies dels models amb PDO
 $userModel = new User(Database::connect());
 $quizModel = new Quiz(Database::connect());
+$questionModel = new Question(Database::connect());
 
 $loginController = new LoginController($userModel);
-$quizController = new QuizController($quizModel);
+$quizController = new QuizController($quizModel, $questionModel);
+$openAIService = new OpenAIService();
+$openAIController = new OpenAIController($openAIService);
 
 // Rutes
 //require __DIR__ . '/../src/routes/auth.php';
