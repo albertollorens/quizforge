@@ -19,7 +19,9 @@ class OpenAIController {
         try {
             $data = $request->getParsedBody();
             $topic = $data['topic'] ?? null;
-            $level = $data['level'] ?? 'medium';
+            $level = $data['level'] ?? 'medio';
+            $language = $data['language'] ?? 'valencia';
+            $numQuestions = $data['numQuestions'] ?? 5;
 
             if (!$topic) {
                 $response->getBody()->write(json_encode([
@@ -31,18 +33,14 @@ class OpenAIController {
                     ->withHeader('Content-Type', 'application/json');
             }
 
-            $result = $this->openAI->generateQuestions(
-                $topic,
-                $level
-            );
+            $result = $this->openAI->generateQuestions($topic, $level, $language, $numQuestions);
 
             $response->getBody()->write(json_encode([
                 'success' => true,
-                'data' => json_decode($result)
+                'data' => $result
             ]));
 
-            return $response
-                ->withHeader('Content-Type', 'application/json');
+            return $response->withHeader('Content-Type', 'application/json');
 
         } catch (\Exception $e) {
             $response->getBody()->write(json_encode([
