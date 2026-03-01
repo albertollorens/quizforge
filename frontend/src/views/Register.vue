@@ -18,6 +18,11 @@
             <label class="form-label">Password</label>
             <input v-model="password" type="password" placeholder="Contraseña" required  class="form-control" />
           </div>
+          
+          <p class="mt-3">            
+            <router-link to="/login">Iniciar sessió</router-link>
+          </p>
+
           <button class="btn btn-primary w-100">
             Enviar
           </button>

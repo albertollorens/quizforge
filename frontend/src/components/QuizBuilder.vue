@@ -266,8 +266,8 @@ const giftOutput = computed(() => {
     // SHORT ANSWER
     if (q.type === 'shortanswer') {
       const answers = q.answers.map(a=>{
-        return `=${a.value} `
-      })
+        return `=${a} `
+      }).join(' ')
       return `${title}[html]${q.statement} {${answers}}`
     }
 
@@ -368,7 +368,7 @@ const xmlOutput = computed(() => {
       `
       q.answers.forEach(a => {
         xml+=`<answer fraction="100">
-                <text><![CDATA[${a.value}]]></text>
+                <text><![CDATA[${a}]]></text>
               </answer>
         `
       })

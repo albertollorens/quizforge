@@ -9,17 +9,16 @@ const answer = ref('')
 function submit() {
   // 1.- Dividim el text per ", " i eliminem possibles espais en blanc al principi/final
   const answersArray = answer.value
-    .split(', ')
+    .split(' ')
     .map(a => a.trim())
     .filter(a => a.length > 0) // eliminem valors buits
 
-  // 2.- Map a objectes correctes
-  const answersPayload = answersArray.map(a => ({ text: a, correct: true }))
+  //console.log(answersArray)
 
   emit('submit', {
     title: title.value,
     statement: statement.value,
-    answers: answersPayload
+    answers: answersArray
   })
 
   resetForm()
@@ -45,7 +44,7 @@ function resetForm() {
     
     <div class="form-floating mb-3">
       <input id="resposta" v-model="answer" class="form-control"/>
-      <label for="resposta">Resposta correcta, per a més d'una separar per , (coma+espai)</label>
+      <label for="resposta">Resposta correcta, per a més d'una separar-les amb un espai en blanc</label>
     </div>    
 
     <button class="btn btn-primary" @click="submit">Afegir</button>
