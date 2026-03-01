@@ -23,6 +23,29 @@ function submit() {
     statement: statement.value,
     answers: answers.value
   })
+  resetForm()
+}
+
+function resetForm() {
+  title.value = ''
+  statement.value = ''
+  answers.value = createEmptyAnswers()
+}
+
+function createEmptyAnswer() {
+  return {
+    text: '',
+    correct: false
+  }
+}
+
+function createEmptyAnswers() {
+  return [
+    createEmptyAnswer(),
+    createEmptyAnswer(),
+    createEmptyAnswer(),
+    createEmptyAnswer()
+  ]
 }
 </script>
 

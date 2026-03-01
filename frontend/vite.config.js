@@ -4,6 +4,9 @@ import { fileURLToPath, URL } from 'node:url'
 import { resolve } from 'path'
 
 export default defineConfig({
+  define: {   // habilita devtools encara que siga producció
+    __VUE_PROD_DEVTOOLS__: true
+  },
   plugins: [vue()],
   resolve: {
     alias: {

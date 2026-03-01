@@ -6,7 +6,6 @@ import Multichoice from './question-types/Multichoice.vue'
 import Matching from './question-types/Matching.vue'
 import TrueFalse from './question-types/TrueFalse.vue'
 import ShortAnswer from './question-types/ShortAnswer.vue'
-import GapSelect from './question-types/GapSelect.vue'
 import Essay from './question-types/Essay.vue'
 
 const emit = defineEmits(['add'])
@@ -19,8 +18,7 @@ const components = {
   matching: Matching,
   truefalse: TrueFalse,
   shortanswer: ShortAnswer,
-  essay: Essay,
-  gapselect: GapSelect
+  essay: Essay
 }
 
 const currentComponent = computed(() => components[type.value])
@@ -45,7 +43,6 @@ function handleSubmit(questionData) {
         <option value="truefalse">True / False</option>
         <option value="shortanswer">Resposta curta</option>
         <option value="essay">Assaig</option>
-        <option value="gapselect">Omplir buits</option>
       </select>
     </div>
 

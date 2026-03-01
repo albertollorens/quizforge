@@ -230,20 +230,190 @@ function removeQuestion(index){
   questions.value.splice(index,1)
 }
 
-/* GIFT */
-const giftOutput = computed(()=>{
-  return questions.value
-    .map((q,i)=>`::Pregunta ${i+1}::${q.statement}`)
-    .join('\n\n')
+/* GIFT FORMAT GENERATOR */
+const giftOutput = computed(() => {
+  return questions.value.map((q, index) => {
+    const title = `::${q.title}::`
+
+    // SINGLECHOICE
+    if (q.type === 'singlechoice') {
+      const answers = q.answers.map(a =>
+        a.correct ? `=${a.text}` : `~${a.text}`
+      ).join('\n')
+
+      return `${title}[html]${q.statement} {\n${answers}\n}`
+    }
+
+    // MULTIPLECHOICE
+    if (q.type === 'multichoice') {
+      const answers = q.answers.map(a => {
+        const weight = a.weight
+        if (a.correct) {
+          return `~%${weight}%${a.text}`
+        }
+        return `~%${weight}%${a.text}`
+      }).join('\n')
+
+      return `${title}[html]${q.statement} {\n${answers}\n}`
+    }
+
+    // TRUE / FALSE
+    if (q.type === 'truefalse') {
+      const answer = q.answer === true ? 'TRUE' : 'FALSE'
+      return `${title}[html]${q.statement} {${answer}}`
+    }
+
+    // SHORT ANSWER
+    if (q.type === 'shortanswer') {
+      const answers = q.answers.map(a=>{
+        return `=${a.value} `
+      })
+      return `${title}[html]${q.statement} {${answers}}`
+    }
+
+    // ESSAY
+    if (q.type === 'essay') {
+      return `${title}[html]${q.statement} {}` 
+    }
+
+    // MATCHING
+    if (q.type === 'matching') {
+      const pairs = q.pairs.map(p => {        
+        return `=${p.left}->${p.right}`
+      }).join('\n')
+
+      return `${title}[html]${q.statement} {\n${pairs}\n}`
+    }
+    return ''
+
+  }).join('\n\n')
+
 })
 
-/* XML */
-const xmlOutput = computed(()=>{
-  return `<quiz>\n${
-    questions.value
-      .map(q=>`<question>${q.statement}</question>`)
-      .join('\n')
-  }\n</quiz>`
+/* XML FORMAT GENERATOR */
+const xmlOutput = computed(() => {
+  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<quiz>\n`
+  questions.value.forEach((q, index) => {
+
+    // SINGLECHOICE
+    if (q.type === 'singlechoice') {
+      xml += `
+        <question type="multichoice">
+          <name><text>${q.title}</text></name>
+          <questiontext format="html">
+            <text><![CDATA[${q.statement}]]></text>
+          </questiontext>
+          <single>true</single>
+      `
+
+      q.answers.forEach(a => {
+        const fraction = a.correct ? "100" : "0"
+        xml += `
+            <answer fraction="${fraction}">
+              <text><![CDATA[${a.text}]]></text>
+            </answer>
+        `
+      })
+      xml += `  </question>\n`
+    }
+
+    // MULTIPLECHOICE
+    if (q.type === 'multichoice') {
+      xml += `
+        <question type="multichoice">
+          <name><text>${q.title}</text></name>
+          <questiontext format="html">
+            <text><![CDATA[${q.statement}]]></text>
+          </questiontext>
+          <single>false</single>
+      `
+      q.answers.forEach(a => {        
+        const weight = a.weight
+
+        xml += `
+            <answer fraction="${weight}">
+              <text><![CDATA[${a.text}]]></text>
+            </answer>
+        `
+      })
+      xml += `  </question>\n`
+    }
+
+    // TRUE FALSE
+    if (q.type === 'truefalse') {
+      xml += `
+        <question type="truefalse">
+          <name><text>${q.title}</text></name>
+          <questiontext format="html">
+            <text><![CDATA[${q.statement}]]></text>
+          </questiontext>
+          <answer fraction="${q.answer ? 100 : 0}">
+            <text>true</text>
+          </answer>
+          <answer fraction="${!q.answer ? 100 : 0}">
+            <text>false</text>
+          </answer>
+        </question>
+      `
+    }
+
+    // SHORT ANSWER
+    if (q.type === 'shortanswer') {
+      xml += `
+        <question type="shortanswer">
+          <name><text>${q.title}</text></name>
+          <questiontext format="html">
+            <text><![CDATA[${q.statement}]]></text>
+          </questiontext>          
+      `
+      q.answers.forEach(a => {
+        xml+=`<answer fraction="100">
+                <text><![CDATA[${a.value}]]></text>
+              </answer>
+        `
+      })
+
+      xml +=`</question>`
+    }
+
+    // ESSAY
+    if (q.type === 'essay') {
+      xml += `
+        <question type="essay">
+          <name><text>${q.title}</text></name>
+          <questiontext format="html">
+            <text><![CDATA[${q.statement}]]></text>
+          </questiontext>
+        </question>
+      `
+    }
+
+    // MATCHING
+    if (q.type === 'matching') {
+      xml += `
+        <question type="matching">
+          <name><text>${q.title}</text></name>
+          <questiontext format="html">
+            <text><![CDATA[${q.statement}]]></text>
+          </questiontext>
+      `
+      q.pairs.forEach(p => {
+        xml += `
+            <subquestion>
+              <text><![CDATA[${p.left}]]></text>
+              <answer>
+                <text><![CDATA[${p.right}]]></text>
+              </answer>
+            </subquestion>
+        `
+      })
+      xml += `  </question>\n`
+    }
+  })
+
+  xml += `</quiz>`
+
+  return xml
 })
 
 

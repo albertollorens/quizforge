@@ -15,8 +15,7 @@ function resetForm() {
 function submit() {
   emit('submit', {
     title: title.value,
-    statement: statement.value,
-    answers: []
+    statement: statement.value
   })
 
   resetForm()

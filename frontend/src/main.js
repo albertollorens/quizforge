@@ -17,5 +17,8 @@ const app = createApp(App)
 // Usar el router
 app.use(router)
 
+//Per a debug, llevar en PRODUCCIÓ
+app.config.devtools = true
+
 // Montar l'app
 app.mount('#app')

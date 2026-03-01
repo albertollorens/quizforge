@@ -4,7 +4,7 @@
       Generador IA de preguntes
     </h3>
     <!-- FORM -->
-    <div class="form-floating mb-3">
+    <div class="row form-floating mb-3">
       <input
         id="topic"
         v-model="topic"
@@ -233,6 +233,10 @@ function sleep(ms) {
 </script>
 
 <style scoped>
+.form-floating > label {
+  left: auto;
+}
+
 .typing::after {
   content: "|";
   animation: blink 1s infinite;
