@@ -12,7 +12,7 @@
         </router-link>
       </li>
       <li>
-        <router-link class="nav-link text-white" to="/nouquiz">
+        <router-link class="nav-link text-white" to="/dashboard/nouquiz">
           <i class="bi bi-plus-circle"></i>  Nou quiz
         </router-link>
       </li>

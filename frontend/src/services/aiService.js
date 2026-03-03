@@ -8,3 +8,11 @@ export function generateQuestions(data) {
         }
     });
 };
+
+export function saveAIQuiz(data) {    
+    return  axios.post("/api/quizzes", data, {
+        headers: {
+            Authorization: `Bearer ${authService.getToken()}`
+        }
+    });
+};

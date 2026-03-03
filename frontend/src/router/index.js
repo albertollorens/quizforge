@@ -11,6 +11,7 @@ import DashboardLayout from "../layouts/DashboardLayout.vue";
 
 // Serveis
 import authService from "../services/authService";
+import QuizList from "../components/QuizList.vue";
 import QuizBuilder from "../components/QuizBuilder.vue";
 import AIGenerator from "../components/AIGenerator.vue";
 
@@ -32,12 +33,23 @@ const routes = [
       },
       {
         path: "dashboard",
-        component: Dashboard
-      },
-      {
-        path: "nouquiz",
-        component: QuizBuilder,
-        props: true
+        component: Dashboard,
+        children: [
+          {
+            path: '/',
+            component: QuizList
+          },
+          {
+            path: "nouquiz",
+            component: QuizBuilder,
+            props: { mode: 'create' }
+          },
+          {
+            path: "editquiz/:id",
+            component: QuizBuilder,
+            props: true
+          }
+        ]
       },
       {
         path: "/aiquiz",

@@ -1,49 +1,54 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import QuizFactory from '@/factories/QuizFactory.js'
+
 const emit = defineEmits(['submit'])
 
-const title = ref('')
-const statement = ref('')
-const answer = ref('')
+// Inicialitzem la pregunta via factory
+const question = ref(QuizFactory.createQuestion('shortanswer'))
+
+const answerInput = ref('') // text en brut de l'usuari
+
+const isFormValid = computed(() =>
+  question.value.title.trim() !== '' &&
+  question.value.statement.trim() !== ''
+)
 
 function submit() {
-  // 1.- Dividim el text per ", " i eliminem possibles espais en blanc al principi/final
-  const answersArray = answer.value
+  if (!isFormValid.value) return
+
+  // Convertim l'input de l'usuari en array d'answers
+  const answersArray = answerInput.value
     .split(' ')
     .map(a => a.trim())
-    .filter(a => a.length > 0) // eliminem valors buits
+    .filter(a => a.length > 0)
+    .map(a => ({ text: a, correct: '' }))
 
-  //console.log(answersArray)
+  question.value.answers = answersArray
 
-  emit('submit', {
-    title: title.value,
-    statement: statement.value,
-    answers: answersArray
-  })
-
+  emit('submit', question.value)
   resetForm()
 }
 
 function resetForm() {
-  title.value = ''
-  statement.value = ''
-  answer.value = ''
+  question.value = QuizFactory.createQuestion('shortanswer')
+  answerInput.value = ''
 }
 </script>
 
 <template>
   <div>
     <div class="form-floating mb-3">
-      <input id="titol" v-model="title" class="form-control"/>
+      <input id="titol" v-model="question.title" class="form-control"/>
       <label for="titol">Títol</label>
     </div>
     <div class="form-floating mb-3">
-      <textarea id="enunciat" v-model="statement" class="form-control"></textarea>
+      <textarea id="enunciat" v-model="question.statement" class="form-control"></textarea>
       <label for="enunciat">Enunciat</label>
     </div>
     
     <div class="form-floating mb-3">
-      <input id="resposta" v-model="answer" class="form-control"/>
+      <input id="resposta" v-model="answerInput" class="form-control"/>
       <label for="resposta">Resposta correcta, per a més d'una separar-les amb un espai en blanc</label>
     </div>    
 

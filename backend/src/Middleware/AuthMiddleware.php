@@ -72,7 +72,11 @@ class AuthMiddleware {
             $res = new Response();
             $res
                 ->getBody()
-                ->write(json_encode(['error' => 'Token inválido']));
+                ->write(json_encode([
+                    'error' => 'Token inválido',
+                    'message' => $e->getMessage(),
+                    'token' => $token
+                    ]));
             return $res
                     ->withStatus(401)
                     ->withHeader('Content-Type', 'application/json');

@@ -1,14 +1,59 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const API_URL = '/api'; // amb Vite, es redirigeix a Slim vía proxy
+const API_URL = '/api'
 
+// Instància axios centralitzada
+const api = axios.create({
+  baseURL: API_URL
+})
+
+/* ================================
+   REQUEST INTERCEPTOR
+================================ */
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('jwt_token')
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+
+  return config
+})
+
+/* ================================
+   RESPONSE INTERCEPTOR
+================================ */
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+
+      // Token expirat o invàlid
+      localStorage.removeItem('jwt_token')
+      localStorage.removeItem('user')
+
+      // Event global per mostrar missatge amigable
+      window.dispatchEvent(new Event('session-expired'))
+
+      // Redirigir a login
+      window.location.href = '/login'
+    }
+
+    return Promise.reject(error)
+  }
+)
+
+/* ================================
+   AUTH SERVICE
+================================ */
 export default {
+
   async login(email, password) {
-    return axios.post(`${API_URL}/login`, { email, password });
+    return api.post('/login', { email, password })
   },
 
   async register(username, email, password) {
-    return axios.post(`${API_URL}/register`, { username, email, password });
+    return api.post('/register', { username, email, password })
   },
 
   async updateProfile(data) {
@@ -16,16 +61,16 @@ export default {
     if (!user) throw new Error('Usuari no loguejat')
 
     const response = await api.put(`/users/${user.id}`, data)
-    // Actualitzem localStorage
+
     localStorage.setItem('user', JSON.stringify(response.data))
     return response.data
   },
 
   saveToken(token) {
-    localStorage.setItem('jwt_token', token);
-    
-    // Decodificar JWT
+    localStorage.setItem('jwt_token', token)
+
     const payload = JSON.parse(atob(token.split('.')[1]))
+
     localStorage.setItem('user', JSON.stringify({
       id: payload.sub,
       username: payload.username,
@@ -39,15 +84,36 @@ export default {
   },
 
   getToken() {
-    return localStorage.getItem('jwt_token');
+    return localStorage.getItem('jwt_token')
   },
 
   logout() {
-    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('jwt_token')
     localStorage.removeItem('user')
+    window.location.href = '/login'
   },
 
   isAuthenticated() {
-    return !!localStorage.getItem('jwt_token');
-  }
-};
+    const token = localStorage.getItem('jwt_token')
+    if (!token) return false
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      const now = Date.now() / 1000
+
+      // Comprovem expiració
+      if (payload.exp && payload.exp < now) {
+        this.logout()
+        return false
+      }
+
+      return true
+
+    } catch (e) {
+      this.logout()
+      return false
+    }
+  },
+
+  api // Exportem api per usar-lo en altres serveis
+}

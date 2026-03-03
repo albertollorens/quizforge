@@ -1,7 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import QuizList from '@/components/QuizList.vue'
-import QuizBuilder from '@/components/QuizBuilder.vue'
+//import QuizBuilder from '@/components/QuizBuilder.vue'
 import {
   getUserQuizzes,
   createQuiz,
@@ -10,10 +11,11 @@ import {
   deleteQuiz
 } from '@/services/quizService'
 
+const router = useRouter()
 const quizzes = ref([])
-const currentView = ref('list')
 const editingQuiz = ref(null)
-const loading = ref(false)
+const loading = ref(false)  //Per mostrar un loading mentre es carreguen els quizzes
+const saving = ref(false) // Per mostrar un loading mentre es guarda el quiz
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -22,7 +24,6 @@ function delay(ms) {
 const builderMode = computed(
   () => editingQuiz.value ? 'edit' : 'create'
 )
-
 
 async function loadQuizzes() {
   loading.value = true
@@ -39,33 +40,49 @@ async function loadQuizzes() {
 
 onMounted(loadQuizzes)
 
-function handleNewQuiz() {
+async function handleNewQuiz() {
   editingQuiz.value = null
-  currentView.value = 'builder'
+  router.push('/dashboard/nouquiz')
 }
 
-async function handleEditQuiz(id) {
-  const res = await getQuiz(id)
-  editingQuiz.value = res.data
-  currentView.value = 'builder'
-}
-
-function handleCancelQuiz() {
-  editingQuiz.value = null
-  currentView.value = 'list'
-}
-
-async function handleSaveQuiz(payload) {
-  if (payload.id) {
-    await updateQuiz(payload.id, payload)
-  } else {
-    await createQuiz(payload)
+// Editar quiz → només enviem l'ID del quiz, després carreguem dades
+async function handleEditQuiz(quizId) {
+  try {
+    editingQuiz.value = null  // netejar abans
+    const res = await getQuiz(quizId)
+    editingQuiz.value = res.data
+    router.push(`/dashboard/editquiz/${quizId}`)
+  } catch (error) {
+    console.error('Error carregant el quiz:', error)
   }
-
-  await loadQuizzes()
-  currentView.value = 'list'
 }
 
+async function handleCancelQuiz() {  
+  editingQuiz.value = null
+  router.push('/dashboard')
+}
+
+async function handleSaveQuiz(payload) {  
+  saving.value = true
+
+  try {
+    if (payload.id) {
+      await updateQuiz(payload.id, payload)
+    } else {
+      await createQuiz(payload)
+    }
+
+    await loadQuizzes()
+    router.push('/dashboard')
+  } catch(e){
+    console.error(e)
+    alert("Error guardant el qüestionari")
+  } finally{
+    saving.value = false    
+  }
+}
+
+// Elimina el quiz
 async function handleDeleteQuiz(id) {
   await deleteQuiz(id)
   await loadQuizzes()
@@ -78,13 +95,13 @@ async function handleDeleteQuiz(id) {
     <header class="dashboard-header">
       <h2>Dashboard</h2>
       <button class="btn btn-primary mb-3" 
-        v-if="currentView === 'list'" 
+        v-if="$route.path === '/dashboard'" 
         @click="handleNewQuiz">
         <i class="bi bi-plus-circle"></i> Nou Quiz
       </button>
 
       <button class="btn btn-secondary mb-3" 
-        v-if="currentView === 'builder'" 
+        v-if="$route.path !== '/dashboard'" 
         @click="handleCancelQuiz"> 
         <i class="bi bi-arrow-left"></i> Tornar 
       </button>
@@ -93,19 +110,24 @@ async function handleDeleteQuiz(id) {
     <section class="dashboard-content"> 
       <!-- Llistat de quizzes -->
       <QuizList 
-        v-if="currentView === 'list'" 
+        v-if="$route.path === '/dashboard'" 
         :quizzes="quizzes" 
-        :loading="loading"
+        :loading="loading" 
         @edit="handleEditQuiz" 
         @delete="handleDeleteQuiz" />
 
-      <QuizBuilder 
-        v-if="currentView === 'builder'" 
-        :key="editingQuiz?.id || 'new'" :quiz="editingQuiz" :mode="builderMode"
+      <router-view 
+        v-else
+        :key="editingQuiz?.id || 'new'" 
+        :quiz="editingQuiz"
+        :mode="builderMode"
+        :loading="saving"    
         @cancel="handleCancelQuiz" 
-        @save="handleSaveQuiz" />
+        @save="handleSaveQuiz"         
+      />
+            
     </section>
-  </div>
+  </div>  
 </template>
 
 <style scoped> 

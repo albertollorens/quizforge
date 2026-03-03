@@ -96,20 +96,48 @@
       </div>
     </div>
 
-    <div class="d-flex justify-content-center mt-3">
+    <div class="d-flex justify-content-center" >        
         <button v-if="questions.length > 0 && !isTyping && !isGenerating"
             class="btn btn-success d-inline-block"
-            @click="saveQuiz"
+            @click="save"
             >
-            Guardar Quiz a la BD
+            Guardar
         </button>
+    </div>
+  </div>
+
+  <!-- Modal Loading -->
+  <div
+    v-if="saving"
+    class="modal fade show"
+    style="display:block; background:rgba(0,0,0,0.5);"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-5">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden"></span>
+          </div>
+          <h5>Guardant quiz...</h5>
+          <p class="text-muted mb-0">
+            Espereu un moment
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
-import { generateQuestions } from "@/services/aiService"
+import { ref, computed } from "vue"
+import { useRouter } from 'vue-router'
+import authService from '../services/authService'
+import { generateQuestions, saveAIQuiz } from "@/services/aiService"
+import { generateGIFT, generateXML } from '@/helpers/quizExport.js'
+import { createQuestion } from '@/factories/quizFactory.js'
+
+const router = useRouter()
+const user = computed(() => authService.getUser())
 
 const topic = ref("")
 const level = ref("basico")
@@ -117,16 +145,17 @@ const language = ref("valencia")
 const numQuestions = ref(5)
 
 const questions = ref([])
+
 const loading = ref(false)
 const isTyping = ref(false)
 const isGenerating = ref(false)
 const error = ref("")
 
-/*
-|--------------------------------------------------------------------------
-| Generate questions
-|--------------------------------------------------------------------------
-*/
+//const giftformat = computed(() => generateGIFT(questions.value))
+//const xmlformat = computed(() => generateXML(questions.value))
+const saving = ref(false) // Per mostrar un loading mentre es guarda el quiz
+
+// Generate questions
 async function generate() {
   error.value = ""
   questions.value = []
@@ -230,6 +259,60 @@ async function typeQuestions(fullQuestions) {
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+async function generateExport() {
+  
+}
+
+// GUARDAR
+async function save() {
+  saving.value = true
+
+  try {
+    // Convertim preguntes al format de quizFactory
+    const formattedQuestions = questions.value.map(q => {
+      const questionObj = createQuestion(q.question_type)
+      questionObj.title = q.question
+      questionObj.statement = q.question
+      questionObj.answers = q.options.map((opt,i) => {
+        const answer = createQuestion(q.question_type).answers[0] || { text:'', correct:false, weight:0 }
+        answer.text = opt
+        if (q.question_type === 'singlechoice') {
+          answer.correct = (opt === q.correct_answer)
+        } else if (q.question_type === 'multichoice') {
+          answer.correct = Array.isArray(q.correct_answer) ? q.correct_answer.includes(opt) : false
+          answer.weight = answer.correct ? 100 / q.correct_answer.length : 0
+        } else if (q.question_type === 'truefalse' || q.question_type === 'shortanswer') {
+          answer.correct = (opt === q.correct_answer)
+        } else if (q.question_type === 'matching') {
+          answer.match_pair = q.correct_answer[i] || ''
+        }
+        return answer
+      })
+      return questionObj
+    })
+
+    const payload = {
+      userid: user.value.id,
+      title: topic.value,
+      course: new Date().getFullYear(),
+      group: 'AI Generated',
+      description: 'Quiz generat amb l\'API d\'OpenAI',
+      questions: formattedQuestions,
+      //giftformat: giftOutput.value,
+      //xmlformat: xmlOutput.value
+    }
+
+    await saveAIQuiz(payload)
+    router.push('/dashboard')
+
+  } catch(e) {
+    console.error(e)
+    alert('Error guardant el qüestionari')
+  } finally {
+    saving.value = false
+  }
+}
 </script>
 
 <style scoped>
@@ -243,11 +326,7 @@ function sleep(ms) {
 }
 
 @keyframes blink {
-  0%, 50%, 100% {
-    opacity: 1;
-  }
-  25%, 75% {
-    opacity: 0;
-  }
+  0%, 50%, 100% { opacity: 1;}
+  25%, 75% { opacity: 0; }
 }
 </style>

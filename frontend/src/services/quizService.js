@@ -25,12 +25,14 @@ export function deleteQuiz(id) {
   })
 }
 
-export function getQuiz(id) {
-  return axios.get(`/api/quizzes/${id}`, {
-    headers: {
+/**
+ * Retorna un quiz amb totes les preguntes i respostes/pairs
+ */
+export async function getQuiz(id) {
+  // 1️⃣ Obtenir el quiz
+  return axios.get(`/api/quizzes/${id}`, { headers: {
       Authorization: `Bearer ${authService.getToken()}`
-    }
-  })
+    } })
 }
 
 export function updateQuiz(id, data) {

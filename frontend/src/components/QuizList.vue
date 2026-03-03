@@ -2,20 +2,11 @@
 import { defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
-  quizzes: {
-    type: Array,
-    default: () => []
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  }
+  quizzes: { type: Array, default: () => [] },
+  loading: { type: Boolean, default: false }
 })
 
-const emit = defineEmits([
-  'edit',
-  'delete'
-])
+const emit = defineEmits(['edit','delete'])
 
 const handleEdit = id => emit('edit', id)
 

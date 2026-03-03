@@ -1,71 +1,38 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import QuizFactory from '@/factories/QuizFactory.js'
 
 const emit = defineEmits(['submit'])
 
-/*
-Matching structure compatible amb Moodle:
-left → pregunta
-right → resposta correcta
-*/
-function createEmptyPairs() {
-  return [
-    { left: '', right: '' },
-    { left: '', right: '' },
-    { left: '', right: '' }
-  ]
-}
+// Inicialitzem la pregunta via factory
+const question = ref(QuizFactory.createQuestion('matching'))
 
-const title = ref('')
-const statement = ref('')
-const pairs = ref(createEmptyPairs())
+const validPairs = computed(() =>
+  question.value.answers.filter(p => p.text.trim() && p.match_pair.trim())
+)
 
-/*
-Afegir nova parella
-*/
+const isFormValid = computed(() => validPairs.value.length >= 2)
+
 function addPair() {
-  pairs.value.push({ left: '', right: '' })
+  question.value.answers.push({ text: '', match_pair: '' })
 }
 
-/*
-Eliminar parella
-*/
 function removePair(index) {
-  if (pairs.value.length > 2)
-    pairs.value.splice(index, 1)
+  if (question.value.answers.length <= 2) return
+  question.value.answers.splice(index, 1)
 }
 
-/*
-Reset complet formulari
-*/
 function resetForm() {
-  title.value = ''
-  statement.value = ''
-  pairs.value = createEmptyPairs()
+  question.value = QuizFactory.createQuestion('matching')
 }
 
-/*
-Submit pregunta
-*/
 function submit() {
-
-  // validar mínim 2 parelles
-  const validPairs = pairs.value.filter(
-    p => p.left.trim() && p.right.trim()
-  )
-
-  if (validPairs.length < 2) {
+  if (!isFormValid.value) {
     alert('Cal mínim 2 parelles')
     return
   }
 
-  emit('submit', {
-    type: 'matching',
-    title: title.value,
-    statement: statement.value,
-    pairs: validPairs
-  })
-
+  emit('submit', question.value)
   resetForm()
 }
 </script>
@@ -73,13 +40,13 @@ function submit() {
 <template>
     <!-- TITLE -->
     <div class="form-floating mb-3">
-      <input v-model="title" class="form-control" placeholder="Títol">
+      <input v-model="question.title" class="form-control" placeholder="Títol">
       <label>Títol</label>
     </div>
 
     <!-- STATEMENT -->
     <div class="form-floating mb-3">
-      <textarea v-model="statement" class="form-control" placeholder="Enunciat" style="height:100px"></textarea>
+      <textarea v-model="question.statement" class="form-control" placeholder="Enunciat" style="height:100px"></textarea>
       <label>Enunciat</label>
     </div>
 
@@ -87,15 +54,15 @@ function submit() {
     <label class="form-label">Parelles</label>
 
     <div
-      v-for="(pair,index) in pairs"
+      v-for="(pair,index) in question.answers"
       :key="index"
       class="row mb-2 align-items-center"
     >
       <div class="col">
-        <input v-model="pair.left"class="form-control" placeholder="Element esquerre">
+        <input v-model="pair.text"class="form-control" placeholder="Element esquerre">
       </div>
       <div class="col">
-        <input v-model="pair.right" class="form-control" placeholder="Element dret">
+        <input v-model="pair.match_pair" class="form-control" placeholder="Element dret">
       </div>
       <div class="col-auto">
         <button

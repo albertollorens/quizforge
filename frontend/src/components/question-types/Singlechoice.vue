@@ -1,15 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import QuizFactory from '@/factories/quizFactory.js'
+
 const emit = defineEmits(['submit'])
 
-const title = ref('')
-const statement = ref('')
-const answers = ref([
-  { text: '', correct: true },
-  { text: '', correct: false },
-  { text: '', correct: false },
-  { text: '', correct: false }
-])
+// Inicialitzem la pregunta via factory
+const question = ref(QuizFactory.createQuestion('singlechoice'))
 
 function setCorrect(index) {
   answers.value.forEach((a, i) => {
@@ -18,34 +14,12 @@ function setCorrect(index) {
 }
 
 function submit() {  
-  emit('submit', {
-    title: title.value,
-    statement: statement.value,
-    answers: answers.value
-  })
+  emit('submit', question.value)
   resetForm()
 }
 
 function resetForm() {
-  title.value = ''
-  statement.value = ''
-  answers.value = createEmptyAnswers()
-}
-
-function createEmptyAnswer() {
-  return {
-    text: '',
-    correct: false
-  }
-}
-
-function createEmptyAnswers() {
-  return [
-    createEmptyAnswer(),
-    createEmptyAnswer(),
-    createEmptyAnswer(),
-    createEmptyAnswer()
-  ]
+  question.value = QuizFactory.createQuestion('singlechoice')
 }
 </script>
 

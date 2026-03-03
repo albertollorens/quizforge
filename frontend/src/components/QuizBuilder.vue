@@ -4,6 +4,12 @@
 
     <!-- Informació -->
     <div class="card shadow-sm mb-4">
+      <button
+        class="btn btn-success mb-3"
+        @click="loadTestData"
+      >
+        Carregar dades de prova
+      </button>
       <div class="card-body">
         <div class="row g-3">
           <div class="col-md-4">
@@ -40,7 +46,7 @@
             class="form-control"
             rows="2"
             v-model="description"
-          />
+          ></textarea>
         </div>
       </div>
     </div>
@@ -110,11 +116,12 @@
               rows="10"
               :value="giftOutput"
               readonly
-            />
+            ></textarea>
 
             <button
               class="btn btn-info mt-2"
               @click="downloadFile(giftOutput,'quiz.gift','text/plain')"
+              :disabled="!questions.length>0"
             >
               <i class="bi bi-download"></i> Descarregar
             </button>
@@ -130,11 +137,12 @@
               rows="10"
               :value="xmlOutput"
               readonly
-            />
+            ></textarea>
 
             <button
               class="btn btn-info mt-2"
               @click="downloadFile(xmlOutput,'quiz.xml','application/xml')"
+              :disabled="!questions.length>0"
             >
               <i class="bi bi-download"></i> Descarregar
             </button>
@@ -149,37 +157,67 @@
       <button
         class="btn btn-success"
         @click="handleSave"
+        :disabled="questions.length === 0 || props.loading"
       >
-        <i class="bi bi-floppy"></i> Guardar
+        <span v-if="props.loading" class="spinner-border spinner-border-sm me-2"></span>  
+        <i class="bi bi-floppy"></i> {{ props.loading ? 'Guardant...' : 'Guardar' }}
       </button>
 
       <button
         class="btn btn-danger"
         @click="emit('cancel')"
+        :disabled="props.loading"
       >
         <i class="bi bi-x"></i> Cancel·lar
       </button>
     </div>
+  </div>
 
+  <!-- Modal Loading -->
+  <div
+    v-if="props.loading"
+    class="modal fade show"
+    style="display:block; background:rgba(0,0,0,0.5);"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center p-5">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <h5>Guardant quiz...</h5>
+          <p class="text-muted mb-0">
+            Espera un moment
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 import QuestionForm from '@/components/QuestionForm.vue'
+import authService from '../services/authService'
+import { generateGIFT, generateXML } from '@/helpers/quizExport.js'
+import { normalizeQuestionFromAPI } from '@/factories/quizFactory'
+import testQuizData from '@/data/testQuizData' //llevar per a producció
 
 const emit = defineEmits(['save','cancel'])
 
 const props = defineProps({
   quiz:Object,
-  mode:String
+  mode:String,
+  loading: Boolean
 })
 
 const isEditMode = computed(
   ()=> props.mode === 'edit'
 )
 
+const user = computed(() => authService.getUser())
 
 /* STATE */
 const id = ref(null)
@@ -189,11 +227,8 @@ const group = ref('')
 const description = ref('')
 const questions = ref([])
 
-
 /* WATCH QUIZ (IMPORTANT) */
-watch(
-  ()=>props.quiz,
-  (quiz)=>{
+watch(()=>props.quiz, (quiz)=>{
     if(!quiz){
       resetForm()
       return
@@ -204,12 +239,11 @@ watch(
     course.value = quiz.course || ''
     group.value = quiz.group || ''
     description.value = quiz.description || ''
-
+    // Normalització
     questions.value = quiz.questions
-      ? structuredClone(quiz.questions)
+      ? quiz.questions.map(q => normalizeQuestionFromAPI(q))
       : []
-  },
-  { immediate:true }
+  }, { immediate:true }
 )
 
 function resetForm(){
@@ -223,7 +257,7 @@ function resetForm(){
 
 /* QUESTIONS */
 function addQuestion(q){
-  questions.value.push(q)
+  questions.value.push(normalizeQuestionFromAPI(q))
 }
 
 function removeQuestion(index){
@@ -231,190 +265,10 @@ function removeQuestion(index){
 }
 
 /* GIFT FORMAT GENERATOR */
-const giftOutput = computed(() => {
-  return questions.value.map((q, index) => {
-    const title = `::${q.title}::`
-
-    // SINGLECHOICE
-    if (q.type === 'singlechoice') {
-      const answers = q.answers.map(a =>
-        a.correct ? `=${a.text}` : `~${a.text}`
-      ).join('\n')
-
-      return `${title}[html]${q.statement} {\n${answers}\n}`
-    }
-
-    // MULTIPLECHOICE
-    if (q.type === 'multichoice') {
-      const answers = q.answers.map(a => {
-        const weight = a.weight
-        if (a.correct) {
-          return `~%${weight}%${a.text}`
-        }
-        return `~%${weight}%${a.text}`
-      }).join('\n')
-
-      return `${title}[html]${q.statement} {\n${answers}\n}`
-    }
-
-    // TRUE / FALSE
-    if (q.type === 'truefalse') {
-      const answer = q.answer === true ? 'TRUE' : 'FALSE'
-      return `${title}[html]${q.statement} {${answer}}`
-    }
-
-    // SHORT ANSWER
-    if (q.type === 'shortanswer') {
-      const answers = q.answers.map(a=>{
-        return `=${a} `
-      }).join(' ')
-      return `${title}[html]${q.statement} {${answers}}`
-    }
-
-    // ESSAY
-    if (q.type === 'essay') {
-      return `${title}[html]${q.statement} {}` 
-    }
-
-    // MATCHING
-    if (q.type === 'matching') {
-      const pairs = q.pairs.map(p => {        
-        return `=${p.left}->${p.right}`
-      }).join('\n')
-
-      return `${title}[html]${q.statement} {\n${pairs}\n}`
-    }
-    return ''
-
-  }).join('\n\n')
-
-})
+const giftOutput = computed(() => generateGIFT(questions.value))
 
 /* XML FORMAT GENERATOR */
-const xmlOutput = computed(() => {
-  let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<quiz>\n`
-  questions.value.forEach((q, index) => {
-
-    // SINGLECHOICE
-    if (q.type === 'singlechoice') {
-      xml += `
-        <question type="multichoice">
-          <name><text>${q.title}</text></name>
-          <questiontext format="html">
-            <text><![CDATA[${q.statement}]]></text>
-          </questiontext>
-          <single>true</single>
-      `
-
-      q.answers.forEach(a => {
-        const fraction = a.correct ? "100" : "0"
-        xml += `
-            <answer fraction="${fraction}">
-              <text><![CDATA[${a.text}]]></text>
-            </answer>
-        `
-      })
-      xml += `  </question>\n`
-    }
-
-    // MULTIPLECHOICE
-    if (q.type === 'multichoice') {
-      xml += `
-        <question type="multichoice">
-          <name><text>${q.title}</text></name>
-          <questiontext format="html">
-            <text><![CDATA[${q.statement}]]></text>
-          </questiontext>
-          <single>false</single>
-      `
-      q.answers.forEach(a => {        
-        const weight = a.weight
-
-        xml += `
-            <answer fraction="${weight}">
-              <text><![CDATA[${a.text}]]></text>
-            </answer>
-        `
-      })
-      xml += `  </question>\n`
-    }
-
-    // TRUE FALSE
-    if (q.type === 'truefalse') {
-      xml += `
-        <question type="truefalse">
-          <name><text>${q.title}</text></name>
-          <questiontext format="html">
-            <text><![CDATA[${q.statement}]]></text>
-          </questiontext>
-          <answer fraction="${q.answer ? 100 : 0}">
-            <text>true</text>
-          </answer>
-          <answer fraction="${!q.answer ? 100 : 0}">
-            <text>false</text>
-          </answer>
-        </question>
-      `
-    }
-
-    // SHORT ANSWER
-    if (q.type === 'shortanswer') {
-      xml += `
-        <question type="shortanswer">
-          <name><text>${q.title}</text></name>
-          <questiontext format="html">
-            <text><![CDATA[${q.statement}]]></text>
-          </questiontext>          
-      `
-      q.answers.forEach(a => {
-        xml+=`<answer fraction="100">
-                <text><![CDATA[${a}]]></text>
-              </answer>
-        `
-      })
-
-      xml +=`</question>`
-    }
-
-    // ESSAY
-    if (q.type === 'essay') {
-      xml += `
-        <question type="essay">
-          <name><text>${q.title}</text></name>
-          <questiontext format="html">
-            <text><![CDATA[${q.statement}]]></text>
-          </questiontext>
-        </question>
-      `
-    }
-
-    // MATCHING
-    if (q.type === 'matching') {
-      xml += `
-        <question type="matching">
-          <name><text>${q.title}</text></name>
-          <questiontext format="html">
-            <text><![CDATA[${q.statement}]]></text>
-          </questiontext>
-      `
-      q.pairs.forEach(p => {
-        xml += `
-            <subquestion>
-              <text><![CDATA[${p.left}]]></text>
-              <answer>
-                <text><![CDATA[${p.right}]]></text>
-              </answer>
-            </subquestion>
-        `
-      })
-      xml += `  </question>\n`
-    }
-  })
-
-  xml += `</quiz>`
-
-  return xml
-})
+const xmlOutput = computed(() => generateXML(questions.value))
 
 
 /* DOWNLOADS */
@@ -432,22 +286,26 @@ function downloadFile(content,filename,type){
 
 
 /* SAVE */
-function handleSave(){
-  if(!quizTitle.value){
-    alert('Nom requerit')
-    return
-  }
+async function handleSave(){  
+  if(!quizTitle.value) return alert('Nom requerit')
+  emit('save',{
+      userid: user.value.id,
+      id:id.value,
+      title:quizTitle.value,
+      course:course.value,
+      group:group.value,
+      description:description.value,
+      questions:questions.value,
+      giftformat:giftOutput.value,
+      xmlformat:xmlOutput.value
+  })  
+}
 
-  emit('save',{ //payload
-    id:id.value,
-    title:quizTitle.value,
-    course:course.value,
-    group:group.value,
-    description:description.value,
-    questions:questions.value,
-    gift:giftOutput.value,
-    xml:xmlOutput.value
-  })
-
+function loadTestData() {
+  quizTitle.value = testQuizData.title
+  course.value = testQuizData.course
+  group.value = testQuizData.group
+  description.value = testQuizData.description
+  questions.value = JSON.parse(JSON.stringify(testQuizData.questions))
 }
 </script>

@@ -41,6 +41,8 @@ CREATE TABLE quizzes (
   user_id INT NOT NULL,
   title VARCHAR(150) NOT NULL,
   description TEXT,
+  giftformat LONGTEXT,
+  xmlformat LONGTEXT;
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT fk_quiz_user
@@ -56,15 +58,17 @@ CREATE TABLE quizzes (
 CREATE TABLE questions (
   id INT AUTO_INCREMENT PRIMARY KEY,
   quiz_id INT NOT NULL,
+  title TEXT NOT NULL,
   type ENUM(
-    'single',
-    'multiple',
+    'singlechoice',
+    'multichoice',
     'matching',
-    'cloze',
-    'short',
+    'gapselect',
+    'truefalse',
+    'shortanswer',
     'essay'
   ) NOT NULL,
-  question_text TEXT NOT NULL,
+  statement TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT fk_question_quiz
@@ -82,6 +86,7 @@ CREATE TABLE answers (
   question_id INT NOT NULL,
   answer_text TEXT NOT NULL,
   is_correct BOOLEAN DEFAULT FALSE,
+  weight INT NOT NULL,
   match_pair VARCHAR(255) NULL,
 
   CONSTRAINT fk_answer_question

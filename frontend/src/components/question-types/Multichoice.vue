@@ -1,28 +1,11 @@
 <script setup>
 import { computed, ref } from 'vue'
+import QuizFactory from '@/factories/QuizFactory.js'
 
 const emit = defineEmits(['submit'])
 
-function createEmptyAnswer() {
-  return {
-    text: '',
-    correct: false,
-    weight: 0
-  }
-}
-
-function createEmptyAnswers() {
-  return [
-    createEmptyAnswer(),
-    createEmptyAnswer(),
-    createEmptyAnswer(),
-    createEmptyAnswer()
-  ]
-}
-
-const title = ref('')
-const statement = ref('')
-const answers = ref(createEmptyAnswers())
+// Inicialitzem la pregunta via factory
+const question = ref(QuizFactory.createQuestion('multichoice'))
 
 const weightOptions = [
   100, 90, 83.33333, 80, 75, 66.66667, 60, 50, 40, 33.33333,
@@ -33,64 +16,45 @@ const weightOptions = [
 ]
 
 const totalWeight = computed(() => {
-  return answers.value
+  return question.value.answers
     .filter(a => a.correct)
     .reduce((sum, a) => sum + (Number(a.weight) || 0), 0)
 })
 
 const TOLERANCE = 0.01
-
 const isWeightValid = computed(() => {
   return Math.abs(totalWeight.value - 100) < TOLERANCE
 })
-
 const hasEnoughAnswers = computed(() => {
-  return answers.value.filter(a => a.text.trim() !== '').length >= 2
+  return question.value.answers.filter(a => a.text.trim() !== '').length >= 2
 })
-
 const isFormValid = computed(() => {
   return (
-    title.value.trim() !== '' &&
-    statement.value.trim() !== '' &&
+    question.value.title.trim() !== '' &&
+    question.value.statement.trim() !== '' &&
     hasEnoughAnswers.value &&
     isWeightValid.value
   )
 })
 
 function addAnswer() {
-  answers.value.push(createEmptyAnswer())
+  question.answers.value.push({ text: '', correct: false, weight: 0 })
 }
 
 function removeAnswer(index) {
-  if (answers.value.length <= 2) return
-  answers.value.splice(index, 1)
+  if (question.value.answers.length <= 2) return
+  question.value.answers.splice(index, 1)
 }
 
 function submit() {
-  if (!isFormValid.value) {
-    alert('Formulari invàlid')
-    return
-  }
+  if (!isFormValid.value) return alert('Formulari invàlid')
 
-  emit('submit', {
-    type: 'multichoice',
-    title: title.value,
-    statement: statement.value,
-    answers: answers.value
-      .filter(a => a.text.trim() !== '')
-      .map(a => ({
-        text: a.text,
-        correct: a.correct,
-        weight: a.weight ?? 0
-      }))
-  })
+  emit('submit', question.value)
   resetForm()
 }
 
 function resetForm() {
-  title.value = ''
-  statement.value = ''
-  answers.value = createEmptyAnswers()
+  question.value = QuizFactory.createQuestion('multichoice')
 }
 </script>
 
@@ -100,7 +64,7 @@ function resetForm() {
     <div class="form-floating mb-3">
       <input
         id="title"
-        v-model="title"
+        v-model="question.title"
         class="form-control"
         placeholder="Títol"
       />
@@ -109,19 +73,18 @@ function resetForm() {
 
     <!-- STATEMENT -->
     <div class="form-floating mb-3">
-      <textarea
+      <input
         id="statement"
-        v-model="statement"
+        v-model="question.statement"
         class="form-control"
         placeholder="Enunciat"
-        style="height:100px"
-      ></textarea>
+      ></input>
       <label for="statement">Enunciat</label>
     </div>
 
     <!-- ANSWERS -->
     <div
-      v-for="(a, index) in answers"
+      v-for="(a, index) in question.answers"
       :key="index"
       class="input-group mb-2"
     >
@@ -164,7 +127,7 @@ function resetForm() {
       <button
         class="btn btn-outline-danger"
         @click="removeAnswer(index)"
-        :disabled="answers.length <= 2"
+        :disabled="question.answers.length <= 2"
         title="Eliminar resposta"
       >
         ✕

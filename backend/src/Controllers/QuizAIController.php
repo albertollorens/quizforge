@@ -38,13 +38,15 @@ class QuizAIController
 
             $data = $request->getParsedBody();
 
-            $topic = $data['topic'] ?? 'programació';
-            $level = $data['level'] ?? 'bàsic';
+            $topic = $data['topic'] ?? '';
+            $level = $data['level'] ?? '';
+            $language = $data['language'] ?? '';
+            $numQuestions = $data['numQuestions'] ?? '';
 
             // 1️⃣ Generar preguntes amb IA
-            $result = $this->ai->generateQuestions($topic, $level);
+            $result = $this->ai->generateQuestions($topic, $level, $language, $numQuestions);
 
-            $questions = json_decode($result, true);
+            $questions = $result;
 
             // 2️⃣ Crear quiz
             $quiz_id = $this->quizModel->create(

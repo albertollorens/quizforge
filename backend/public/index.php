@@ -13,6 +13,7 @@ use App\Services\OpenAIService;
 use App\Models\User;
 use App\Models\Quiz;
 use App\Models\Question;
+use App\Models\Answer;
 
 $app = AppFactory::create();
 
@@ -39,7 +40,7 @@ $app->add(function ($request, $handler) {
 // Crear instàncies dels models amb PDO
 $userModel = new User(Database::connect());
 $quizModel = new Quiz(Database::connect());
-$questionModel = new Question(Database::connect());
+$questionModel = new Question(Database::connect(), new Answer(Database::connect()));
 
 $loginController = new LoginController($userModel);
 $quizController = new QuizController($quizModel, $questionModel);
@@ -53,6 +54,8 @@ require __DIR__ . '/../src/routes/api.php';
 // Comprovació d'errors
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('log_errors', 1);
+ini_set('error_log', 'C:/wamp64/logs/php_error.log');
 
 // Si no és /api, servir Vue
 if (!str_starts_with($_SERVER['REQUEST_URI'], '/api')) {

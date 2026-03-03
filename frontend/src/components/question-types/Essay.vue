@@ -1,24 +1,26 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import QuizFactory from '@/factories/QuizFactory.js'
+
 const emit = defineEmits(['submit'])
 
-const title = ref('')
-const statement = ref('')
-const answer = ref('')
+// Creem la pregunta via factory
+const question = ref(QuizFactory.createQuestion('essay'))
 
-function resetForm() {
-  title.value = ''
-  statement.value = ''
-  answer.value = ''
-}
+const isFormValid = computed(() =>
+  question.value.title.trim() !== '' &&
+  question.value.statement.trim() !== ''
+)
 
 function submit() {
-  emit('submit', {
-    title: title.value,
-    statement: statement.value
-  })
+  if (!isFormValid.value) return alert('Formulari invàlid')
 
+  emit('submit', question.value)
   resetForm()
+}
+
+function resetForm() {
+  question.value = QuizFactory.createQuestion('essay')
 }
 </script>
 

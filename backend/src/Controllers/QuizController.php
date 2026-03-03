@@ -32,16 +32,13 @@ class QuizController
         $data = $request->getParsedBody();
 
         try {
-
-            $quiz_id = $this->quizModel->create($user_id, $data);
+            // Crea el Quiz          
+            $quiz_id = $this->quizModel->create($user_id, $data);            
 
             // 2️⃣ Crear preguntes
             foreach ($data['questions'] as $question) {
-                $this->questionModel->create($quiz_id, $question);
+                $this->questionModel->create($quiz_id, $question);              
             }
-
-            // Confirmem
-            $this->quizModel->commit();
 
             $response->getBody()->write(json_encode([
                 'success' => true,
@@ -49,8 +46,6 @@ class QuizController
             ]));
             
         } catch(\Exception $e) {
-            $this->quizModel->rollBack();
-
             $response->getBody()->write(json_encode([
                 'success' => false,
                 'error' => $e->getMessage()
@@ -72,8 +67,18 @@ class QuizController
             return $response->withStatus(404);
         }
 
-        $response->getBody()->write(json_encode($quiz));
+        // Obtenim totes les preguntes del quiz
+        $questions = $this->questionModel->getAllByQuiz($quiz_id);
 
+        // Afegim respostes o parells per cada pregunta segons el tipus
+        foreach ($questions as &$q) {            
+            // Obtenim les respostes normals
+            $q['answers'] = $this->questionModel->getAnswerModel()->getByQuestionId($q['id']);
+        }
+        // Afegim les preguntes al quiz
+        $quiz['questions'] = $questions;
+
+        $response->getBody()->write(json_encode($quiz));
         return $response->withHeader('Content-Type', 'application/json');
     }
 
@@ -83,10 +88,29 @@ class QuizController
         $quiz_id = $args['id'];
         $data = $request->getParsedBody();
 
-        $this->quizModel->update($quiz_id, $user_id, $data);
-        $response->getBody()->write(json_encode([
-            'success' => true
-        ]));
+        try {
+            // Actualitza les dades del Quiz          
+            $this->quizModel->update($quiz_id, $user_id, $data);         
+
+            // Elimina les preguntes del quiz
+            $this->questionModel->deleteByQuizId($quiz_id);
+
+            // Insereix les noves preguntes
+            foreach ($data['questions'] as $question) {
+                $this->questionModel->create($quiz_id, $question);              
+            }
+
+            $response->getBody()->write(json_encode([
+                'success' => true
+            ]));
+        } catch(\Exception $e) {
+            $response->getBody()->write(json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]));
+
+            return $response->withStatus(500);
+        }
 
         return $response->withHeader('Content-Type', 'application/json');
     }
