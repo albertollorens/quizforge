@@ -198,7 +198,6 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { defineProps, defineEmits } from 'vue'
 import QuestionForm from '@/components/QuestionForm.vue'
 import authService from '../services/authService'
 import { generateGIFT, generateXML } from '@/helpers/quizExport.js'
