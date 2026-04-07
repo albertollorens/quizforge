@@ -1,0 +1,506 @@
+<html lang="ca"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizForge | Crea qüestionaris amb IA per a Moodle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-grid-pattern {
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .shimmer {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 antialiased selection:bg-gray-200 selection:text-black">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div class="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white">
+                        <iconify-icon icon="solar:pen-new-square-linear" width="20" stroke-width="1.5"></iconify-icon>
+                    </div>
+                    <span class="font-semibold text-lg tracking-tight">QuizForge</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors" data-i18n="nav_features">Funcionalitats</a>
+                    <a href="#demo" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors" data-i18n="nav_demo">Demostració</a>
+                    <a href="#pricing" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors" data-i18n="nav_plans">Plans</a>
+                    
+                    <!-- Language Selector -->
+                    <div class="relative group">
+                        <button class="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900 bg-gray-50 px-2 py-1 rounded-md border border-gray-200">
+                            <span id="current-lang">VA</span>
+                            <iconify-icon icon="solar:alt-arrow-down-linear" width="16"></iconify-icon>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-32 bg-white border border-gray-100 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                            <div class="py-1 flex flex-col">
+                                <button onclick="setLanguage('va')" class="px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 w-full">Valencià</button>
+                                <button onclick="setLanguage('es')" class="px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 w-full">Castellano</button>
+                                <button onclick="setLanguage('en')" class="px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 w-full">English</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#pricing" class="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm" data-i18n="nav_cta">Provar gratis</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="relative overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32">
+        <div class="absolute inset-0 bg-gradient-to-b from-gray-50/50 to-white z-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-medium mb-8">
+                <iconify-icon icon="solar:info-circle-linear" width="14"></iconify-icon>
+                <span data-i18n="hero_badge">Nou: Integració directa i exportació a Aules (Moodle)</span>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 tracking-tight max-w-4xl mx-auto leading-tight" data-i18n="hero_title">
+                Crea qüestionaris per a la teua aula en segons amb Intel·ligència Artificial.
+            </h1>
+            
+            <p class="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-normal leading-relaxed" data-i18n="hero_subtitle">
+                Estalvia hores de feina. Genera, edita i exporta exàmens directament a la teua aula virtual sense coneixements tècnics. Pensat per a docents.
+            </p>
+
+            <div class="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#pricing" class="w-full sm:w-auto bg-gray-900 text-white px-6 py-3 rounded-md text-base font-medium hover:bg-gray-800 transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <span data-i18n="hero_cta1">Començar gratuïtament</span>
+                    <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+                </a>
+                <a href="#demo" class="w-full sm:w-auto bg-white text-gray-900 border border-gray-200 px-6 py-3 rounded-md text-base font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                    <iconify-icon icon="solar:play-circle-linear" width="20" class="text-gray-500"></iconify-icon>
+                    <span data-i18n="hero_cta2">Veure com funciona</span>
+                </a>
+            </div>
+
+            <!-- Hero Mockup -->
+            <div class="mt-16 max-w-4xl mx-auto relative">
+                <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 top-1/2"></div>
+                <div class="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden flex flex-col text-left">
+                    <div class="h-10 bg-gray-50 border-b border-gray-200 flex items-center px-4 gap-2">
+                        <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                        <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                        <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                    </div>
+                    <div class="p-6 bg-grid-pattern relative">
+                        <!-- Mockup Content -->
+                        <div class="max-w-2xl bg-white border border-gray-100 rounded-lg shadow-sm p-4 mb-4">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 rounded bg-blue-50 flex items-center justify-center text-blue-600">
+                                    <iconify-icon icon="solar:magic-stick-3-linear"></iconify-icon>
+                                </div>
+                                <h3 class="text-sm font-medium text-gray-900">Generant preguntes sobre "La Revolució Francesa"...</h3>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="h-4 bg-gray-100 rounded w-3/4"></div>
+                                <div class="h-4 bg-gray-100 rounded w-1/2"></div>
+                            </div>
+                        </div>
+                        <div class="max-w-2xl bg-white border border-gray-100 rounded-lg shadow-sm p-4 ml-8 opacity-80">
+                            <p class="text-sm text-gray-800 font-medium mb-2">1. Quin va ser el detonant principal de la Revolució Francesa?</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded border border-gray-300"></div><span class="text-xs text-gray-600">La invasió napoleònica</span></div>
+                                <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full bg-green-100 border border-green-500 flex items-center justify-center"><iconify-icon icon="solar:check-read-linear" width="12" class="text-green-600"></iconify-icon></div><span class="text-xs text-gray-900 font-medium">La crisi financera i la desigualtat social</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-20 bg-gray-50 border-y border-gray-100">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-900 mb-4" data-i18n="demo_title">Prova la màgia tu mateix</h2>
+            <p class="text-gray-600 mb-8 text-base" data-i18n="demo_sub">Escriu un tema de la teua assignatura i observa com es genera un qüestionari.</p>
+            
+            <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 shadow-sm text-left">
+                
+                <!-- Input Area -->
+                <div id="demo-input-area" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="demo_label">Tema del qüestionari</label>
+                        <input type="text" id="demo-topic" placeholder="Ex: El cicle de l'aigua, Equacions de segon grau..." class="w-full rounded-md border border-gray-200 px-4 py-2.5 text-sm text-gray-900 focus:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-100 transition-all">
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-gray-500 mb-1" data-i18n="demo_level">Nivell educatiu</label>
+                            <select class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-gray-400">
+                                <option>1r ESO</option>
+                                <option>4t ESO</option>
+                                <option>Batxillerat</option>
+                                <option>Cicles Formatius</option>
+                            </select>
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-gray-500 mb-1" data-i18n="demo_questions">Núm. preguntes</label>
+                            <select class="w-full rounded-md border border-gray-200 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-gray-400">
+                                <option>3 preguntes (Demo)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="runDemo()" class="w-full mt-4 bg-gray-900 text-white px-4 py-2.5 rounded-md text-sm font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2">
+                        <iconify-icon icon="solar:magic-stick-3-linear" width="18"></iconify-icon>
+                        <span data-i18n="demo_btn">Generar qüestionari</span>
+                    </button>
+                </div>
+
+                <!-- Loading Area -->
+                <div id="demo-loading" class="hidden flex flex-col items-center justify-center py-12 space-y-4">
+                    <iconify-icon icon="solar:spinner-linear" width="32" class="text-gray-400 animate-spin"></iconify-icon>
+                    <p class="text-sm text-gray-500 font-medium animate-pulse" data-i18n="demo_loading">Llegint el context i creant preguntes...</p>
+                </div>
+
+                <!-- Result Area -->
+                <div id="demo-result" class="hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                        <h3 class="text-base font-semibold text-gray-900" id="demo-result-title">Resultats generats</h3>
+                        <button class="text-xs font-medium text-gray-500 hover:text-gray-900 flex items-center gap-1" onclick="resetDemo()">
+                            <iconify-icon icon="solar:refresh-linear"></iconify-icon> Tornar a provar
+                        </button>
+                    </div>
+                    
+                    <!-- Question 1 -->
+                    <div class="space-y-3">
+                        <p class="text-sm font-medium text-gray-800"><span class="text-gray-400 mr-2">1.</span> Quina d'aquestes afirmacions descriu millor el concepte clau?</p>
+                        <div class="space-y-2 pl-6">
+                            <label class="flex items-center gap-3 p-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                                <input type="radio" name="q1" class="w-4 h-4 text-gray-900 border-gray-300 focus:ring-gray-900">
+                                <span class="text-sm text-gray-600">És un procés estacional independent.</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-2 rounded border border-green-200 bg-green-50 cursor-pointer relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
+                                <input type="radio" name="q1" checked="" class="w-4 h-4 text-green-600 border-green-400 focus:ring-green-500">
+                                <span class="text-sm text-gray-900 font-medium">És la base fonamental per a la comprensió del tema establert.</span>
+                                <span class="ml-auto text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded">Correcta</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-end gap-3 border-t border-gray-100">
+                        <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors flex items-center gap-2">
+                            <iconify-icon icon="solar:pen-linear"></iconify-icon> Editar
+                        </button>
+                        <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2">
+                            <iconify-icon icon="solar:export-linear"></iconify-icon> Exportar a Moodle
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-900 mb-4" data-i18n="feat_title">Tot el que necessites, res del que no</h2>
+                <p class="text-base text-gray-600" data-i18n="feat_sub">Una eina dissenyada específicament per resoldre els problemes reals del dia a dia docent.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Feature 1 -->
+                <div class="p-6 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 mb-4">
+                        <iconify-icon icon="solar:magic-stick-3-linear" width="22"></iconify-icon>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2" data-i18n="f1_title">Generació Intel·ligent</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="f1_desc">Aporta un text, un PDF o simplement un tema, i deixa que la IA cree bateries de preguntes coherents i adaptades al nivell.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-6 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600 mb-4">
+                        <iconify-icon icon="solar:export-linear" width="22"></iconify-icon>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2" data-i18n="f2_title">Exportació a Aules/Moodle</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="f2_desc">Descarrega els teus qüestionaris en format natiu XML de Moodle. Importa'ls al teu curs en menys de 3 clics sense errors de format.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-6 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 mb-4">
+                        <iconify-icon icon="solar:check-circle-linear" width="22"></iconify-icon>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2" data-i18n="f3_title">Retroalimentació Automàtica</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="f3_desc">El sistema no només marca la resposta correcta, sinó que genera explicacions per a l'alumne del motiu de cada error.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="p-6 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md transition-all">
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-4">
+                        <iconify-icon icon="solar:layers-minimalistic-linear" width="22"></iconify-icon>
+                    </div>
+                    <h3 class="text-base font-semibold text-gray-900 mb-2" data-i18n="f4_title">Múltiples Formats</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed" data-i18n="f4_desc">Crea preguntes d'opció múltiple, veritable/fals, resposta curta o emparellament. Combina-les com vulgues.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-semibold tracking-tight text-center text-gray-900 mb-12" data-i18n="test_title">Creat per i per a docents</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex gap-1 mb-4 text-gray-900">
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-6 leading-relaxed">"Abans perdia tot el diumenge preparant el banc de preguntes a Aules. Ara puge el PDF del tema, revise el que genera QuizForge i ho exporte. M'ha canviat la vida."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 text-xs font-semibold">MR</div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Marta Ribera</p>
+                            <p class="text-xs text-gray-500">Professora d'Història, IES Lluís Vives</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex gap-1 mb-4 text-gray-900">
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-6 leading-relaxed">"El que més m'agrada és que no he de formatar res. L'arxiu XML que et dóna entra perfecte a Moodle amb totes les opcions i la retroalimentació ja configurada."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 text-xs font-semibold">JP</div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Joan Pastor</p>
+                            <p class="text-xs text-gray-500">Departament d'Informàtica, FP</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex gap-1 mb-4 text-gray-900">
+                        <iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon><iconify-icon icon="solar:star-bold" width="16"></iconify-icon>
+                    </div>
+                    <p class="text-sm text-gray-700 mb-6 leading-relaxed">"Sóc una mica maldestre amb la tecnologia, però la interfície és tan neta que no pots equivocar-te. Poses el text, cliques al botó i ja ho tens."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-700 text-xs font-semibold">CG</div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">Carme Garcia</p>
+                            <p class="text-xs text-gray-500">Mestra de Primària</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-900 mb-4" data-i18n="price_title">Plans simples i transparents</h2>
+                <p class="text-base text-gray-600" data-i18n="price_sub">Comença debades i millora quan necessites generar més volum per als teus grups.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto items-center">
+                
+                <!-- Basic -->
+                <div class="rounded-2xl border border-gray-200 p-8 bg-white">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2" data-i18n="p1_name">Bàsic</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-semibold tracking-tight text-gray-900" data-i18n="p1_price">Gratis</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-600">
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> 10 qüestionaris al mes</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Exportació Moodle (XML)</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Només opció múltiple</li>
+                    </ul>
+                    <button class="w-full py-2.5 rounded-md border border-gray-200 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors" data-i18n="p1_btn">Començar gratis</button>
+                </div>
+
+                <!-- Pro -->
+                <div class="rounded-2xl border-2 border-gray-900 p-8 bg-white relative shadow-lg transform md:-translate-y-4">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs font-medium px-3 py-1 rounded-full" data-i18n="p2_badge">Més popular</div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2" data-i18n="p2_name">Pro Docent</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-semibold tracking-tight text-gray-900">9€</span>
+                        <span class="text-sm text-gray-500" data-i18n="p2_period">/mes</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-600">
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Qüestionaris il·limitats</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Exportació Moodle i GIFT</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Tots els tipus de preguntes</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Generació des de PDF</li>
+                    </ul>
+                    <button class="w-full py-2.5 rounded-md bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors" data-i18n="p2_btn">Actualitzar a Pro</button>
+                </div>
+
+                <!-- Center -->
+                <div class="rounded-2xl border border-gray-200 p-8 bg-white">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2" data-i18n="p3_name">Centre Educatiu</h3>
+                    <div class="flex items-baseline gap-1 mb-6">
+                        <span class="text-4xl font-semibold tracking-tight text-gray-900">49€</span>
+                        <span class="text-sm text-gray-500" data-i18n="p3_period">/mes</span>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-sm text-gray-600">
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Llicències il·limitades pel centre</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Banc de preguntes compartit</li>
+                        <li class="flex items-center gap-3"><iconify-icon icon="solar:check-circle-linear" class="text-gray-900"></iconify-icon> Suport prioritari</li>
+                    </ul>
+                    <button class="w-full py-2.5 rounded-md border border-gray-200 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors" data-i18n="p3_btn">Contactar</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-24 bg-gray-900 text-center px-4">
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight text-white mb-6" data-i18n="cta_title">Preparat per recuperar el teu temps?</h2>
+        <p class="text-gray-400 text-lg mb-10 max-w-xl mx-auto font-normal" data-i18n="cta_sub">Uneix-te a centenars de docents que ja han automatitzat la creació de les seues proves d'avaluació.</p>
+        <button class="bg-white text-gray-900 px-8 py-3.5 rounded-md text-base font-medium hover:bg-gray-100 transition-colors shadow-sm" data-i18n="cta_btn">Crear el meu primer qüestionari gratuït</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-gray-900 flex items-center justify-center text-white">
+                    <iconify-icon icon="solar:pen-new-square-linear" width="14"></iconify-icon>
+                </div>
+                <span class="font-semibold text-sm tracking-tight text-gray-900">QuizForge</span>
+            </div>
+            <div class="flex gap-6 text-sm text-gray-500">
+                <a href="#" class="hover:text-gray-900">Privacitat</a>
+                <a href="#" class="hover:text-gray-900">Termes legals</a>
+                <a href="#" class="hover:text-gray-900">Contacte</a>
+            </div>
+            <p class="text-xs text-gray-400">© 2024 QuizForge. Creat per i per a l'educació.</p>
+        </div>
+    </footer>
+
+    <!-- Logic Script (Demo & i18n) -->
+    <script>
+        // Interactive Demo Logic
+        function runDemo() {
+            const inputArea = document.getElementById('demo-input-area');
+            const loadingArea = document.getElementById('demo-loading');
+            const resultArea = document.getElementById('demo-result');
+            const topicInput = document.getElementById('demo-topic').value;
+
+            if(!topicInput) {
+                alert('Per favor, escriu un tema per generar el qüestionari.');
+                return;
+            }
+
+            // Hide input, show loading
+            inputArea.classList.add('hidden');
+            loadingArea.classList.remove('hidden');
+            loadingArea.classList.add('flex');
+
+            // Simulate API Call delay
+            setTimeout(() => {
+                loadingArea.classList.add('hidden');
+                loadingArea.classList.remove('flex');
+                resultArea.classList.remove('hidden');
+            }, 1800);
+        }
+
+        function resetDemo() {
+            document.getElementById('demo-input-area').classList.remove('hidden');
+            document.getElementById('demo-result').classList.add('hidden');
+            document.getElementById('demo-topic').value = '';
+        }
+
+        // Lightweight i18n System
+        const translations = {
+            va: {
+                nav_features: "Funcionalitats", nav_demo: "Demostració", nav_plans: "Plans", nav_cta: "Provar gratis",
+                hero_badge: "Nou: Integració directa i exportació a Aules (Moodle)",
+                hero_title: "Crea qüestionaris per a la teua aula en segons amb Intel·ligència Artificial.",
+                hero_subtitle: "Estalvia hores de feina. Genera, edita i exporta exàmens directament a la teua aula virtual sense coneixements tècnics. Pensat per a docents.",
+                hero_cta1: "Començar gratuïtament", hero_cta2: "Veure com funciona",
+                demo_title: "Prova la màgia tu mateix", demo_sub: "Escriu un tema de la teua assignatura i observa com es genera un qüestionari.",
+                demo_label: "Tema del qüestionari", demo_level: "Nivell educatiu", demo_questions: "Núm. preguntes", demo_btn: "Generar qüestionari", demo_loading: "Llegint el context i creant preguntes...",
+                feat_title: "Tot el que necessites, res del que no", feat_sub: "Una eina dissenyada específicament per resoldre els problemes reals del dia a dia docent.",
+                f1_title: "Generació Intel·ligent", f1_desc: "Aporta un text, un PDF o simplement un tema, i deixa que la IA cree bateries de preguntes coherents i adaptades al nivell.",
+                f2_title: "Exportació a Aules/Moodle", f2_desc: "Descarrega els teus qüestionaris en format natiu XML de Moodle. Importa'ls al teu curs en menys de 3 clics sense errors de format.",
+                f3_title: "Retroalimentació Automàtica", f3_desc: "El sistema no només marca la resposta correcta, sinó que genera explicacions per a l'alumne del motiu de cada error.",
+                f4_title: "Múltiples Formats", f4_desc: "Crea preguntes d'opció múltiple, veritable/fals, resposta curta o emparellament. Combina-les com vulgues.",
+                test_title: "Creat per i per a docents",
+                price_title: "Plans simples i transparents", price_sub: "Comença debades i millora quan necessites generar més volum per als teus grups.",
+                p1_name: "Bàsic", p1_price: "Gratis", p1_btn: "Començar gratis",
+                p2_badge: "Més popular", p2_name: "Pro Docent", p2_period: "/mes", p2_btn: "Actualitzar a Pro",
+                p3_name: "Centre Educatiu", p3_period: "/mes", p3_btn: "Contactar",
+                cta_title: "Preparat per recuperar el teu temps?", cta_sub: "Uneix-te a centenars de docents que ja han automatitzat la creació de les seues proves d'avaluació.", cta_btn: "Crear el meu primer qüestionari gratuït"
+            },
+            es: {
+                nav_features: "Funcionalidades", nav_demo: "Demostración", nav_plans: "Planes", nav_cta: "Probar gratis",
+                hero_badge: "Nuevo: Integración directa y exportación a Aules (Moodle)",
+                hero_title: "Crea cuestionarios para tu aula en segundos con Inteligencia Artificial.",
+                hero_subtitle: "Ahorra horas de trabajo. Genera, edita y exporta exámenes directamente a tu aula virtual sin conocimientos técnicos. Pensado para docentes.",
+                hero_cta1: "Empezar gratis", hero_cta2: "Ver cómo funciona",
+                demo_title: "Prueba la magia tú mismo", demo_sub: "Escribe un tema de tu asignatura y observa cómo se genera un cuestionario.",
+                demo_label: "Tema del cuestionario", demo_level: "Nivel educativo", demo_questions: "Núm. preguntas", demo_btn: "Generar cuestionario", demo_loading: "Leyendo el contexto y creando preguntas...",
+                feat_title: "Todo lo que necesitas, nada de lo que no", feat_sub: "Una herramienta diseñada específicamente para resolver los problemas reales del día a día docente.",
+                f1_title: "Generación Inteligente", f1_desc: "Aporta un texto, un PDF o simplemente un tema, y deja que la IA cree baterías de preguntas coherentes y adaptadas al nivel.",
+                f2_title: "Exportación a Aules/Moodle", f2_desc: "Descarga tus cuestionarios en formato nativo XML de Moodle. Impórtalos a tu curso en menos de 3 clics sin errores de formato.",
+                f3_title: "Retroalimentación Automática", f3_desc: "El sistema no solo marca la respuesta correcta, sino que genera explicaciones para el alumno del motivo de cada error.",
+                f4_title: "Múltiples Formatos", f4_desc: "Crea preguntas de opción múltiple, verdadero/falso, respuesta corta o emparejamiento. Combínalas como quieras.",
+                test_title: "Creado por y para docentes",
+                price_title: "Planes simples y transparentes", price_sub: "Empieza gratis y mejora cuando necesites generar más volumen para tus grupos.",
+                p1_name: "Básico", p1_price: "Gratis", p1_btn: "Empezar gratis",
+                p2_badge: "Más popular", p2_name: "Pro Docente", p2_period: "/mes", p2_btn: "Actualizar a Pro",
+                p3_name: "Centro Educativo", p3_period: "/mes", p3_btn: "Contactar",
+                cta_title: "¿Preparado para recuperar tu tiempo?", cta_sub: "Únete a cientos de docentes que ya han automatizado la creación de sus pruebas de evaluación.", cta_btn: "Crear mi primer cuestionario gratis"
+            },
+            en: {
+                nav_features: "Features", nav_demo: "Demo", nav_plans: "Pricing", nav_cta: "Try for free",
+                hero_badge: "New: Direct integration and export to Aules (Moodle)",
+                hero_title: "Create quizzes for your classroom in seconds with Artificial Intelligence.",
+                hero_subtitle: "Save hours of work. Generate, edit and export exams directly to your virtual classroom without technical knowledge. Designed for teachers.",
+                hero_cta1: "Start for free", hero_cta2: "See how it works",
+                demo_title: "Try the magic yourself", demo_sub: "Write a topic for your subject and watch a quiz being generated.",
+                demo_label: "Quiz topic", demo_level: "Education level", demo_questions: "Num. questions", demo_btn: "Generate quiz", demo_loading: "Reading context and creating questions...",
+                feat_title: "Everything you need, nothing you don't", feat_sub: "A tool specifically designed to solve real day-to-day teaching problems.",
+                f1_title: "Smart Generation", f1_desc: "Provide a text, a PDF or just a topic, and let AI create coherent question banks adapted to the level.",
+                f2_title: "Export to Aules/Moodle", f2_desc: "Download your quizzes in native Moodle XML format. Import them to your course in under 3 clicks with no formatting errors.",
+                f3_title: "Automatic Feedback", f3_desc: "The system not only marks the correct answer but generates explanations for the student regarding the reason for each mistake.",
+                f4_title: "Multiple Formats", f4_desc: "Create multiple choice, true/false, short answer or matching questions. Combine them as you wish.",
+                test_title: "Created by and for teachers",
+                price_title: "Simple and transparent pricing", price_sub: "Start for free and upgrade when you need to generate more volume for your groups.",
+                p1_name: "Basic", p1_price: "Free", p1_btn: "Start for free",
+                p2_badge: "Most popular", p2_name: "Pro Teacher", p2_period: "/month", p2_btn: "Upgrade to Pro",
+                p3_name: "School", p3_period: "/month", p3_btn: "Contact us",
+                cta_title: "Ready to reclaim your time?", cta_sub: "Join hundreds of teachers who have already automated the creation of their assessments.", cta_btn: "Create my first free quiz"
+            }
+        };
+
+        function setLanguage(lang) {
+            document.getElementById('current-lang').innerText = lang.toUpperCase();
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(translations[lang] && translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+        }
+    </script>
+
+</body></html>

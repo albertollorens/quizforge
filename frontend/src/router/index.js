@@ -1,29 +1,40 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 // Vistes
+import Landing from "../views/Landing.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Profile from "../views/Profile.vue";
 
-// Layout
-import DashboardLayout from "../layouts/DashboardLayout.vue";
+// Layouts
+import LandingLayout from '@/layouts/LandingLayout.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
 
 // Serveis
 import authService from "../services/authService";
+
+// Components
 import QuizList from "../components/QuizList.vue";
 import QuizBuilder from "../components/QuizBuilder.vue";
 import AIGenerator from "../components/AIGenerator.vue";
+//import Navbar from "../components/dashboard/Navbar.vue";
 
 const routes = [
   // 🔓 Públiques
-  { path: "/", redirect: "/login" },
+  { path: "/", 
+    component: LandingLayout,
+    children: [
+      {path: "", component: Landing }
+    ]
+   },
+  //{ path: "/landingpage", component: LandingPage },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
 
   // 🔒 Protegides (SB Admin Layout)
   {
-    path: "/",
+    path: "/dashboard",
     component: DashboardLayout,
     meta: { requiresAuth: true },
     children: [

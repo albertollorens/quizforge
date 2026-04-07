@@ -1,0 +1,880 @@
+<html lang="en"><head>
+<script>
+try{if(window.parent&&window.parent!==window){window.parent.promotekit_referral="1fd2949a-d22c-431b-92bf-02d4ad04ee24";window.parent.document.cookie="promotekit_referral=1fd2949a-d22c-431b-92bf-02d4ad04ee24;path=/;domain=.aura.build;max-age=31536000"}}catch(e){}
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consensus Cloud Apps - Modern SaaS Platform for SAP Business One</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Inter', sans-serif; }
+/* Smooth scrolling */
+html { scroll-behavior: smooth; }
+/* Hide scrollbar for clean UI in some containers */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+<script>
+// Configure Tailwind to include our custom 3D transform utilities
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+sap: {
+blue: '#003366', // Dark SAP Blue
+light: '#0faaff', // Bright SAP Blue
+gold: '#f0ab00', // SAP Gold
+gray: '#f5f7f9'
+}
+}
+}
+},
+plugins: [
+function({ addUtilities }) {
+const rotateXUtilities = {};
+const rotateYUtilities = {};
+const rotateZUtilities = {};
+const rotateValues = [0, 5, 10, 15, 20, 30, 45, 75];
+// Generate rotate-x utilities
+rotateValues.forEach((value) => {
+rotateXUtilities[`.rotate-x-${value}`] = {
+'--tw-rotate-x': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateXUtilities[`.-rotate-x-${value}`] = {
+'--tw-rotate-x': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-y utilities
+rotateValues.forEach((value) => {
+rotateYUtilities[`.rotate-y-${value}`] = {
+'--tw-rotate-y': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateYUtilities[`.-rotate-y-${value}`] = {
+'--tw-rotate-y': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Generate rotate-z utilities
+rotateValues.forEach((value) => {
+rotateZUtilities[`.rotate-z-${value}`] = {
+'--tw-rotate-z': `${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+if (value !== 0) {
+rotateZUtilities[`.-rotate-z-${value}`] = {
+'--tw-rotate-z': `-${value}deg`,
+transform: `
+translate3d(var(--tw-translate-x, 0), var(--tw-translate-y, 0), var(--tw-translate-z, 0))
+rotateX(var(--tw-rotate-x, 0))
+rotateY(var(--tw-rotate-y, 0))
+rotateZ(var(--tw-rotate-z, 0))
+skewX(var(--tw-skew-x, 0))
+skewY(var(--tw-skew-y, 0))
+scaleX(var(--tw-scale-x, 1))
+scaleY(var(--tw-scale-y, 1))
+`.replace(/\\s+/g, ' ').trim(),
+};
+}
+});
+// Perspective utilities
+const perspectiveUtilities = {
+".perspective-none": { perspective: "none" },
+".perspective-dramatic": { perspective: "100px" },
+".perspective-near": { perspective: "300px" },
+".perspective-normal": { perspective: "500px" },
+".perspective-midrange": { perspective: "800px" },
+".perspective-distant": { perspective: "1200px" },
+};
+// Transform style utilities
+const transformStyleUtilities = {
+".transform-style-preserve-3d": { "transform-style": "preserve-3d" },
+".transform-style-flat": { "transform-style": "flat" },
+};
+addUtilities({
+...rotateXUtilities,
+...rotateYUtilities,
+...rotateZUtilities,
+...perspectiveUtilities,
+...transformStyleUtilities,
+});
+}
+]
+};
+</script>
+<link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style><link id="all-fonts-link-font-newsreader" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400..800&amp;display=swap"><style id="all-fonts-style-font-newsreader">.font-newsreader { font-family: 'Newsreader', serif !important; }</style><link id="all-fonts-link-font-google-sans-flex" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-google-sans-flex">.font-google-sans-flex { font-family: 'Google Sans Flex', sans-serif !important; }</style><link id="all-fonts-link-font-oswald" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-oswald">.font-oswald { font-family: 'Oswald', sans-serif !important; }</style><link id="all-fonts-link-font-dm-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-dm-sans">.font-dm-sans { font-family: 'DM Sans', sans-serif !important; }</style><link id="all-fonts-link-font-cormorant" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-cormorant">.font-cormorant { font-family: 'Cormorant Garamond', serif !important; }</style>  <style>
+/* 3D Transform utilities */
+.perspective-none { perspective: none !important; }
+.perspective-dramatic { perspective: 100px !important; }
+.perspective-near { perspective: 300px !important; }
+.perspective-normal { perspective: 500px !important; }
+.perspective-midrange { perspective: 800px !important; }
+.perspective-distant { perspective: 1200px !important; }
+.transform-style-preserve-3d { transform-style: preserve-3d !important; }
+.transform-style-flat { transform-style: flat !important; }
+</style></head>
+<body class="antialiased selection:bg-blue-100 selection:text-blue-900 bg-white text-slate-600" data-new-gr-c-s-check-loaded="14.1268.0" data-gr-ext-installed="">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 backdrop-blur-md border-b bg-white/90 border-slate-200">
+        <div class="flex h-20 max-w-7xl mr-auto ml-auto pr-6 pl-6 items-center justify-between">
+            <!-- Logo -->
+            <div class="flex gap-2 gap-x-2 gap-y-2 items-center">
+                <img src="COUD APPS COLOUR PNG FILE with white colour (horizontal).png" alt="Cloud Apps by Consensus" class="w-auto h-10 object-contain">
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#" class="transition-colors hover:text-blue-700">Products</a>
+                <a href="#" class="transition-colors hover:text-blue-700">Solutions</a>
+                <a href="#pricing" class="transition-colors hover:text-blue-700">Pricing</a>
+                <a href="#" class="transition-colors hover:text-blue-700">Resources</a>
+            </div>
+
+            <!-- Auth -->
+            <div class="hidden md:flex items-center gap-4">
+                <div class="flex items-center gap-1 text-xs font-medium text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="globe" aria-hidden="true" class="lucide lucide-globe w-3 h-3"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg> EN
+                </div>
+                <a href="#" class="text-sm font-medium text-slate-900 hover:text-blue-700">Log in</a>
+                <a href="#" class="text-sm font-medium px-5 py-2.5 rounded-full transition-colors bg-[#003366] text-white hover:bg-blue-900 shadow-md shadow-blue-900/10">Get Started</a>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-slate-900">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="menu" aria-hidden="true" class="lucide lucide-menu w-6 h-6"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="lg:pt-40 lg:pb-32 overflow-hidden pt-32 pb-20 relative">
+        <!-- Background Decor -->
+        <div class="absolute inset-0 -z-10 overflow-hidden">
+            <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full blur-3xl opacity-40 bg-blue-50"></div>
+            <div class="absolute top-[10%] -right-[10%] w-[40%] h-[40%] rounded-full blur-3xl opacity-30 bg-amber-50"></div>
+        </div>
+
+        <div class="text-center max-w-5xl mr-auto ml-auto pr-6 pl-6 relative isolate">
+    <!-- Modern Background Glow (SAP Colors) -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-full -z-10 pointer-events-none">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-slate-400/10 to-amber-500/10 blur-3xl rounded-full transform scale-110 opacity-60"></div>
+    </div>
+
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full backdrop-blur-sm border text-xs font-medium mb-8 shadow-sm ring-1 ring-blue-500/10 bg-blue-50/50 border-blue-100/50 text-blue-700">
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-amber-400"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+        </span>
+        New: AI Assistant 2.0 is now live
+    </div>
+    
+    <h1 class="md:text-7xl leading-[1.1] bg-clip-text text-5xl font-semibold text-transparent tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 mb-6">
+        AI Cloud Apps for <span class="inline-block align-bottom">
+    <img src="https://www.aura.build/editor/SAP_BusinessOne_R_grad_blue.png" class="h-[0.77em] w-auto object-contain" alt="SAP Business One">
+</span>
+    </h1>
+    
+    <p class="md:text-2xl leading-relaxed text-xl font-light text-slate-500 max-w-3xl mr-auto mb-10 ml-auto">
+        Powerful cloud-based modules for document automation, electronic signatures, AI-powered insights, and seamless reporting.
+    </p>
+    
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#" class="w-full sm:w-auto px-8 py-4 rounded-xl font-medium transition-all shadow-lg flex items-center justify-center gap-2 group bg-[#003366] text-white hover:bg-blue-900 shadow-blue-900/20">
+            Start Free Trial
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="arrow-right" aria-hidden="true" class="lucide lucide-arrow-right w-4 h-4 group-hover:translate-x-1 transition-transform"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </a>
+        <a href="#" class="w-full sm:w-auto px-8 py-4 backdrop-blur-md border rounded-xl font-medium transition-all shadow-sm bg-white/80 text-slate-700 border-slate-200 hover:bg-white hover:border-blue-200">
+            Explore Modules
+        </a>
+    </div>
+</div>
+    </section>
+
+    <!-- Value Props / Icons (SAP Palette) -->
+    <section class="py-12 border-y border-slate-100 bg-slate-50/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="flex flex-col items-center text-center">
+                    <div class="p-3 rounded-xl mb-4 bg-blue-50 text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cloud" aria-hidden="true" class="lucide lucide-cloud w-6 h-6"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                    </div>
+                    <h3 class="text-base font-semibold mb-1 text-slate-900">Cloud-Based</h3>
+                    <p class="text-sm text-slate-500">Access anywhere, anytime</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="p-3 rounded-xl mb-4 bg-amber-50 text-amber-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="plug" aria-hidden="true" class="lucide lucide-plug w-6 h-6"><path d="M12 22v-5"></path><path d="M15 8V2"></path><path d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"></path><path d="M9 8V2"></path></svg>
+                    </div>
+                    <h3 class="text-base font-semibold mb-1 text-slate-900">SAP Integrated</h3>
+                    <p class="text-sm text-slate-500">Seamless B1 connectivity</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="p-3 rounded-xl mb-4 bg-slate-100 text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-6 h-6"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                    </div>
+                    <h3 class="text-base font-semibold mb-1 text-slate-900">Quick Setup</h3>
+                    <p class="text-sm text-slate-500">Deploy in minutes</p>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="p-3 rounded-xl mb-4 bg-blue-100 text-[#003366]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check w-6 h-6"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    </div>
+                    <h3 class="text-base font-semibold mb-1 text-slate-900">Enterprise Ready</h3>
+                    <p class="text-sm text-slate-500">Secure &amp; scalable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Features Title -->
+    <section class="pt-24 pb-12 text-center">
+        <h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-4 text-[#003366]">
+            Powerful Modules for Every Need
+        </h2>
+        <p class="text-lg text-slate-500">Choose the tools that fit your business workflow, powered by Consensus International</p>
+    </section>
+
+    <!-- Feature 1: AI Assistant -->
+    <section class="lg:pt-18 lg:pb-18 pt-20 pb-20">
+        <div class="overflow-hidden isolate bg-gradient-to-br max-w-7xl rounded-3xl mr-auto ml-auto pt-16 pr-6 pb-16 pl-6 relative shadow-2xl from-white via-blue-50/50 to-slate-50">
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-200/20 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-amber-200/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Image Left -->
+        <div class="relative group perspective-normal">
+            <!-- SAP Background Layer (Dark Card for Contrast) -->
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl border aspect-[4/3] bg-[#003366] border-blue-900">
+                <img src="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/4734259a-bad7-422f-981e-ce01e79184f2_1600w.jpg" alt="SAP Business One Background" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-40 transition duration-700 mix-blend-overlay">
+                
+                <!-- Center the AI Image (Smaller & Floating) -->
+                <div class="flex pt-8 pr-8 pb-8 pl-8 absolute top-0 right-0 bottom-0 left-0 items-center justify-center">
+                    <div class="relative w-[85%] h-[85%] rounded-xl overflow-hidden shadow-2xl ring-1 group-hover:scale-105 transition duration-500 ease-out transform bg-slate-950 ring-white/10">
+                         <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&amp;fit=crop&amp;q=80&amp;w=1000" alt="AI Interface" class="object-cover w-full h-full opacity-90">
+                         
+                         <!-- Gradient Overlay -->
+                         <div class="absolute inset-0 bg-slate-50 flex items-center justify-center overflow-hidden">
+    <img src="image (11).png" alt="Chat Interface Preview" class="w-full h-full object-contain">
+</div>
+                         
+                         <!-- AI Status Overlay -->
+                         <div class="absolute bottom-6 left-6 right-6">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Right -->
+        <div class="relative">
+            <div class="flex shadow-blue-100/50 text-blue-700 bg-white w-12 h-12 border-blue-100 border rounded-xl mb-6 shadow-lg items-center justify-center">
+                <svg xmlns="http://www.w3.org/2024" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bot" aria-hidden="true" class="lucide lucide-bot w-6 h-6"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            </div>
+            <h3 class="text-3xl font-semibold tracking-tight mb-2 text-slate-900">AI Assistant</h3>
+            <p class="text-lg mb-6 font-medium text-blue-700">Your Intelligent Business Partner</p>
+            <p class="mb-8 leading-relaxed text-slate-600">
+                Chat with an AI bot directly connected to your SAP Business One database. Retrieve information instantly, generate insights, and even create transactions through natural language conversations.
+            </p>
+            
+            <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3 text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 text-amber-500 mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    Natural language queries
+                </li>
+                <li class="flex items-start gap-3 text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 text-amber-500 mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    Real-time B1 data access
+                </li>
+                <li class="flex items-start gap-3 text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 text-amber-500 mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    Create transactions via chat
+                </li>
+            </ul>
+
+            <a href="#" class="inline-flex items-center gap-2 font-medium transition-colors group text-blue-700 hover:text-blue-900">
+                Get Started <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right w-4 h-4 group-hover:translate-x-0.5 transition-transform"><path d="m9 18 6-6-6-6"></path></svg>
+            </a>
+        </div>
+    </div>
+</div>
+    </section>
+
+    <!-- Feature 2: B1 Proxy Module -->
+    <section class="py-20 lg:py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto rounded-3xl p-8 lg:p-16 shadow-2xl bg-gradient-to-br from-white via-slate-50 to-blue-50/30">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Content Left -->
+                <div class="order-2 lg:order-1">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-white text-amber-600 shadow-sm border border-amber-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="database" aria-hidden="true" class="lucide lucide-database w-6 h-6"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M3 5V19A9 3 0 0 0 21 19V5"></path><path d="M3 12A9 3 0 0 0 21 12"></path></svg>
+                    </div>
+                    <h3 class="text-3xl font-semibold text-slate-900 tracking-tight mb-2">Documents and Reports Hub</h3>
+                    <p class="text-lg text-slate-600 mb-6 font-medium">Connect, Query, and Report with Ease</p>
+                    <p class="mb-8 leading-relaxed text-slate-600">
+                        Access your SAP Business One database directly through our secure cloud proxy. Generate custom reports, run complex queries, and extract critical business insights without the need for on-premise infrastructure.
+                    </p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3 text-slate-700 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 text-amber-500 mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Direct database connectivity
+                        </li>
+                        <li class="flex items-start gap-3 text-slate-700 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 text-amber-500 mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Custom report generation
+                        </li>
+                        <li class="flex items-start gap-3 text-slate-700 font-medium">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 text-amber-500 mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Secure cloud-based queries
+                        </li>
+                    </ul>
+
+                    <a href="#" class="inline-flex items-center gap-2 font-medium transition-colors text-amber-700 hover:text-amber-900">
+                        Learn More <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right w-4 h-4"><path d="m9 18 6-6-6-6"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Image Right -->
+                <div class="order-1 lg:order-2 relative group">
+                     <div class="absolute -inset-2 bg-gradient-to-l rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 from-amber-100 to-blue-100"></div>
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border aspect-[4/3] flex items-center justify-center p-6 bg-white border-white/40">
+                        <!-- Abstract Dashboard UI Mockup -->
+                        <div class="w-full h-full rounded-xl overflow-hidden flex flex-col p-5 bg-[#f3f6f9] text-slate-600 font-sans shadow-sm border border-slate-200">
+    <!-- Breadcrumbs -->
+    <div class="flex items-center gap-2 mb-4 text-[10px] text-slate-400 font-medium select-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span class="text-slate-300">/</span>
+        <span>Reports</span>
+        <span class="text-slate-300">/</span>
+        <span class="text-slate-500 font-semibold">Reports and Layouts</span>
+    </div>
+
+    <!-- Title -->
+    <h2 class="text-xl font-bold text-slate-800 mb-5 tracking-tight">Reports and Layouts</h2>
+
+    <!-- Main Card -->
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 p-4 flex-1 w-full relative overflow-hidden flex flex-col">
+        <div class="grid grid-cols-2 gap-4 h-full">
+            <!-- Left Field -->
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[10px] font-semibold text-slate-500">SAP Connection</label>
+                <div class="bg-[#f8fafc] border border-slate-200 rounded-md px-3 py-2 flex items-center justify-between shadow-sm hover:border-slate-300 transition-colors cursor-pointer">
+                    <span class="text-xs font-medium text-slate-700 truncate pr-2">SBODEMOUS (SBODEMOUS)</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down text-slate-400"><path d="m6 9 6 6 6-6"></path></svg>
+                </div>
+            </div>
+
+            <!-- Right Field (Expanded Dropdown) -->
+            <div class="flex flex-col gap-1.5 z-10 h-full">
+                <label class="text-[10px] font-semibold text-slate-500">Reports and layouts</label>
+                
+                <!-- Dropdown Structure -->
+                <div class="bg-[#f8fafc] rounded-md shadow-lg border border-slate-200 overflow-hidden flex flex-col w-full h-full relative">
+                    <!-- Dropdown Header -->
+                    <div class="px-3 py-2 flex items-center justify-between border-b border-slate-200 bg-[#f1f5f9] shrink-0">
+                        <span class="text-xs text-slate-500 truncate">Select a report or layout...</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up text-slate-400"><path d="m18 15-6-6-6 6"></path></svg>
+                    </div>
+
+                    <!-- List Container -->
+                    <div class="flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent bg-white h-full">
+                        <!-- Selected Option (Blue) -->
+                        <div class="bg-blue-600 px-3 py-2 border-b border-blue-500 shrink-0">
+                            <span class="text-xs font-medium text-white truncate block">Select a report or layout...</span>
+                        </div>
+
+                        <!-- List Items -->
+                        <div class="bg-white hover:bg-slate-50 px-3 py-2 border-b border-slate-100 cursor-pointer group transition-colors">
+                            <div class="text-[11px] font-bold text-slate-800 mb-0.5 group-hover:text-blue-600">A/P Credit Memo (Items)</div>
+                            <div class="text-[9px] text-slate-400 truncate font-medium">A/P Credit Memo (Items) - CR (US) (System) (default)</div>
+                        </div>
+
+                        <div class="bg-white hover:bg-slate-50 px-3 py-2 border-b border-slate-100 cursor-pointer group transition-colors">
+                            <div class="text-[11px] font-bold text-slate-800 mb-0.5 group-hover:text-blue-600">A/R Credit Memo</div>
+                            <div class="text-[9px] text-slate-400 truncate font-medium">A/R Credit Memo (Service) - CR (US) (System) (default)</div>
+                        </div>
+
+                        <div class="bg-white hover:bg-slate-50 px-3 py-2 border-b border-slate-100 cursor-pointer group transition-colors">
+                            <div class="text-[11px] font-bold text-slate-800 mb-0.5 group-hover:text-blue-600">A/R Invoice (Items)</div>
+                            <div class="text-[9px] text-slate-400 truncate font-medium">A/R Invoice (Item) - CR (US) (System) (default)</div>
+                        </div>
+                        
+                        <div class="bg-white hover:bg-slate-50 px-3 py-2 cursor-pointer group transition-colors">
+                            <div class="text-[11px] font-bold text-slate-800 mb-0.5 group-hover:text-blue-600">Bin Location List</div>
+                            <div class="text-[9px] text-slate-400 truncate font-medium">Bin Location List - CR (System) (default)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 3: DocuSign -->
+    <section class="lg:py-24 pt-20 pb-20">
+        <div class="max-w-7xl mx-auto rounded-3xl bg-gradient-to-br p-8 lg:p-16 shadow-2xl from-blue-50 via-white to-blue-50/20">
+            <div class="grid lg:grid-cols-2 gap-16 gap-x-16 gap-y-16 items-center">
+                <!-- Image Left -->
+                <div class="relative group">
+                     <div class="absolute -inset-2 bg-gradient-to-r rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-1000 from-blue-100 to-indigo-100"></div>
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl border aspect-[4/3] flex items-center justify-center bg-white border-slate-200">
+                         <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&amp;fit=crop&amp;q=80&amp;w=1000" alt="Signing Documents" class="object-cover w-full h-full hover:scale-105 transition duration-700">
+                    </div>
+                </div>
+
+                <!-- Content Right -->
+                <div class="">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-6 bg-[#003366] text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="pen-tool" aria-hidden="true" class="lucide lucide-pen-tool w-6 h-6"><path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z"></path><path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18"></path><path d="m2.3 2.3 7.286 7.286"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                    </div>
+                    <h3 class="text-3xl font-semibold tracking-tight mb-2 text-slate-900">DocuSign Integration</h3>
+                    <p class="text-lg text-slate-500 mb-6 font-medium">Electronic Signatures Made Simple</p>
+                    <p class="mb-8 leading-relaxed text-slate-600">
+                        Send documents directly from SAP Business One transactions to DocuSign for electronic signatures. Automatically update your database when documents are signed.
+                    </p>
+                    
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-start gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 mt-0.5 shrink-0 text-blue-700"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Send from B1 transactions
+                        </li>
+                        <li class="flex items-start gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 mt-0.5 shrink-0 text-blue-700"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Webhook signature updates
+                        </li>
+                        <li class="flex items-start gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle-2" aria-hidden="true" class="lucide lucide-check-circle-2 w-5 h-5 mt-0.5 shrink-0 text-blue-700"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Complete audit trail
+                        </li>
+                    </ul>
+
+                    <a href="#" class="inline-flex items-center gap-2 font-medium transition-colors text-blue-700 hover:text-blue-900">
+                        Get Started <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-right" aria-hidden="true" class="lucide lucide-chevron-right w-4 h-4"><path d="m9 18 6-6-6-6"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 4: Document Automation -->
+    <section class="py-20 lg:py-24 bg-white border-t border-slate-100">
+        <div class="max-w-7xl mx-auto rounded-3xl p-8 lg:p-16 shadow-2xl bg-[linear-gradient(110deg,#f1f5f9,#ffffff,#e2e8f0,#dbeafe)]">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Content Left -->
+                <div class="order-1">
+                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-8 bg-blue-600 text-white shadow-lg shadow-blue-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-text" aria-hidden="true" class="lucide lucide-file-text"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+                    </div>
+                    <h3 class="text-3xl md:text-4xl font-semibold tracking-tight mb-2 text-slate-900">Document Automation</h3>
+                    <p class="text-lg text-slate-500 mb-6 font-medium">AI-Powered Document Processing</p>
+                    <p class="mb-8 leading-relaxed text-slate-600 text-lg">
+                        Automatically ingest PDF invoices and purchase orders to create documents in SAP Business One. Our AI extracts key information with precision, reducing manual data entry and accelerating your accounts payable workflow.
+                    </p>
+                    
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex gap-3 font-medium text-slate-700 gap-x-3 gap-y-3 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 w-6 h-6 text-blue-600 fill-blue-50"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Intelligent PDF extraction
+                        </li><li class="flex gap-3 font-medium text-slate-700 gap-x-3 gap-y-3 items-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 w-6 h-6 text-blue-600 fill-blue-50"><circle cx="12" cy="12" r="10" class=""></circle><path d="m9 12 2 2 4-4" class=""></path></svg>
+    Auto-create B1 documents
+</li>
+                        <li class="flex gap-3 font-medium text-slate-700 gap-x-3 gap-y-3 items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 w-6 h-6 text-blue-600 fill-blue-50"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                            Invoice &amp; PO processing
+                        </li>
+                        
+                    </ul>
+
+                    <a href="#" class="inline-flex items-center justify-center px-8 py-3 rounded-lg font-semibold transition-all border-2 border-blue-600 text-blue-700 hover:bg-blue-50 bg-white/60 backdrop-blur-sm">
+                        Get Started
+                    </a>
+                </div>
+
+                <!-- Image Right -->
+                <div class="order-2">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3] group">
+                         <div class="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <img src="image 2.png" alt="Document Processing" class="transform group-hover:scale-105 transition duration-700 w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="bg-slate-50 pt-24 pb-24" id="pricing">
+        <div class="max-w-7xl mr-auto ml-auto pr-6 pl-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-4 text-[#003366]">
+                    Simple, Transparent Pricing
+                </h2>
+                <p class="text-lg text-slate-500">Choose the plan that fits your business needs</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Standard -->
+                <div class="rounded-2xl p-8 border shadow-sm hover:shadow-lg transition-shadow bg-white border-slate-200">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-blue-50 text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="zap" aria-hidden="true" class="lucide lucide-zap w-5 h-5"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-2">Standard</h3>
+                    <p class="text-sm text-slate-500 mb-6">Perfect for small teams</p>
+                    <div class="flex gap-1 mb-8 gap-x-1 gap-y-1 items-baseline">
+                        <span class="text-4xl font-semibold text-slate-900 tracking-tight">$499</span>
+                        <span class="text-slate-500">/month (billed annually)</span>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8 text-sm">
+                        <li class="flex text-slate-600 gap-x-3 gap-y-3 items-center">Documents and Reports Hub</li>
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Up to 100 queries/mo
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> 5 custom reports
+                        </li>
+                        
+                    </ul>
+                    
+                    <a href="#" class="block w-full py-3 text-center border rounded-lg font-medium transition-colors text-blue-700 border-blue-200 hover:bg-blue-50">Start Free Trial</a>
+                </div>
+
+                <!-- Pro (Highlighted) -->
+                <div class="rounded-2xl p-8 border-2 shadow-xl relative scale-105 z-10 bg-white border-[#003366]">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-semibold tracking-wide uppercase bg-amber-400 text-slate-900 shadow-md">Most Popular</div>
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-[#003366] text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="star" aria-hidden="true" class="lucide lucide-star w-5 h-5"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-slate-900 mb-2">Pro Plus</h3>
+                    <p class="text-sm text-slate-500 mb-6">For growing businesses</p>
+                    <div class="flex items-baseline gap-1 mb-8">
+                        <span class="text-5xl font-semibold text-slate-900 tracking-tight">$999</span>
+                        <span class="text-slate-500">/month (billed annually)</span>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8 text-sm">
+                        <li class="flex items-center gap-3 font-medium text-slate-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-blue-700"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Everything in Standard
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> DocuSign Integration
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Document Automation
+                        </li>
+                        
+                        
+                    </ul>
+                    
+                    <a href="#" class="block w-full py-3 text-center rounded-lg font-medium transition-colors shadow-lg bg-[#003366] text-white hover:bg-blue-900 shadow-blue-900/20">Start Free Trial</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="rounded-2xl p-8 border shadow-sm hover:shadow-lg transition-shadow bg-white border-slate-200">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center mb-6 bg-slate-100 text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="building" aria-hidden="true" class="lucide lucide-building w-5 h-5"><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M12 6h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path><path d="M8 6h.01"></path><path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-900">Enterprise</h3>
+                    <p class="text-sm text-slate-500 mb-6">For large organizations</p>
+                    <div class="flex items-baseline gap-1 mb-8">
+                        <span class="text-4xl font-semibold tracking-tight text-slate-900">Custom</span>
+                    </div>
+                    
+                    <ul class="space-y-4 mb-8 text-sm">
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Everything in Pro
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Custom integrations
+                        </li>
+                        <li class="flex items-center gap-3 text-slate-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check-circle" aria-hidden="true" class="lucide lucide-check-circle w-4 h-4 text-amber-500"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg> Dedicated support manager
+                        </li>
+                        
+                    </ul>
+                    
+                    <a href="#" class="block w-full py-3 text-center border rounded-lg font-medium transition-colors text-slate-700 border-slate-200 hover:bg-slate-50">Contact Sales</a>
+                </div>
+            </div>
+            
+            <p class="flex items-center justify-center gap-2 text-sm text-slate-400 text-center mt-8"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check w-4 h-4"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg> Billed annually.</p>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Grid -->
+    <section class="pt-24 pb-24 text-slate-900 bg-gradient-to-br from-white via-slate-50 to-blue-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-4 text-[#003366]">Why Choose Consensus?</h2>
+                <p class="text-lg text-slate-600">Built by SAP experts, trusted by businesses worldwide</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="p-8 border rounded-2xl transition-all bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200">
+                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4 text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="settings" aria-hidden="true" class="lucide lucide-settings w-5 h-5"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-slate-900">Deep SAP Integration</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Built specifically for SAP Business One with native integration and expert understanding of B1 workflows.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="p-8 border rounded-2xl transition-all bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-amber-200">
+                    <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mb-4 text-amber-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="users" aria-hidden="true" class="lucide lucide-users w-5 h-5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-slate-900">Multi-Tenant SaaS</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Secure, scalable architecture supporting multiple organizations with complete data isolation.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="p-8 border rounded-2xl transition-all bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300">
+                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-4 text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="headphones" aria-hidden="true" class="lucide lucide-headphones w-5 h-5"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-slate-900">Expert Support</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Backed by Consensus International's decades of SAP implementation experience and expertise.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="p-8 border rounded-2xl transition-all bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200">
+                    <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mb-4 text-blue-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="refresh-cw" aria-hidden="true" class="lucide lucide-refresh-cw w-5 h-5"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-slate-900">Always Updated</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Cloud-based deployment ensures you always have access to the latest features and security updates.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="p-8 border rounded-2xl transition-all bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-amber-200">
+                    <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mb-4 text-amber-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="trending-up" aria-hidden="true" class="lucide lucide-trending-up w-5 h-5"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-slate-900">Boost Productivity</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Automate repetitive tasks and reduce manual data entry to focus on strategic business decisions.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="p-8 border rounded-2xl transition-all bg-white border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300">
+                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mb-4 text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="lock" aria-hidden="true" class="lucide lucide-lock w-5 h-5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2 text-slate-900">Enterprise Security</h3>
+                    <p class="text-sm leading-relaxed text-slate-500">Bank-grade encryption, role-based access control, and compliance with industry security standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="pt-24 pb-24">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-3xl font-semibold text-center tracking-tight mb-4 text-[#003366]">Frequently Asked Questions</h2>
+            <p class="text-center text-slate-500 mb-12">Everything you need to know about Consensus Cloud Apps</p>
+            
+            <div class="space-y-4">
+                <!-- Item 1 -->
+                <details class="group border rounded-xl open:ring-2 open:ring-blue-100 open:border-blue-200 transition-all border-slate-200 bg-white">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <div class="flex items-center gap-3 font-medium text-slate-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="help-circle" aria-hidden="true" class="lucide lucide-help-circle w-5 h-5 text-blue-700"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+                            What is Consensus Cloud Apps?
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 group-open:rotate-180 transition-transform text-slate-400"><path d="m6 9 6 6 6-6"></path></svg>
+                    </summary>
+                    <div class="px-6 pb-6 leading-relaxed pl-14 text-slate-600">
+                        Consensus Cloud Apps is a suite of cloud-based modules designed specifically for SAP Business One users. Our platform provides document automation, electronic signatures, AI-powered insights, and advanced reporting capabilities to streamline your business operations.
+                    </div>
+                </details>
+
+                <!-- Item 2 -->
+                <details class="group border rounded-xl transition-all border-slate-200 bg-white hover:border-slate-300">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <div class="flex items-center gap-3 font-medium text-slate-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="help-circle" aria-hidden="true" class="lucide lucide-help-circle w-[20px] h-[20px] text-blue-700" data-icon-replaced="true" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+                            How long does implementation take?
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 group-open:rotate-180 transition-transform text-slate-400"><path d="m6 9 6 6 6-6"></path></svg>
+                    </summary>
+                    <div class="px-6 pb-6 leading-relaxed pl-14 text-slate-600">
+                        Most modules can be deployed within minutes. Our B1 Proxy module connects securely to your database, and features like the AI Assistant are ready to use immediately after configuration.
+                    </div>
+                </details>
+
+                <!-- Item 3 -->
+                <details class="group border rounded-xl transition-all border-slate-200 bg-white hover:border-slate-300">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <div class="flex items-center gap-3 font-medium text-slate-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="help-circle" aria-hidden="true" class="lucide lucide-help-circle w-[20px] h-[20px] text-blue-700" data-icon-replaced="true" style="width: 20px; height: 20px;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+                            Do I need to install anything on-premise?
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down w-5 h-5 group-open:rotate-180 transition-transform text-slate-400"><path d="m6 9 6 6 6-6"></path></svg>
+                    </summary>
+                    <div class="px-6 pb-6 leading-relaxed pl-14 text-slate-600">
+                        No heavy infrastructure is required. A lightweight connector agent may be needed depending on your SAP B1 hosting environment (SQL or HANA), but the core application logic runs entirely in our secure cloud.
+                    </div>
+                </details>
+
+                 <!-- Item 4 -->
+                 <details class="group border rounded-xl transition-all border-slate-200 bg-white hover:border-slate-300">
+                    <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+                        <div class="flex items-center gap-3 font-medium text-slate-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="help-circle" aria-hidden="true" class="lucide lucide-help-circle w-[20px] h-[20px] text-blue-700" data-icon-replaced="true" style="width: 20px; height: 20px"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+                            Is my data secure?
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="chevron-down" aria-hidden="true" class="lucide lucide-chevron-down group-open:rotate-180 transition-transform w-[20px] h-[20px]" data-icon-replaced="true" style="color: rgb(148, 163, 184); width: 20px; height: 20px;"><path d="m6 9 6 6 6-6"></path></svg>
+                    </summary>
+                    <div class="px-6 pb-6 leading-relaxed pl-14 text-slate-600">
+                        Absolutely. We use bank-grade TLS encryption for all data in transit and rest. We do not store your core business data; we only process it securely to provide the requested services.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="bg-slate-50 border-slate-200 border-t pt-24 pb-24">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-semibold tracking-tight mb-6 text-[#003366]">
+                Ready to Transform Your Business?
+            </h2>
+            <p class="text-xl text-slate-500 mb-10 max-w-2xl mx-auto">
+                Join businesses already leveraging the power of Consensus Cloud Apps for SAP Business One.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#" class="w-full sm:w-auto px-8 py-4 rounded-xl font-medium transition-all shadow-lg bg-[#003366] text-white hover:bg-blue-900 shadow-blue-900/20">
+                    Start Your Free Trial
+                </a>
+                <a href="#" class="w-full sm:w-auto px-8 py-4 border rounded-xl font-medium transition-colors bg-white text-slate-700 border-slate-200 hover:bg-slate-50">
+                    Contact Sales
+                </a>
+            </div>
+            <p class="text-sm mt-6 text-slate-400">No credit card required • Full feature access • Cancel anytime</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-slate-200 border-t pt-16 pb-12">
+        <div class="max-w-7xl mr-auto ml-auto pr-6 pl-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <div class="col-span-2 lg:col-span-2">
+                    <div class="flex mb-6 items-center">
+                        <a href="#" class="inline-flex items-center gap-3 group select-none h-10">
+                            <img src="COUD APPS COLOUR PNG FILE with dark Consensus (horizontal).png" alt="Consensus Cloud Apps" class="w-auto h-full object-contain">
+                        </a>
+                    </div>
+                    <p class="text-base text-slate-500 max-w-xs mb-6">Empowering SAP Business One users with next-generation cloud tools for automation, AI, and analytics. Cloud Apps is developed by Consensus International, an SAP Premier Partner with 35+ years of experience across the U.S., Europe, and Latin America.</p>
+                    <div class="flex gap-x-4 gap-y-4">
+                        <a href="#" class="transition-colors text-slate-400 hover:text-blue-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="twitter" aria-hidden="true" class="lucide lucide-twitter w-5 h-5"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg></a>
+                        <a href="#" class="transition-colors text-slate-400 hover:text-blue-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="linkedin" aria-hidden="true" class="lucide lucide-linkedin w-5 h-5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                        <a href="#" class="transition-colors text-slate-400 hover:text-blue-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="github" aria-hidden="true" class="lucide lucide-github w-5 h-5"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path><path d="M9 18c-4.51 2-5-2-7-2"></path></svg></a>
+                    </div>
+                </div>
+                
+                <div class="">
+                    <h4 class="font-semibold mb-4 text-[#003366] text-lg">Product</h4>
+                    <ul class="space-y-3 text-base text-slate-500">
+                        <li class=""><a href="#" class="hover:text-blue-700">AI Assistant</a></li>
+                        <li class=""><a href="#" class="hover:text-blue-700">B1 Proxy</a></li>
+                        <li class=""><a href="#" class="hover:text-blue-700">DocuSign</a></li>
+                        
+                    </ul>
+                </div>
+
+                <div class="">
+                    <h4 class="font-semibold mb-4 text-[#003366] text-lg">Company</h4>
+                    <ul class="space-y-3 text-base text-slate-500">
+                        <li class=""><a href="#" class="hover:text-blue-700">About</a></li>
+                        <li class=""><a href="#" class="hover:text-blue-700">Blog</a></li>
+                        <li class=""><a href="#" class="hover:text-blue-700">Careers</a></li>
+                        
+                    </ul>
+                </div>
+
+                <div class="">
+                    <h4 class="font-semibold mb-4 text-[#003366] text-lg">Legal</h4>
+                    <ul class="space-y-3 text-base text-slate-500">
+                        <li class=""><a href="#" class="hover:text-blue-700">Privacy Policy</a></li>
+                        <li class=""><a href="#" class="hover:text-blue-700">Terms of Service</a></li>
+                        <li class=""><a href="#" class="hover:text-blue-700">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-base border-slate-100 text-slate-400">
+                <p class="">© 2026 Consensus International. All rights reserved.</p>
+                <div class="flex items-center gap-6">
+                    <span class="flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" data-lucide="circle-dot" aria-hidden="true" class="lucide lucide-circle-dot w-3 h-3 text-green-500"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="1"></circle></svg> Systems Operational</span>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-slate-100/50">
+                <p class="leading-relaxed text-xs text-slate-400 text-center">Cloud Apps is an independent solution developed by Consensus International. It is not affiliated with, endorsed by, or sponsored by SAP or SAP Business One.                                                   SAP and SAP Business One are trademarks or registered trademarks of SAP or its affiliates.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body></html>

@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import authService from '../services/authService'
+import authService from '../../services/authService'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

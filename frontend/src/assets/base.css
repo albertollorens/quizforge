@@ -1,0 +1,38 @@
+/* DARK MODE GLOBAL */
+body.dark {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+/* Sections */
+body.dark section {
+  background: #0f172a !important;
+}
+
+/* Cards */
+body.dark .card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+/* Text muted */
+body.dark .text-muted {
+  color: #94a3b8 !important;
+}
+
+/* Navbar */
+body.dark .navbar {
+  background: rgba(15,23,42,0.8) !important;
+}
+
+/* Inputs */
+body.dark .form-control {
+  background: #1e293b;
+  color: #e5e7eb;
+  border-color: #334155;
+}
+
+/* Botons */
+body.dark .btn-dark {
+  background: #6366f1;
+}

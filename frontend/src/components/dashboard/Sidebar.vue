@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import router from '../router'
+import router from '../../router'
 import logo from '@/assets/logo.png'
 
 const logout = () => {

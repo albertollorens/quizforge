@@ -8,6 +8,7 @@ export default defineConfig({
     __VUE_PROD_DEVTOOLS__: true
   },
   plugins: [vue()],
+  //base: 'public',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

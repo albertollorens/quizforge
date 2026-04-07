@@ -22,9 +22,9 @@
 </template>
 
 <script setup>
-import Sidebar from '../components/Sidebar.vue'
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
+import Sidebar from '../components/dashboard/Sidebar.vue'
+import Navbar from '../components/dashboard/Navbar.vue'
+import Footer from '../components/dashboard/Footer.vue'
 </script>
 
 <style scoped>

@@ -1,0 +1,213 @@
+@import './base.css';
+@import './animations.css';
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* =========================
+   🎯 VARIABLES GLOBALS
+========================= */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #f8fafc;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --radius: 12px;
+}
+
+/* =========================
+   🌍 BASE
+========================= */
+body {
+  font-family: 'Inter', 'Nunito', sans-serif;
+  color: var(--text);
+  background: #ffffff;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* =========================
+   🧩 CONTAINERS
+========================= */
+.container {
+  max-width: 1140px;
+}
+
+/* =========================
+   🔘 BOTONS
+========================= */
+.btn {
+  border-radius: var(--radius);
+  padding: 10px 18px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.btn-dark {
+  background: #111827;
+  border: none;
+}
+
+.btn-dark:hover {
+  background: #000;
+  transform: translateY(-2px);
+}
+
+.btn-outline-dark:hover {
+  transform: translateY(-2px);
+}
+
+/* =========================
+   🪄 CARDS
+========================= */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   🧭 NAVBAR
+========================= */
+.navbar {
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar a {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.navbar a:hover {
+  color: var(--text);
+}
+
+/* =========================
+   ✨ HERO
+========================= */
+section {
+  scroll-margin-top: 80px;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+/* =========================
+   🎯 BADGES
+========================= */
+.badge {
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* =========================
+   ⚡ ANIMACIONS
+========================= */
+.fade-in {
+  animation: fade 0.8s ease forwards;
+}
+
+.fade-up {
+  animation: fadeUp 0.8s ease forwards;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   🧪 INPUTS
+========================= */
+.form-control {
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 10px;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+}
+
+/* =========================
+   💰 PRICING
+========================= */
+.pricing-card {
+  transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: scale(1.05);
+}
+
+/* =========================
+   🌙 DARK MODE READY
+========================= */
+body.dark {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark .card {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark .navbar {
+  background: rgba(15,23,42,0.8);
+}
+
+body.dark .blob1 {
+  background: #4f46e5;
+}
+
+body.dark .blob2 {
+  background: #16a34a;
+}
+
+body.dark .blob3 {
+  background: #d97706;
+}
+
+body.dark .gradient-bg {
+  opacity: 0.08;
+}
+
+body.dark .line {
+  stroke: rgba(148,163,184,0.3);
+}
+
+.hero h1 {
+  background: linear-gradient(90deg, #6366f1, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card {
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.6);
+}
+
+body.dark .card {
+  background: rgba(30,41,59,0.6);
+}
