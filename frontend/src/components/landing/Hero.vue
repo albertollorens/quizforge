@@ -29,9 +29,11 @@
           <div class="d-flex justify-content-center justify-content gap-3 animate-item delay-3">
             <button class="btn btn-dark btn-lg cta-btn" @click="goToRegister">
               {{ t('hero.cta1') }}
+              <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
             </button>
 
             <button class="btn btn-outline-dark btn-lg cta-secondary" @click="scrollToDemo">
+              <iconify-icon icon="solar:play-circle-linear" width="20" class="text-gray-500"></iconify-icon>
               {{ t('hero.cta2') }}
             </button>
           </div>

@@ -16,9 +16,10 @@
         <div class="col-md-2 col-6 mb-4">
           <h6 class="fw-semibold">{{ t('footer.links') }}</h6>
           <ul class="list-unstyled small">
-            <li><a href="#features">{{ t('footer.features') }}</a></li>
             <li><a href="#demo">{{ t('footer.demo') }}</a></li>
+            <li><a href="#features">{{ t('footer.features') }}</a></li>
             <li><a href="#success">{{ t('footer.success') }}</a></li>
+            <li><a href="#pricing">{{ t('footer.pricing') }}</a></li>
             <li><a href="#contact">{{ t('footer.contact') }}</a></li>
           </ul>
         </div>

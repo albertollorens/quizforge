@@ -1,83 +1,141 @@
 <template>
-  <section id="demo" class="reveal py-5 demo-section text-center">
-    <div class="container">
+  <section id="demo" class="py-20 bg-gray-50 border-y border-gray-100">
+    <div class="max-w-3xl mx-auto px-4 text-center">
 
-      <h2 class="fw-bold mb-2">{{ t('demo.title') }}</h2>
-      <p class="text-muted mb-4">{{ t('demo.sub') }}</p>
+      <!-- TITLE -->
+      <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
+        {{ t('demo.title') }}
+      </h2>
 
-      <!-- INPUT -->
-      <div v-if="step==='input'" class="mx-auto demo-box animate-fade" style="max-width:500px">
-        <input 
-          v-model="topic"
-          class="form-control form-control-lg mb-3"
-          :placeholder="t('demo.label')"
-          @keyup.enter="runDemo"
-        />
+      <p class="text-gray-600 mb-8">
+        {{ t('demo.sub') }}
+      </p>
 
-        <button 
-          class="btn btn-dark w-100 btn-lg"
-          :disabled="!topic.trim()"
-          @click="runDemo"
-        >
-          {{ t('demo.btn') }}
-        </button>
-      </div>
+      <!-- CARD -->
+      <div class="bg-white p-6 md:p-8 rounded-xl border border-gray-200 shadow-sm text-left">
 
-      <!-- LOADING -->
-      <div v-if="step==='loading'" class="py-5 animate-fade">
-        <div class="spinner-border mb-3"></div>
-        <p class="text-muted">{{ t('demo.loading') }}</p>
+        <!-- INPUT -->
+        <div v-if="step==='input'" class="space-y-4">
 
-        <div class="fake-output mt-4">
-          <div class="fake-line w-75"></div>
-          <div class="fake-line w-50"></div>
-          <div class="fake-line w-100"></div>
-        </div>
-      </div>
-
-      <!-- RESULT -->
-      <div v-if="step==='result'" class="mx-auto animate-fade" style="max-width:650px">
-
-        <div 
-          v-for="(q, qIndex) in questions" 
-          :key="qIndex"
-          class="card demo-card p-4 mb-3"
-        >
-          <strong class="fs-5">
-            {{ qIndex + 1 }}. {{ q.displayed }}
-          </strong>
-
-          <ul class="mt-3 list-unstyled">
-            <li 
-              v-for="(opt, i) in q.options"
-              :key="i"
-              class="option"
-              :class="getOptionClass(q, i)"
-              @click="selectOption(q, i)"
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              {{ t('demo.label') }}
+            </label>
+            <input
+              v-model="topic"
+              type="text"
+              placeholder="Ex: El cicle de l'aigua..."
+              class="w-full rounded-md border border-gray-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-100"
             >
-              {{ String.fromCharCode(65 + i) }}. {{ opt }}
-            </li>
-          </ul>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-1">
+              <label class="block text-xs text-gray-500 mb-1">
+                {{ t('demo.level') }}
+              </label>
+              <select class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm">
+                <option>ESO</option>
+                <option>Batxillerat</option>
+                <option>FP</option>
+                <option>Altres</option>
+              </select>
+            </div>
+
+            <div class="flex-1">
+              <label class="block text-xs text-gray-500 mb-1">
+                {{ t('demo.questions') }}
+              </label>
+              <select class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm">
+                <option>3 preguntes</option>
+                <option>6 preguntes</option>
+                <option>10 preguntes</option>
+              </select>
+            </div>
+          </div>
+
+          <button
+            @click="runDemo"
+            :disabled="!topic.trim()"
+            class="w-full mt-4 bg-gray-900 text-white py-2.5 rounded-md text-sm hover:bg-gray-800 flex justify-center gap-2"
+          >
+            ✨ {{ t('demo.btn') }}
+          </button>
+
         </div>
 
-        <!-- prompt -->
-        <p class="small text-muted mt-2">
-          Prompt: "{{ topic }}"
-        </p>
+        <!-- LOADING -->
+        <div v-if="step==='loading'" class="flex flex-col items-center py-12 space-y-4">
+          <div class="animate-spin text-2xl">⏳</div>
+          <p class="text-sm text-gray-500 animate-pulse">
+            {{ t('demo.loading') }}
+          </p>
+        </div>
 
-        <!-- accions -->
-        <div class="d-flex gap-2 justify-content-center mt-3">
-          <button class="btn btn-primary" @click="runDemo">
-            {{ t('demo.more') }}
-          </button>
+        <!-- RESULT -->
+        <div v-if="step==='result'" class="space-y-6">
 
-          <button class="btn btn-outline-secondary" @click="resetDemo">
-            {{ t('demo.reset') }}
-          </button>
+          <div class="flex justify-between border-b pb-4">
+            <h3 class="font-semibold text-gray-900">Resultats generats</h3>
+            <button @click="resetDemo" class="text-sm text-gray-500 hover:text-black">
+              🔄 {{t('demo.reset')}}
+            </button>
+          </div>
+
+          <!-- QUESTIONS -->
+          <div v-for="(q, qIndex) in questions" :key="qIndex" class="space-y-3">
+
+            <p class="text-sm font-medium text-gray-800">
+              {{ qIndex + 1 }}. {{ q.question }}
+            </p>
+
+            <!-- SINGLE -->
+            <div v-if="q.type==='single'" class="space-y-2 pl-4">
+              <label
+                v-for="(opt,i) in q.options"
+                :key="i"
+                class="flex items-center gap-3 p-2 rounded border cursor-pointer"
+                :class="getOptionClass(q,i)"
+              >
+                <input type="radio" :checked="i===q.correctIndex">
+                <span>{{ opt }}</span>
+                <span v-if="i===q.correctIndex" class="ml-auto text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                  ✔
+                </span>
+              </label>
+            </div>
+
+            <!-- MULTIPLE -->
+            <div v-if="q.type==='multiple'" class="space-y-2 pl-4">
+              <label
+                v-for="(opt,i) in q.options"
+                :key="i"
+                class="flex items-center gap-3 p-2 rounded border cursor-pointer"
+                :class="getOptionClass(q,i)"
+              >
+                <input type="checkbox" :checked="q.correctIndexes.includes(i)">
+                <span>{{ opt }}</span>
+                <span v-if="q.correctIndexes.includes(i)" class="ml-auto text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                  ✔
+                </span>
+              </label>
+            </div>
+
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="flex justify-end gap-3 pt-4 border-t">
+            <button class="px-4 py-2 text-sm bg-gray-100 rounded">
+              ✏️ Editar
+            </button>
+            <button class="px-4 py-2 text-sm bg-blue-600 text-white rounded">
+              🚀 Exportar
+            </button>
+          </div>
+
         </div>
 
       </div>
-
     </div>
   </section>
 </template>
@@ -91,75 +149,59 @@ const { t } = useI18n()
 const topic = ref('')
 const step = ref('input')
 const questions = ref([])
-let timeout = null
 
-// 🧠 generar preguntes fake però creïbles
-function generateFakeQuestion(topic) {
-  return {
-    question: `Quina de les següents afirmacions sobre ${topic} és correcta?`,
-    options: [
-      `${topic} és un concepte secundari`,
-      `${topic} és un element fonamental`,
-      `${topic} no té aplicació pràctica`
-    ],
-    correctIndex: 1,
-    selected: null,
-    displayed: ''
+function generateFakeQuestions(topic) {
+  return [
+    {
+      type: 'single',
+      question: `Quina afirmació sobre ${topic} és correcta?`,
+      options: [
+        `Incorrecta`,
+        `Correcta`,
+        `Falsa`
+      ],
+      correctIndex: 1
+    },
+    {
+      type: 'multiple',
+      question: `Selecciona les correctes:`,
+      options: [
+        `Opció bona`,
+        `Opció bona`,
+        `Opció incorrecta`
+      ],
+      correctIndexes: [0,1]
+    }
+  ]
+}
+
+function runDemo(){
+  if(!topic.value.trim()) return
+  step.value='loading'
+
+  setTimeout(()=>{
+    questions.value = generateFakeQuestions(topic.value)
+    step.value='result'
+  },1200)
+}
+
+function resetDemo(){
+  step.value='input'
+  topic.value=''
+}
+
+function getOptionClass(q,i){
+  if(q.type==='single'){
+    return i===q.correctIndex
+      ? 'border-green-200 bg-green-50'
+      : 'border-gray-100 hover:bg-gray-50'
   }
-}
 
-// ✨ typing effect
-function typeEffect(q) {
-  let i = 0
-  const text = q.question
-
-  const interval = setInterval(() => {
-    q.displayed += text[i]
-    i++
-    if (i >= text.length) clearInterval(interval)
-  }, 15)
-}
-
-function runDemo() {
-  if (!topic.value.trim()) return
-
-  step.value = 'loading'
-
-  const delay = 1200 + Math.random() * 800
-
-  timeout = setTimeout(() => {
-    questions.value = [
-      generateFakeQuestion(topic.value),
-      generateFakeQuestion(topic.value)
-    ]
-
-    step.value = 'result'
-
-    // aplicar typing a cada pregunta
-    questions.value.forEach((q, i) => {
-      setTimeout(() => typeEffect(q), i * 300)
-    })
-
-  }, delay)
-}
-
-function selectOption(q, index) {
-  if (q.selected !== null) return
-  q.selected = index
-}
-
-function getOptionClass(q, i) {
-  return {
-    correct: q.selected === i && i === q.correctIndex,
-    wrong: q.selected === i && i !== q.correctIndex
+  if(q.type==='multiple'){
+    return q.correctIndexes.includes(i)
+      ? 'border-green-200 bg-green-50'
+      : 'border-gray-100 hover:bg-gray-50'
   }
-}
-
-function resetDemo() {
-  step.value = 'input'
-  topic.value = ''
-  questions.value = []
-  clearTimeout(timeout)
 }
 </script>
 
@@ -189,30 +231,19 @@ function resetDemo() {
   border-radius: 8px;
   margin-bottom: 8px;
   background: #f1f5f9;
-  cursor: pointer;
   opacity: 0;
   transform: translateY(10px);
   animation: optionIn 0.4s ease forwards;
+  transition: all 0.3s ease;
 }
 
-.option:nth-child(1) { animation-delay: 0.1s }
-.option:nth-child(2) { animation-delay: 0.2s }
-.option:nth-child(3) { animation-delay: 0.3s }
+/* animacions */
+@keyframes optionIn { to {opacity:1; transform:translateY(0)} }
 
-.option:hover {
-  transform: translateX(5px);
-}
-
-/* estats */
 .correct {
-  background: #dcfce7;
+  background: #dcfce7 !important;
   color: #166534;
   font-weight: 600;
-}
-
-.wrong {
-  background: #fee2e2;
-  color: #991b1b;
 }
 
 /* loading fake */
@@ -230,45 +261,17 @@ function resetDemo() {
 }
 
 @keyframes pulse {
-  0% { opacity: 0.6 }
-  50% { opacity: 1 }
-  100% { opacity: 0.6 }
+  0% { opacity:0.6 }
+  50% { opacity:1 }
+  100% { opacity:0.6 }
 }
 
 /* animacions */
-.animate-fade {
-  animation: fade 0.4s ease;
-}
-
-@keyframes fade {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes optionIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.animate-fade { animation:fade 0.4s ease; }
+@keyframes fade { from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)} }
 
 /* dark */
-body.dark .demo-section {
-  background: #020617;
-}
-
-body.dark .demo-box,
-body.dark .demo-card {
-  background: #0f172a;
-}
-
-body.dark .option {
-  background: #1e293b;
-}
+body.dark .demo-section { background: #020617; }
+body.dark .demo-box, body.dark .demo-card { background: #0f172a; }
+body.dark .option { background: #1e293b; }
 </style>

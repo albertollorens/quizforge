@@ -38,12 +38,9 @@
           </form>
         </div>
 
-        <!-- Info de contacte o imatge -->
-        <div class="col-lg-4 animate-item delay-3 d-none d-lg-flex align-items-center justify-content-center">
-          <!-- Placeholder per icona, mapa o imatge -->
-          <div class="contact-placeholder">
-            📍
-          </div>
+        <!-- Mapa geolocalitzat -->
+        <div class="col-lg-4 animate-item delay-3 d-none d-lg-block">
+          <div id="map" class="contact-map rounded"></div>
         </div>
 
       </div>
@@ -53,20 +50,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useReveal } from '@/composables/useReveal'
 
-useReveal()
+// Leaflet
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
 
+useReveal()
 const { t } = useI18n()
 
-const form = ref({
-  name: '',
-  email: '',
-  message: ''
-})
-
+const form = ref({ name:'', email:'', message:'' })
 const status = ref('')
 const statusClass = ref('text-success')
 
@@ -79,25 +74,27 @@ function sendMessage() {
   setTimeout(() => {
     status.value = t('contact.sent')
     statusClass.value = 'text-success'
-    form.value.name = ''
-    form.value.email = ''
-    form.value.message = ''
+    form.value = { name:'', email:'', message:'' }
   }, 1500)
 }
+
+// Mapa
+onMounted(() => {
+  const map = L.map('map').setView([38.9908448,-0.5218106], 15) // Ex: Xàtiva, Espanya
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map)
+  L.marker([38.9908448,-0.5218106]).addTo(map)
+    .bindPopup('<b>Quizforge Enterprise SLU</b><br>Avinguda Albereda Jaume I 17')
+    .openPopup()
+})
 </script>
 
 <style scoped>
-/* 🌈 Fons diferenciat */
 .contact-section {
   background: linear-gradient(180deg, #eef2ff 0%, #f1f5f9 100%);
 }
 
-/* 🌙 Dark mode */
-body.dark .contact-section {
-  background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
-}
-
-/* Form */
 .contact-form {
   background: white;
   border-radius: 18px;
@@ -110,49 +107,22 @@ body.dark .contact-section {
   box-shadow: 0 25px 60px rgba(0,0,0,0.1);
 }
 
-/* Placeholder info */
-.contact-placeholder {
-  font-size: 3rem;
-  color: #3b82f6;
-  padding: 20px;
-  border-radius: 16px;
-  background: rgba(59,130,246,0.1);
+.contact-map {
+  width: 100%;
+  height: 455px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Animació d'entrada */
-.animate-item {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeSlide 0.8s ease forwards;
-}
-
+.animate-item { opacity: 0; transform: translateY(20px); animation: fadeSlide 0.8s ease forwards; }
 .delay-1 { animation-delay: 0.2s; }
 .delay-2 { animation-delay: 0.4s; }
 .delay-3 { animation-delay: 0.6s; }
+@keyframes fadeSlide { to { opacity:1; transform: translateY(0); } }
 
-@keyframes fadeSlide {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+.cta-btn { transition: all 0.3s ease; }
+.cta-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
 
-/* Botó */
-.cta-btn {
-  transition: all 0.3s ease;
-}
-.cta-btn:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-/* Dark mode form */
-body.dark .contact-form {
-  background: #0f172a;
-  border: 1px solid #1e293b;
-}
-body.dark .contact-placeholder {
-  background: rgba(99,102,241,0.15);
-  color: #818cf8;
-}
+/* Dark mode */
+body.dark .contact-section { background: linear-gradient(180deg,#020617 0%,#0f172a 100%); }
+body.dark .contact-form { background: #0f172a; border:1px solid #1e293b; }
 </style>

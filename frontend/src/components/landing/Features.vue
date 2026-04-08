@@ -156,10 +156,59 @@ body.dark .features-section {
   font-size: 0.85rem;
 }
 
-/* 🌙 dark */
+/* 🌙 DARK MODE PREMIUM */
+body.dark .features-section {
+  background: linear-gradient(180deg, #020617 0%, #020617 100%);
+  position: relative;
+}
+
+/* ✨ glow corporatiu subtil */
+body.dark .features-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(37,99,235,0.15), transparent 60%),
+              radial-gradient(circle at bottom right, rgba(249,115,22,0.15), transparent 60%);
+  pointer-events: none;
+}
+
+/* 🎴 cards dark millorades */
 body.dark .feature-card {
   background: #0f172a;
-  border-color: #1e293b;
+  border: 1px solid #1e293b;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* ✨ hover més visible */
+body.dark .feature-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+}
+
+/* glow en hover */
+body.dark .feature-card::before {
+  background: radial-gradient(circle at top, rgba(59,130,246,0.25), transparent);
+}
+
+/* 🖼️ imatges en dark */
+body.dark .feature-img {
+  filter: grayscale(0%) brightness(0.9) contrast(1.1);
+  opacity: 0.9;
+}
+
+/* hover imatge */
+body.dark .feature-card:hover .feature-img {
+  transform: scale(1.15);
+  filter: brightness(1.1);
+}
+
+/* 📝 text contrast */
+body.dark .feature-card h5 {
+  color: #e2e8f0;
+}
+
+body.dark .feature-card p {
+  color: #94a3b8;
 }
 
 </style>

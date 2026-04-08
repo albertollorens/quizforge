@@ -10,6 +10,7 @@
     <div class="menu-links">
       <a href="#demo">{{ t('navbar.demo') }}</a>
       <a href="#features">{{ t('navbar.features') }}</a>
+      <a href="#success">{{ t('navbar.testimonials') }}</a>
       <a href="#pricing">{{ t('navbar.pricing') }}</a>
       <a href="#contact">{{ t('navbar.contact') }}</a>
     </div>
@@ -36,6 +37,17 @@
         {{ t('navbar.contactus') }}
       </a>
 
+      <!-- Login / Register Dropdown -->
+      <div class="user-menu dropdown">
+        <button class="btn btn-outline-theme btn-sm dropdown-toggle" @click="toggleUserMenu">
+          <i class="bi bi-person-circle"></i> {{ t('navbar.account') }}
+        </button>
+        <ul v-if="showUserMenu" class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#login">{{ t('navbar.login') }}</a></li>
+          <li><a class="dropdown-item" href="#register">{{ t('navbar.register') }}</a></li>
+        </ul>
+      </div>
+
       <button class="btn btn-sm btn-outline-theme" @click="toggle" :title="isDark ? 'Light mode' : 'Dark mode'">
         <i class="bi" :class="isDark ? 'bi-sun' : 'bi-moon'"></i>
       </button>
@@ -61,6 +73,7 @@ import { useDarkMode } from '@/composables/useDarkMode'
 import { useScrollSpy } from '@/composables/useScrollSpy'
 
 const isOpen = ref(false)
+const showUserMenu = ref(false)
 
 const { activeSection } = useScrollSpy([
   'hero',
@@ -75,6 +88,11 @@ const { isDark, toggle } = useDarkMode()
 
 function saveLang() {
   localStorage.setItem('lang', locale.value)
+}
+
+// Canvia l'estat del menú d'usuari
+function toggleUserMenu() {
+  showUserMenu.value = !showUserMenu.value
 }
 </script>
 
@@ -219,5 +237,43 @@ function saveLang() {
 .nav-link.active {
   color: #ff6a00 !important;
   font-weight: bold;
+}
+
+/* DROPDOWN USER MENU */
+.user-menu {
+  position: relative;
+}
+
+.user-menu .dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  background: white;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  z-index: 100;
+}
+
+.user-menu .dropdown-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #0b1f5b;
+  text-decoration: none;
+}
+
+.user-menu .dropdown-item:hover {
+  background: #ff6a00;
+  color: white;
+}
+
+/* Responsive: dropdown visible on desktop */
+@media (max-width: 768px) {
+  .user-menu {
+    display: none;
+  }
 }
 </style>

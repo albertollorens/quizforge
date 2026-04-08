@@ -15,10 +15,15 @@
     </svg>
 
     <!-- 📦 CONTINGUT -->
-    <router-view />
-    
+    <router-view />   
   </div>
+  
+  <ScrollTop />
 </template>
+
+<script setup>
+import ScrollTop from '../components/landing/ScrollTop.vue';
+</script>
 
 <style scoped>
 .landing-layout {
@@ -83,9 +88,9 @@
   }
 }
 
-/* CONTINGUT DAMUNT
+/* CONTINGUT DAMUNT*/
 .landing-layout > *:not(.gradient-bg):not(.lines) {
   position: relative;
   z-index: 1;
-}*/
+}
 </style>
