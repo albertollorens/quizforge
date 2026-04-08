@@ -1,5 +1,5 @@
 <template>
-  <section id="finalcta" class="py-5 text-center bg-dark text-white">
+  <section id="finalcta" class="py-5 text-center bg-dark text-white reveal">
     <div class="container">
 
       <h2>{{ t('cta.title') }}</h2>

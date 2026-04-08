@@ -32,6 +32,10 @@
         {{ t('navbar.cta') }}
       </button>
 
+      <a href="#contact" class="btn btn-contactus btn-sm">
+        {{ t('navbar.contactus') }}
+      </a>
+
       <button class="btn btn-sm btn-outline-theme" @click="toggle" :title="isDark ? 'Light mode' : 'Dark mode'">
         <i class="bi" :class="isDark ? 'bi-sun' : 'bi-moon'"></i>
       </button>
@@ -62,7 +66,8 @@ const { activeSection } = useScrollSpy([
   'hero',
   'demo',
   'features',
-  'pricing'
+  'pricing',
+  'contact'
 ])
 
 const { t, locale } = useI18n()
@@ -119,14 +124,14 @@ function saveLang() {
 }
 
 /* BOTONS */
-.btn-cta {
+.btn-cta, .btn-contactus {
   background: #ff6a00;
   color: white;
   border: none;
 }
 
-.btn-cta:hover {
-  background: #e85d00;
+.btn-cta:hover, .btn-contactus:hover {
+  background: #0b1f5b;
 }
 
 .btn-outline-theme {

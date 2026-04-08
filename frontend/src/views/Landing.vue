@@ -3,10 +3,12 @@
   <Hero />
   <Demo />
   <Features />
-  <Pricing />
   <SuccessCases />
+  <Pricing />
   <FinalCTA />
   <Contact />
+  <Footer />
+  <ScrollTop />
 </template>
 
 <script setup>
@@ -18,4 +20,6 @@ import Pricing from '@/components/landing/Pricing.vue'
 import FinalCTA from '@/components/landing/FinalCTA.vue'
 import Contact from '../components/landing/Contact.vue'
 import SuccessCases from '../components/landing/SuccessCases.vue'
+import Footer from '../components/landing/Footer.vue'
+import ScrollTop from '../components/landing/ScrollTop.vue';
 </script>

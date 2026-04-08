@@ -16,13 +16,9 @@
 
     <!-- 📦 CONTINGUT -->
     <router-view />
-
+    
   </div>
 </template>
-
-<script setup>
-// sense lògica
-</script>
 
 <style scoped>
 .landing-layout {
@@ -87,9 +83,9 @@
   }
 }
 
-/* CONTINGUT DAMUNT */
+/* CONTINGUT DAMUNT
 .landing-layout > *:not(.gradient-bg):not(.lines) {
   position: relative;
   z-index: 1;
-}
+}*/
 </style>

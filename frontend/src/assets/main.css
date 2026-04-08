@@ -197,12 +197,6 @@ body.dark .line {
   stroke: rgba(148,163,184,0.3);
 }
 
-.hero h1 {
-  background: linear-gradient(90deg, #6366f1, #22c55e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .card {
   backdrop-filter: blur(10px);
   background: rgba(255,255,255,0.6);

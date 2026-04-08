@@ -1,5 +1,5 @@
 <template>
-  <section id="pricing" class="py-5 bg-light">
+  <section id="pricing" class="py-5 bg-light reveal">
     <div class="container text-center">
 
       <h2 class="mb-4">{{ t('price.title') }}</h2>

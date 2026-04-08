@@ -216,6 +216,12 @@ onBeforeUnmount(() => {
   align-items: center;
 }
 
+.hero h1 {
+  background: linear-gradient(90deg, #2563eb, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* 🌈 BACKGROUND */
 .hero-bg {
   position: absolute;
