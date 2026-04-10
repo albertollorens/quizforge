@@ -6,13 +6,16 @@
   "navbar.contact": "Contact",
   "navbar.cta": "Try it",
   "navbar.contactus": "Contact us",
+  "navbar.account": "Private",
+  "navbar.login": "Log in",
+  "navbar.register": "Sign in",
 
   "hero.badge": "Direct integration and export to Aules (Moodle)",
   "hero.title": "Automate the creation of Moodle quizzes...",
   "hero.subtitle": "Generate questionnaires in seconds and save hours of work. Generate, edit and export directly to your virtual classroom without technical knowledge. Designed for teachers.",
   "hero.cta1": "Get Started",
   "hero.cta2": "Learn More",  
-  "hero.typing": "in seconds.,effortless.,with IA.",
+  "hero.typing": "in seconds.,effortless.,with IA.,exportable!",
 
   "demo.title": "Try the magic yourself",
   "demo.sub": "Write a topic for your subject and observe how a questionnaire is generated.",
@@ -21,6 +24,7 @@
   "demo.questions": "Questions",
   "demo.btn": "Generate quiz",
   "demo.loading": "Generating questions...",
+  "demo.more": "More info",
   "demo.reset": "Reset",
   
   "feat.title": "Features",

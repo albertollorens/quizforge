@@ -91,6 +91,6 @@ import ScrollTop from '../components/landing/ScrollTop.vue';
 /* CONTINGUT DAMUNT*/
 .landing-layout > *:not(.gradient-bg):not(.lines) {
   position: relative;
-  z-index: 1;
+  /*z-index: 1;*/
 }
 </style>

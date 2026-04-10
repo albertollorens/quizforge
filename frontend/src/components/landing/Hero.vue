@@ -54,8 +54,7 @@
               <!-- 🎥 VIDEO REAL -->
               <video 
                 class="mockup-video"
-                autoplay 
-                muted 
+                autoplay                  
                 loop 
                 playsinline
               >

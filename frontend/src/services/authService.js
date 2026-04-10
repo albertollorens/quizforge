@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = '/api'
+const OAUTH_URL = '/auth'
 
 // Instància axios centralitzada
 const api = axios.create({
@@ -113,6 +114,14 @@ export default {
       this.logout()
       return false
     }
+  },
+
+  /* ================================
+   SOCIAL LOGIN (OAuth)
+  ================================ */
+  loginSocial(provider) {
+    // provider: google | microsoft | linkedin
+    window.location.href = `${OAUTH_URL}/${provider}`
   },
 
   api // Exportem api per usar-lo en altres serveis

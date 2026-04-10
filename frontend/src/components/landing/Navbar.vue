@@ -43,8 +43,8 @@
           <i class="bi bi-person-circle"></i> {{ t('navbar.account') }}
         </button>
         <ul v-if="showUserMenu" class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#login">{{ t('navbar.login') }}</a></li>
-          <li><a class="dropdown-item" href="#register">{{ t('navbar.register') }}</a></li>
+          <li><a class="dropdown-item" href="/login">{{ t('navbar.login') }}</a></li>
+          <li><a class="dropdown-item" href="/register">{{ t('navbar.register') }}</a></li>
         </ul>
       </div>
 
@@ -104,6 +104,7 @@ function toggleUserMenu() {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   position: relative;
+  z-index: 1000;
 }
 
 /* LOGO */
@@ -255,7 +256,7 @@ function toggleUserMenu() {
   border-radius: 8px;
   padding: 0.5rem 0;
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  z-index: 100;
+  z-index: 2000;
 }
 
 .user-menu .dropdown-item {

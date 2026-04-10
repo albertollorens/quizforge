@@ -1,0 +1,1 @@
+import{o as s}from"./index-CtGDj4Qt.js";function c(){s(()=>{const t=document.querySelectorAll(".reveal"),r=new IntersectionObserver(e=>{e.forEach(o=>{o.isIntersecting&&o.target.classList.add("active")})},{threshold:.1});t.forEach(e=>r.observe(e))})}export{c as u};

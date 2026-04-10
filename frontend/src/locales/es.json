@@ -6,13 +6,16 @@
   "navbar.contact": "Contactar",
   "navbar.cta": "Pruébalo",
   "navbar.contactus": "Contáctanos",
+  "navbar.account": "Privado",
+  "navbar.login": "Iniciar sesión",
+  "navbar.register": "Regístrate",
 
   "hero.badge": "Integración directa i exportación a Aules (Moodle)",
   "hero.title": "Automatiza la creación de cuestionarios para Moodle...",
   "hero.subtitle": "Genera cuestionarios en segundos y ahorra horas de trabajo. Genera, edita y exporta directamente a tu aula virtual sin conocimientos técnicos. Pensado para docentes.",
   "hero.cta1": "Comenzar",
   "hero.cta2": "Aprende más",
-  "hero.typing": "en segundos.,sin esfuerzo.,con IA.",
+  "hero.typing": "en segundos.,sin esfuerzo.,con IA.,exportables!",
 
   "demo.title": "Prueba la magia tú mismo",
   "demo.sub": "Escribe un tema de tu asignatura y observa cómo se genera un cuestionario.",
@@ -21,6 +24,7 @@
   "demo.questions": "Preguntas",
   "demo.btn": "Generar cuestionario",
   "demo.loading": "Generando preguntas...",
+  "demo.more": "Más información",
   "demo.reset": "Reiniciar",
 
   "feat.title": "Funcionalidades",
