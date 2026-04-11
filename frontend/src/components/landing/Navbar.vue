@@ -23,11 +23,27 @@
     <!-- ACCIONS -->
     <div class="nav-right d-flex align-items-center gap-2">
 
-      <select v-model="locale" @change="saveLang" class="form-select form-select-sm w-auto">
-        <option value="va">VAL</option>
-        <option value="es">CAS</option>
-        <option value="en">ENG</option>
-      </select>
+      <div class="lang-wrapper" ref="langRef">
+        <button class="lang-btn" @click="toggleLang">
+          <i class="bi bi-globe2"></i>
+          <span>{{ locale.toUpperCase() }}</span>
+          <i class="bi bi-chevron-down chevron" :class="{ open: langOpen }"></i>
+        </button>
+
+        <transition name="fade-slide">
+          <div v-if="langOpen" class="lang-dropdown">
+            <div
+              v-for="lang in languages"
+              :key="lang.code"
+              class="lang-item"
+              :class="{ active: locale === lang.code }"
+              @click="selectLang(lang.code)"
+            >
+              <span>{{ lang.label }}</span>
+            </div>
+          </div>
+        </transition>
+      </div>
 
       <button class="btn btn-cta btn-sm">
         {{ t('navbar.cta') }}
@@ -40,7 +56,7 @@
       <!-- Login / Register Dropdown -->
       <div class="user-menu dropdown">
         <button class="btn btn-outline-theme btn-sm dropdown-toggle" @click="toggleUserMenu">
-          <i class="bi bi-person-circle"></i> {{ t('navbar.account') }}
+          <i class="bi bi-lock"></i> {{ t('navbar.account') }}
         </button>
         <ul v-if="showUserMenu" class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="/login">{{ t('navbar.login') }}</a></li>
@@ -66,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import logo from '@/assets/img/logo.png'
 import { useI18n } from 'vue-i18n'
 import { useDarkMode } from '@/composables/useDarkMode'
@@ -86,6 +102,25 @@ const { activeSection } = useScrollSpy([
 const { t, locale } = useI18n()
 const { isDark, toggle } = useDarkMode()
 
+const langOpen = ref(false)
+const langRef = ref(null)
+
+const languages = [
+  { code: 'es', label: 'ES'},
+  { code: 'va', label: 'VA'},
+  { code: 'en', label: 'EN'}
+]
+
+function toggleLang() {
+  langOpen.value = !langOpen.value
+}
+
+function selectLang(code) {
+  locale.value = code
+  langOpen.value = false
+  saveLang()
+}
+
 function saveLang() {
   localStorage.setItem('lang', locale.value)
 }
@@ -94,6 +129,20 @@ function saveLang() {
 function toggleUserMenu() {
   showUserMenu.value = !showUserMenu.value
 }
+
+function handleClickOutside(e) {
+  if (langRef.value && !langRef.value.contains(e.target)) {
+    langOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>
@@ -276,5 +325,84 @@ function toggleUserMenu() {
   .user-menu {
     display: none;
   }
+}
+
+.lang-wrapper {
+  position: relative;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.lang-btn:hover {
+  background: #f7f7f7;
+  transform: translateY(-1px);
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* DROPDOWN */
+.lang-dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  overflow: hidden;
+  min-width: 80px;
+  z-index: 3000;
+}
+
+/* ITEMS */
+.lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.lang-item:hover {
+  background: #f5f7ff;
+}
+
+.lang-item.active {
+  background: #eef2ff;
+  font-weight: 600;
+}
+
+.flag {
+  font-size: 18px;
+}
+
+/* ANIMACIÓ */
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.15s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 </style>

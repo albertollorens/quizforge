@@ -5,11 +5,12 @@
     <div class="register-bg"></div>
     <div class="register-glow"></div>
 
+    <!-- 🔙 BACK -->
     <div class="back-link" @click="$router.push('/')">
       <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Tornar
     </div>
 
-    <!-- CARD -->
+    <!-- 🧾 CARD -->
     <div class="register-card">
 
       <!-- LOGO -->
@@ -24,41 +25,36 @@
 
         <!-- USERNAME -->
         <div class="form-floating mb-3">
-          <input
-            v-model="username"
-            type="text"
-            class="form-control"
-            id="username"
-            placeholder="Usuari"
-            required
-          />
+          <input v-model="username" type="text" class="form-control" id="username" placeholder="Usuari" required />
           <label for="username">Usuari</label>
         </div>
 
         <!-- EMAIL -->
         <div class="form-floating mb-3">
-          <input
-            v-model="email"
-            type="email"
-            class="form-control"
-            id="email"
-            placeholder="Email"
-            required
-          />
+          <input v-model="email" type="email" class="form-control" id="email" placeholder="Email" required />
           <label for="email">Email</label>
         </div>
 
         <!-- PASSWORD -->
-        <div class="form-floating mb-3">
-          <input
-            v-model="password"
-            type="password"
-            class="form-control"
-            id="password"
-            placeholder="Contraseña"
-            required
-          />
+        <div class="form-floating mb-2">
+          <input v-model="password" type="password" class="form-control" id="password" placeholder="Contraseña" required />
           <label for="password">Contraseña</label>
+        </div>
+
+        <!-- RULES -->
+        <ul class="password-rules small mb-3">
+          <li :class="{ valid: passwordValid }">
+            8 caràcters, 1 majúscula, 1 número i 1 símbol
+          </li>
+          <li :class="{ valid: passwordsMatch }">
+            Les contrasenyes coincideixen
+          </li>
+        </ul>
+
+        <!-- CONFIRM -->
+        <div class="form-floating mb-3">
+          <input v-model="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirmar contraseña" required />
+          <label for="confirmPassword">Confirmar contraseña</label>
         </div>
 
         <!-- ERROR -->
@@ -69,31 +65,6 @@
         <!-- SUCCESS -->
         <div v-if="message" class="alert alert-success py-2 small">
           {{ message }}
-        </div>
-
-        <!-- SOCIAL LOGIN -->
-        <div class="social-login">
-
-          <button class="btn social-btn google w-100 mb-2" @click="loginSocial('google')">
-            <iconify-icon icon="logos:google-icon" width="18"></iconify-icon>
-            Continuar amb Google
-          </button>
-
-          <button class="btn social-btn microsoft w-100 mb-2" @click="loginSocial('microsoft')">
-            <iconify-icon icon="logos:microsoft-icon" width="18"></iconify-icon>
-            Continuar amb Microsoft
-          </button>
-
-          <button class="btn social-btn linkedin w-100" @click="loginSocial('linkedin')">
-            <iconify-icon icon="logos:linkedin-icon" width="18"></iconify-icon>
-            Continuar amb LinkedIn
-          </button>
-
-        </div>
-
-        <!-- SEPARATOR -->
-        <div class="separator my-3">
-          <span>o</span>
         </div>
 
         <!-- BUTTON -->
@@ -117,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import authService from '../services/authService'
 import { useRouter } from 'vue-router'
 import logo from '@/assets/img/logo.png'
@@ -125,12 +96,32 @@ import logo from '@/assets/img/logo.png'
 const username = ref('')
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const error = ref('')
 const message = ref('')
 
 const router = useRouter()
 
+const passwordValid = computed(() => {
+  return /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password.value)
+})
+
+const passwordsMatch = computed(() => {
+  return password.value === confirmPassword.value
+})
+
 const register = async () => {
+
+  if (!passwordValid.value) {
+    error.value = 'Contrasenya insegura'
+    return
+  }
+
+  if (!passwordsMatch.value) {
+    error.value = 'No coincideixen'
+    return
+  }
+
   try {
     const res = await authService.register(
       username.value,
@@ -139,21 +130,16 @@ const register = async () => {
     )
 
     authService.saveToken(res.data.token)
-    message.value = res.message
+    message.value = 'Compte creat correctament'
     error.value = ''
 
-    // Redirect amb lleuger delay (UX PRO)
     setTimeout(() => {
       router.push('/dashboard')
     }, 800)
 
-  } catch (err) {
+  } catch (err) {    
     error.value = err.response?.data?.error || 'Error desconocido'
   }
-}
-
-function loginSocial(provider) {
-  authService.loginSocial(provider)
 }
 </script>
 
@@ -348,5 +334,15 @@ a {
 a:hover {
   text-decoration: underline;
 }
+/* (TU CSS ORIGINAL intacto) */
 
+.password-rules {
+  list-style: none;
+  padding-left: 0;
+  color: #9ca3af;
+}
+
+.password-rules li.valid {
+  color: #16a34a;
+}
 </style>

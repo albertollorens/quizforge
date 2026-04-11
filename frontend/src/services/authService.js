@@ -117,11 +117,32 @@ export default {
   },
 
   /* ================================
-   SOCIAL LOGIN (OAuth)
+   SOCIAL AUTH (Google via API)
   ================================ */
-  loginSocial(provider) {
-    // provider: google | microsoft | linkedin
-    window.location.href = `${OAUTH_URL}/${provider}`
+
+  async loginWithGoogle(googleToken) {
+    const response = await api.post('/auth/google', {
+      token: googleToken
+    })
+
+    if (response.data?.token) {
+      this.saveToken(response.data.token)
+    }
+
+    return response.data
+  },
+
+  async registerWithGoogle(googleToken) {
+    const response = await api.post('/auth/google/register', {
+      token: googleToken
+    })
+
+    // guardar JWT directament (auto login)
+    if (response.data?.token) {
+      this.saveToken(response.data.token)
+    }
+
+    return response.data
   },
 
   api // Exportem api per usar-lo en altres serveis

@@ -10,9 +10,9 @@
         {{ t('cta.sub') }}
       </p>
 
-      <button class="btn btn-cta animate-item delay-2">
+      <a href="/dashboard" class="btn btn-cta animate-item delay-2">
         {{ t('cta.btn') }}
-      </button>
+      </a>
 
     </div>
   </section>

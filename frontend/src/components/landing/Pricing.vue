@@ -27,10 +27,11 @@
               </li>
             </ul>
 
-            <button class="btn w-100 mt-auto"
-                    :class="plan.highlight ? 'btn-gradient' : 'btn-outline-dark'">
+            <a class="btn w-100 mt-auto"
+                    :class="plan.highlight ? 'btn-gradient' : 'btn-outline-dark'"
+                    :href="plan.url">
               {{ t(plan.btn) }}
-            </button>
+          </a>
 
           </div>
 
@@ -51,7 +52,8 @@ const plans = [
     price: t('price.p1'),
     btn: 'price.p1_btn',
     features: ['price.p1_f1', 'price.p1_f2', 'price.p1_f3', 'price.p1_f4'],
-    variant: 'plan-free'
+    variant: 'plan-free',
+    url: '/dashboard'
   },
   {
     name: 'price.p2_name',
@@ -59,7 +61,8 @@ const plans = [
     month: "/" + t('price.p2_month'),
     btn: 'price.p2_btn',
     features: ['price.p2_f1', 'price.p2_f2', 'price.p2_f3', 'price.p2_f4'],
-    highlight: true
+    highlight: true,
+    url: '/dashboard/subscribe'
   },
   {
     name: 'price.p3_name',
@@ -67,7 +70,8 @@ const plans = [
     month: "/" + t('price.p2_month'),
     btn: 'price.p3_btn',
     features: ['price.p3_f1', 'price.p3_f2', 'price.p3_f3', 'price.p3_f4'],
-    variant: 'plan-business'
+    variant: 'plan-business',
+    url: '#contact'
   }
 ]
 </script>

@@ -18,7 +18,7 @@ import authService from "../services/authService";
 import QuizList from "../components/QuizList.vue";
 import QuizBuilder from "../components/QuizBuilder.vue";
 import AIGenerator from "../components/AIGenerator.vue";
-//import Navbar from "../components/dashboard/Navbar.vue";
+import AuthSuccess from "../views/AuthSuccess.vue";
 
 const routes = [
   // 🔓 Públiques
@@ -27,10 +27,10 @@ const routes = [
     children: [
       {path: "", component: Landing }
     ]
-   },
-  //{ path: "/landingpage", component: LandingPage },
+   },  
   { path: "/login", component: Login },
   { path: "/register", component: Register },
+  { path: '/auth/success', component: AuthSuccess },
 
   // 🔒 Protegides (SB Admin Layout)
   {

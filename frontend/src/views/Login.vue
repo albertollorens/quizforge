@@ -5,11 +5,12 @@
     <div class="login-bg"></div>
     <div class="login-glow"></div>
 
+    <!-- 🔙 BACK -->
     <div class="back-link" @click="$router.push('/')">
       <iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Tornar
     </div>
 
-    <!-- CARD -->
+    <!-- 🧾 CARD -->
     <div class="login-card">
 
       <!-- LOGO -->
@@ -24,25 +25,13 @@
 
         <!-- EMAIL -->
         <div class="form-floating mb-3">
-          <input
-            v-model="email"
-            type="email"
-            class="form-control"
-            id="email"
-            placeholder="Email"
-          />
+          <input v-model="email" type="email" class="form-control" id="email" placeholder="Email" />
           <label for="email">Email</label>
         </div>
 
         <!-- PASSWORD -->
         <div class="form-floating mb-3">
-          <input
-            v-model="password"
-            type="password"
-            class="form-control"
-            id="password"
-            placeholder="Contraseña"
-          />
+          <input v-model="password" type="password" class="form-control" id="password" placeholder="Contraseña" />
           <label for="password">Contraseña</label>
         </div>
 
@@ -51,10 +40,35 @@
           {{ error }}
         </div>
 
-        <!-- BUTTON -->
+        <!-- LOGIN BUTTON -->
         <button class="btn btn-dark w-100 login-btn">
           Entrar
         </button>
+
+        <!-- SEPARATOR -->
+        <div class="separator my-3">
+          <span>o continua amb</span>
+        </div>
+
+       <div class="social-login">
+
+        <!-- GOOGLE CUSTOM -->
+        <button type="button" class="btn social-btn google w-100 mb-2" @click="loginWithGoogle">
+          <iconify-icon icon="logos:google-icon" width="18"></iconify-icon>
+          Continuar amb Google
+        </button>
+
+        <button type="button" class="btn social-btn microsoft w-100 mb-2">
+          <iconify-icon icon="logos:microsoft-icon" width="18"></iconify-icon>
+          Continuar amb Microsoft
+        </button>
+
+        <button type="button" class="btn social-btn linkedin w-100">
+          <iconify-icon icon="logos:linkedin-icon" width="18"></iconify-icon>
+          Continuar amb LinkedIn
+        </button>
+
+      </div>
 
         <!-- LINKS -->
         <p class="text-center mt-3 small">
@@ -72,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import authService from '../services/authService'
 import { useRouter } from 'vue-router'
 import logo from '@/assets/img/logo.png'
@@ -83,6 +97,9 @@ const error = ref('')
 
 const router = useRouter()
 
+let googleClient = null
+
+/* LOGIN NORMAL */
 const login = async () => {
   try {
     const res = await authService.login(email.value, password.value)
@@ -92,135 +109,109 @@ const login = async () => {
     error.value = err.response?.data?.error || 'Error desconocido'
   }
 }
+
+/* GOOGLE INIT */
+/*onMounted(() => {
+  window.google.accounts.id.initialize({
+    client_id: '422845366189-pb88uq9qqhd6d7n5icv08vemhc03raql.apps.googleusercontent.com',
+    callback: handleCredentialResponse
+  })
+
+  window.google.accounts.id.renderButton(
+    document.getElementById('google-btn'),
+    {
+      theme: 'outline',
+      size: 'large',
+      width: 320
+    }
+  )
+
+  window.google.accounts.id.prompt()
+});*/
+
+/* 👉 CLICK EN TU BOTÓN */
+/*function loginWithGoogle() {
+  googleClient.prompt() // lanza el selector de cuentas
+}*/
+
+/* CALLBACK */
+/*async function handleCredentialResponse(response) {
+  try {
+    const res = await authService.loginWithGoogle(response.credential)
+    authService.saveToken(res.data.token)
+    router.push('/dashboard')
+  } catch (err) {
+    error.value = 'Error amb Google Login'
+  }
+}*/
 </script>
 
 <style scoped>
+/* BACK */
 .back-link {
   position: absolute;
   top: 30px;
   left: 30px;
   z-index: 3;
-
   font-size: 0.9rem;
   color: #64748b;
   cursor: pointer;
-
-  transition: all 0.2s ease;
 }
+.back-link:hover { transform: translateX(-3px); }
 
-.back-link:hover {
-  color: #0f172a;
-  transform: translateX(-3px);
-}
-
-/* 🌌 PAGE */
+/* PAGE */
 .login-page {
-  display: flex;
   align-items: flex-start;
-  justify-content: center;
   padding-top: 100px;
 }
 
-@media (max-width: 768px) {
-  .login-page {
-    padding-top: 60px;
-  }
-}
-
-/* 🌈 BACKGROUND */
+/* BG */
 .login-bg {
   position: absolute;
   inset: 0;
   background: linear-gradient(120deg, #f8fafc, #eef2ff, #f0f9ff);
-  background-size: 200% 200%;
   animation: gradientMove 12s ease infinite;
-  z-index: 0;
 }
-
 @keyframes gradientMove {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
+  0% { background-position: 0% }
+  50% { background-position: 100% }
+  100% { background-position: 0% }
 }
 
-/* 💡 GLOW */
-.login-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.15), transparent 40%);
-  z-index: 1;
-}
-
-/* 🧾 CARD */
+/* CARD */
 .login-card {
-  position: relative;
-  z-index: 2;
-  width: 100%;
   max-width: 420px;
   padding: 2rem;
   border-radius: 20px;
-
-  background: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(12px);
-
   box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255,255,255,0.4);
-
-  animation: fadeUp 0.6s ease;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 🧠 LOGO */
-.logo {
-  width: 120px;
-  transition: transform 0.3s ease;
-}
-
-.logo:hover {
-  transform: scale(1.05);
-}
-
-/* ✨ INPUTS */
-.form-control {
+/* SOCIAL */
+.social-btn {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
   border-radius: 12px;
+  padding: 0.6rem;
   border: 1px solid #e5e7eb;
-  transition: all 0.2s ease;
 }
-
-.form-control:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-}
-
-/* 🚀 BUTTON */
-.login-btn {
-  border-radius: 12px;
-  padding: 0.7rem;
-  transition: all 0.2s ease;
-}
-
-.login-btn:hover {
+.social-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
-/* 🔗 LINKS */
-a {
-  text-decoration: none;
+/* SEPARATOR */
+.separator {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
 }
-
-a:hover {
-  text-decoration: underline;
+.separator::before,
+.separator::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
 }
-
+.separator span { padding: 0 10px; }
 </style>
