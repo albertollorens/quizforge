@@ -28,3 +28,6 @@ Thumbs.db
 configuració_local.txt
 configuració_azure.txt
 QuizForge_PFC_Documentacio_Academica.pdf
+
+# Google OAuth
+client_secret_*.json
