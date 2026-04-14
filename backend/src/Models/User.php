@@ -16,6 +16,12 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getNumQuizzes(int $id) {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM quizzes WHERE user_id = ?");
+        $stmt->execute([$id]);
+        return (int) $stmt->fetchColumn();
+    }
+
     public function create(string $username, string $email, string $password): bool {
         $hash = password_hash($password, PASSWORD_BCRYPT);
 

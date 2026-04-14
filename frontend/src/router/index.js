@@ -43,7 +43,7 @@ const routes = [
         component: Profile
       },
       {
-        path: "dashboard",
+        path: "",
         component: Dashboard,
         children: [
           {

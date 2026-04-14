@@ -22,8 +22,10 @@ class LoginController {
                 
         $email = $data['email'] ?? '';
         $password = $data['password'] ?? '';
+        $plan = $data['plan'] ?? '';
 
         $user = $this->user->findByEmail($email);
+        $user['quizzes'] = $this->user->getNumQuizzes($user['id']);
 
         if (!$user || !password_verify($password, $user['password'])) {
             $response->getBody()->write(json_encode([
@@ -40,13 +42,17 @@ class LoginController {
             'exp' => time() + 3600,               // Expira en 1 hora
             'sub' => $user['id'],                 // ID d'usuari
             'email' => $user['email'],            // Email d'usuari
-            'username' => $user['name'],      // Username d'usuari
+            'username' => $user['name'],          // Username d'usuari
+            'rol' => $user['rol'],               //Rol de l'usuari
+            'plan' => $user['plan'],               //Rol de l'usuari
+            'quizzes' => $user['quizzes'],               //Quizzes creats
+            //'completedquizzes' => $user['completedquizzes']               //Quizzes completats
         ];
 
         $jwt = JWT::encode($payload, Settings::jwtSecret(), 'HS256');
 
         $response->getBody()->write(json_encode([
-            'message' => 'Login correcto',
+            'message' => 'Login correcto',            
             'token' => $jwt
         ]));
 
@@ -65,25 +71,34 @@ class LoginController {
                             ->withHeader('Content-Type', 'application/json');
         }
 
-        $created = $this->user->create(
-            $data['username'],
-            $data['email'],
-            $data['password']
-        );
+        $user = $this->user->findByEmail($data['email']);
 
-        if (!$created) {
+        if($user) {
             $response->getBody()->write(json_encode([
-                'error' => 'No se pudo registrar'
+                'error' => 'Usuario existente'
             ]));
-            return $response->withStatus(500)
+            return $response->withStatus(400)
                             ->withHeader('Content-Type', 'application/json');
+        } else {
+            $created = $this->user->create(
+                $data['username'],
+                $data['email'],
+                $data['password']
+            );
+
+            if (!$created) {
+                $response->getBody()->write(json_encode([
+                    'error' => 'No se pudo registrar'
+                ]));
+                return $response->withStatus(500)
+                                ->withHeader('Content-Type', 'application/json');
+            }
+
+            $response->getBody()->write(json_encode([
+                'message' => 'Usuario registrado correctamente'
+            ]));
+            return $response->withHeader('Content-Type', 'application/json');
         }
-
-        $response->getBody()->write(json_encode([
-            'message' => 'Usuario registrado correctamente'
-        ]));
-
-        return $response->withHeader('Content-Type', 'application/json');
     }
 
     // Validar token JWT (per a usar com middleware)
