@@ -1,11 +1,11 @@
 <template>
   <FullScreenLayout>
-    <div class="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
+    <div class="relative p-6 bg-slate-50 z-1 font-sans dark:bg-slate-950 sm:p-0">
       <div
-        class="relative flex flex-col justify-center w-full h-screen lg:flex-row dark:bg-gray-900"
+        class="relative flex flex-col justify-center w-full h-screen lg:flex-row"
       >
         <div class="flex flex-col flex-1 w-full lg:w-1/2">
-          <div class="w-full max-w-md pt-10 mx-auto">
+          <div class="w-full max-w-xl pt-10 mx-auto">
             <router-link
               to="/"
               class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
@@ -30,22 +30,23 @@
             </router-link>
           </div>
           <!-- Form -->
-          <div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-            <div class="mb-5 sm:mb-8">
-              <h1
-                class="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md"
-              >
-                Registra't
-              </h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">
-                Introdueix el teu correu electrònic i la contrasenya per iniciar sessió!
-              </p>
-            </div>
-            <div>
-              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-                <button
-                  class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+          <div class="flex flex-col justify-center flex-1 w-full max-w-xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+            <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-950 dark:shadow-none">
+              <div class="mb-5 sm:mb-8">
+                <h1
+                  class="mb-3 text-4xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-5xl"
                 >
+                  Registra't
+                </h1>
+                <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  Introdueix les següents dades per a crear el teu compte.
+                </p>
+              </div>
+              <div>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
+                  <button
+                    class="inline-flex items-center justify-center gap-3 rounded-3xl bg-slate-100 px-7 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-800"
+                  >
                   <svg
                     width="20"
                     height="20"
@@ -73,7 +74,9 @@
                   Inicieu la sessió amb Google
                 </button>
                 <button
-                  class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+                  @click="handleGoogleRegister"
+                  :disabled="googleLoading"
+                  class="inline-flex items-center justify-center gap-3 rounded-3xl bg-slate-100 px-7 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-800"
                 >
                   <svg
                     width="21"
@@ -83,23 +86,23 @@
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path
-                      d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z"
-                    />
+                    <path d="M0 0h10.5v10.5H0V0z" fill="#F25022"/>
+                    <path d="M10.5 0H21v10.5H10.5V0z" fill="#00A4EF"/>
+                    <path d="M0 10.5h10.5V21H0v-10.5z" fill="#7FBA00"/>
+                    <path d="M10.5 10.5H21V21H10.5v-10.5z" fill="#FFB900"/>
                   </svg>
 
-                  Inicieu la sessió amb X
+                  Inicieu la sessió amb Microsoft
                 </button>
               </div>
               <div class="relative py-3 sm:py-5">
                 <div class="absolute inset-0 flex items-center">
-                  <div class="w-full border-t border-gray-200 dark:border-gray-800"></div>
+                  <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
                 </div>
                 <div class="relative flex justify-center text-sm">
-                  <span class="p-2 text-gray-400 bg-white dark:bg-gray-900 sm:px-5 sm:py-2"
-                    >O</span
-                  >
+                  <span class="p-2 text-slate-500 bg-white dark:bg-slate-950 sm:px-5 sm:py-2">O</span>
                 </div>
+              </div>
               </div>
               <form @submit.prevent="handleSubmit">
                 <div class="space-y-5">
@@ -108,7 +111,7 @@
                     <div class="sm:col-span-1">
                       <label
                         for="fname"
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                        class="mb-1.5 block text-sm font-medium text-slate-900 dark:text-slate-200"
                       >
                         Nom<span class="text-error-500">*</span>
                       </label>
@@ -118,14 +121,14 @@
                         id="fname"
                         name="fname"
                         placeholder="Introdueix el teu nom"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                        class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                       />
                     </div>
                     <!-- Last Name -->
                     <div class="sm:col-span-1">
                       <label
                         for="lname"
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                        class="mb-1.5 block text-sm font-medium text-slate-900 dark:text-slate-200"
                       >
                         Cognoms<span class="text-error-500">*</span>
                       </label>
@@ -135,7 +138,7 @@
                         id="lname"
                         name="lname"
                         placeholder="Introdueix els teus cognoms"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                        class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                       />
                     </div>
                   </div>
@@ -153,14 +156,14 @@
                       id="email"
                       name="email"
                       placeholder="Enter your email"
-                      class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                     />
                   </div>
                   <!-- Password -->
                   <div>
                     <label
                       for="password"
-                      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                        class="mb-1.5 block text-sm font-medium text-slate-900 dark:text-slate-200"
                     >
                       Contrasenya<span class="text-error-500">*</span>
                     </label>
@@ -170,7 +173,62 @@
                         :type="showPassword ? 'text' : 'password'"
                         id="password"
                         placeholder="Enter your password"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                      class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-11 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
+                      />
+                      <span
+                        @click="togglePasswordVisibility"
+                        class="absolute z-30 text-gray-500 -translate-y-1/2 cursor-pointer right-4 top-1/2 dark:text-gray-400"
+                      >
+                        <svg
+                          v-if="!showPassword"
+                          class="fill-current"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M10.0002 13.8619C7.23361 13.8619 4.86803 12.1372 3.92328 9.70241C4.86804 7.26761 7.23361 5.54297 10.0002 5.54297C12.7667 5.54297 15.1323 7.26762 16.0771 9.70243C15.1323 12.1372 12.7667 13.8619 10.0002 13.8619ZM10.0002 4.04297C6.48191 4.04297 3.49489 6.30917 2.4155 9.4593C2.3615 9.61687 2.3615 9.78794 2.41549 9.94552C3.49488 13.0957 6.48191 15.3619 10.0002 15.3619C13.5184 15.3619 16.5055 13.0957 17.5849 9.94555C17.6389 9.78797 17.6389 9.6169 17.5849 9.45932C16.5055 6.30919 13.5184 4.04297 10.0002 4.04297ZM9.99151 7.84413C8.96527 7.84413 8.13333 8.67606 8.13333 9.70231C8.13333 10.7286 8.96527 11.5605 9.99151 11.5605H10.0064C11.0326 11.5605 11.8646 10.7286 11.8646 9.70231C11.8646 8.67606 11.0326 7.84413 10.0064 7.84413H9.99151Z"
+                            fill="#98A2B3"
+                          />
+                        </svg>
+                        <svg
+                          v-else
+                          class="fill-current"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M4.63803 3.57709C4.34513 3.2842 3.87026 3.2842 3.57737 3.57709C3.28447 3.86999 3.28447 4.34486 3.57737 4.63775L4.85323 5.91362C3.74609 6.84199 2.89363 8.06395 2.4155 9.45936C2.3615 9.61694 2.3615 9.78801 2.41549 9.94558C3.49488 13.0957 6.48191 15.3619 10.0002 15.3619C11.255 15.3619 12.4422 15.0737 13.4994 14.5598L15.3625 16.4229C15.6554 16.7158 16.1302 16.7158 16.4231 16.4229C16.716 16.13 16.716 15.6551 16.4231 15.3622L4.63803 3.57709ZM12.3608 13.4212L10.4475 11.5079C10.3061 11.5423 10.1584 11.5606 10.0064 11.5606H9.99151C8.96527 11.5606 8.13333 10.7286 8.13333 9.70237C8.13333 9.5461 8.15262 9.39434 8.18895 9.24933L5.91885 6.97923C5.03505 7.69015 4.34057 8.62704 3.92328 9.70247C4.86803 12.1373 7.23361 13.8619 10.0002 13.8619C10.8326 13.8619 11.6287 13.7058 12.3608 13.4212ZM16.0771 9.70249C15.7843 10.4569 15.3552 11.1432 14.8199 11.7311L15.8813 12.7925C16.6329 11.9813 17.2187 11.0143 17.5849 9.94561C17.6389 9.78803 17.6389 9.61696 17.5849 9.45938C16.5055 6.30925 13.5184 4.04303 10.0002 4.04303C9.13525 4.04303 8.30244 4.17999 7.52218 4.43338L8.75139 5.66259C9.1556 5.58413 9.57311 5.54303 10.0002 5.54303C12.7667 5.54303 15.1323 7.26768 16.0771 9.70249Z"
+                            fill="#98A2B3"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Confirm Password -->
+                  <div>
+                    <label
+                      for="confirmPassword"
+                        class="mb-1.5 block text-sm font-medium text-slate-900 dark:text-slate-200"
+                    >
+                      Confirma la contrasenya<span class="text-error-500">*</span>
+                    </label>
+                    <div class="relative">
+                      <input
+                        v-model="confirmPassword"
+                        :type="showPassword ? 'text' : 'password'"
+                        id="confirmPassword"
+                        placeholder="Confirma la teva contrasenya"
+                      class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-11 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                       />
                       <span
                         @click="togglePasswordVisibility"
@@ -216,7 +274,7 @@
                     <div>
                       <label
                         for="checkboxLabelOne"
-                        class="flex items-start text-sm font-normal text-gray-700 cursor-pointer select-none dark:text-gray-400"
+                        class="flex items-start text-sm font-normal text-slate-700 cursor-pointer select-none dark:text-slate-300"
                       >
                         <div class="relative">
                           <input
@@ -252,13 +310,13 @@
                             </span>
                           </div>
                         </div>
-                        <p class="inline-block font-normal text-gray-500 dark:text-gray-400">
+                        <p class="inline-block font-normal text-slate-600 dark:text-slate-400">
                           En crear un compte, acceptes els
-                          <span class="text-gray-800 dark:text-white/90">
+                          <span class="text-slate-900 dark:text-slate-100">
                             Termes and Condicions,
                           </span>
                           i la nostra
-                          <span class="text-gray-800 dark:text-white"> Política de privadesa</span>
+                          <span class="text-slate-900 dark:text-slate-100"> Política de privadesa</span>
                         </p>
                       </label>
                     </div>
@@ -267,7 +325,7 @@
                   <div>
                     <button
                       type="submit"
-                      class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+                      class="flex items-center justify-center w-full rounded-3xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                     >
                       Registra't
                     </button>
@@ -276,12 +334,12 @@
               </form>
               <div class="mt-5">
                 <p
-                  class="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start"
+                  class="text-sm font-normal text-center text-slate-900 dark:text-slate-200 sm:text-start"
                 >
                   Ja tens un compte?
                   <router-link
                     to="/signin"
-                    class="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                    class="text-blue-600 hover:text-blue-700 dark:text-blue-300"
                     >Inicia la sessió</router-link
                   >
                 </p>
@@ -296,7 +354,7 @@
             <common-grid-shape />
             <div class="flex flex-col items-center max-w-xs">
               <router-link to="/" class="block mb-4">
-                <img width="{231}" height="{48}" src="/images/logo/logo.png" alt="Logo" />
+                <img width="100%" src="/images/logo/logo.png" alt="Logo" />
               </router-link>
               <!--<p class="text-center text-gray-400 dark:text-white/60">
                 Craft your quizzes
@@ -311,19 +369,32 @@
 
 <script setup lang="ts">
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
-import CommonGridShape from '@/components/common/CommonGridShape.vue'
+//import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useGoogleAuth } from '@/composables/useGoogleAuth'
+import { GOOGLE_CLIENT_ID } from '@/config/googleConfig'
 
 const firstName = ref('')
 const lastName = ref('')
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const showPassword = ref(false)
 const agreeToTerms = ref(false)
 
+const { registerWithGoogle, isLoading: googleLoading } = useGoogleAuth()
+
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
+}
+
+const handleGoogleRegister = async () => {
+  try {
+    await registerWithGoogle(GOOGLE_CLIENT_ID)
+  } catch (error) {
+    console.error('Error registering with Google:', error)
+  }
 }
 
 const handleSubmit = () => {
@@ -333,6 +404,7 @@ const handleSubmit = () => {
     lastName: lastName.value,
     email: email.value,
     password: password.value,
+    confirmPassword: confirmPassword.value,
     agreeToTerms: agreeToTerms.value,
   })
 }

@@ -1,11 +1,11 @@
 <template>
   <FullScreenLayout>
-    <div class="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
+    <div class="relative p-6 bg-slate-50 z-1 font-sans dark:bg-slate-950 sm:p-0">
       <div
-        class="relative flex flex-col justify-center w-full h-screen lg:flex-row dark:bg-gray-900"
+        class="relative flex flex-col justify-center w-full h-screen lg:flex-row"
       >
         <div class="flex flex-col flex-1 w-full lg:w-1/2">
-          <div class="w-full max-w-md pt-10 mx-auto">
+          <div class="w-full max-w-xl pt-10 mx-auto">
             <router-link
               to="/"
               class="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
@@ -29,22 +29,24 @@
               Tornar
             </router-link>
           </div>
-          <div class="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-            <div>
+          <div class="flex flex-col justify-center flex-1 w-full max-w-xl mx-auto px-4 py-10 sm:px-6 lg:px-8">
+            <div class="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-xl shadow-slate-900/5 dark:border-slate-700 dark:bg-slate-950 dark:shadow-none">
               <div class="mb-5 sm:mb-8">
                 <h1
-                  class="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md"
+                  class="mb-3 text-4xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-5xl"
                 >
                   Inicieu la sessió
                 </h1>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
+                <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
                   Introdueix el teu correu electrònic i la contrasenya per iniciar sessió!
                 </p>
               </div>
               <div>
                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                   <button
-                    class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+                    @click="handleGoogleLogin"
+                    :disabled="googleLoading"
+                    class="inline-flex items-center justify-center gap-3 rounded-3xl bg-slate-100 px-7 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-800"
                   >
                     <svg
                       width="20"
@@ -73,7 +75,7 @@
                     Inicieu la sessió amb Google
                   </button>
                   <button
-                    class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+                    class="inline-flex items-center justify-center gap-3 rounded-3xl bg-slate-100 px-7 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-800"
                   >
                     <svg
                       width="21"
@@ -83,31 +85,31 @@
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <path
-                        d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z"
-                      />
+                      <path d="M0 0h10.5v10.5H0V0z" fill="#F25022"/>
+                      <path d="M10.5 0H21v10.5H10.5V0z" fill="#00A4EF"/>
+                      <path d="M0 10.5h10.5V21H0v-10.5z" fill="#7FBA00"/>
+                      <path d="M10.5 10.5H21V21H10.5v-10.5z" fill="#FFB900"/>
                     </svg>
 
-                    Inicieu la sessió amb X
+                    Inicieu la sessió amb Microsoft
                   </button>
                 </div>
-                <div class="relative py-3 sm:py-5">
-                  <div class="absolute inset-0 flex items-center">
-                    <div class="w-full border-t border-gray-200 dark:border-gray-800"></div>
-                  </div>
-                  <div class="relative flex justify-center text-sm">
-                    <span class="p-2 text-gray-400 bg-white dark:bg-gray-900 sm:px-5 sm:py-2"
-                      >O</span
-                    >
-                  </div>
+              </div>
+              <div class="relative py-3 sm:py-5">
+                <div class="absolute inset-0 flex items-center">
+                  <div class="w-full border-t border-slate-200 dark:border-slate-700"></div>
                 </div>
+                <div class="relative flex justify-center text-sm">
+                  <span class="p-2 text-slate-500 bg-white dark:bg-slate-950 sm:px-5 sm:py-2">O</span>
+                </div>
+              </div>
                 <form @submit.prevent="login">
                   <div class="space-y-5">
                     <!-- Email -->
                     <div>
                       <label
                         for="email"
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                        class="mb-1.5 block text-sm font-medium text-slate-900 dark:text-slate-200"
                       >
                         Email<span class="text-error-500">*</span>
                       </label>
@@ -117,14 +119,14 @@
                         id="email"
                         name="email"
                         placeholder="info@gmail.com"
-                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                        class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                       />
                     </div>
                     <!-- Password -->
                     <div>
                       <label
                         for="password"
-                        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                        class="mb-1.5 block text-sm font-medium text-slate-900 dark:text-slate-200"
                       >
                         Contrasenya<span class="text-error-500">*</span>
                       </label>
@@ -134,7 +136,7 @@
                           :type="showPassword ? 'text' : 'password'"
                           id="password"
                           placeholder="Introdueix la teua contrasenya"
-                          class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                          class="h-11 w-full rounded-2xl border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-11 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                         />
                         <span
                           @click="togglePasswordVisibility"
@@ -180,7 +182,7 @@
                       <div>
                         <label
                           for="keepLoggedIn"
-                          class="flex items-center text-sm font-normal text-gray-700 cursor-pointer select-none dark:text-gray-400"
+                          class="flex items-center text-sm font-normal text-slate-900 cursor-pointer select-none dark:text-slate-200"
                         >
                           <div class="relative">
                             <input
@@ -221,7 +223,7 @@
                       </div>
                       <router-link
                         to="/reset-password"
-                        class="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                        class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-300"
                         >Heu oblidat la contrasenya?</router-link
                       >
                     </div>
@@ -229,8 +231,7 @@
                     <div>
                       <button
                         type="submit"
-                        class="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
-                        @click=""
+                        class="flex items-center justify-center w-full rounded-3xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
                       >
                         Inicieu la sessió
                       </button>
@@ -239,17 +240,16 @@
                 </form>
                 <div class="mt-5">
                   <p
-                    class="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start"
+                    class="text-sm font-normal text-center text-slate-900 dark:text-slate-200 sm:text-start"
                   >
                     No tens un compte?
                     <router-link
                       to="/signup"
-                      class="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                      class="text-blue-600 hover:text-blue-700 dark:text-blue-300"
                       >Registra't</router-link
                     >
                   </p>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -260,12 +260,8 @@
             <common-grid-shape />
             <div class="flex flex-col items-center max-w-xs">
               <router-link to="/" class="block mb-4">
-                <img width="{231}" height="{48}" src="/images/logo/logo.png" alt="Logo" class="block dark:hidden"/>
+                <img width="100%" src="/images/logo/logo.png" alt="Logo" class="block dark:hidden"/>
               </router-link>
-              <!--<p class="text-center text-gray-400 dark:text-white/60">
-                Craft your quizzes
-              </p>
-              -->
             </div>
           </div>
         </div>
@@ -279,8 +275,10 @@ import { ref } from 'vue'
 import type { AxiosError } from 'axios'
 import authService from '../../services/authService'
 import { useRouter } from 'vue-router'
-import CommonGridShape from '@/components/common/CommonGridShape.vue'
+//import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
+import { useGoogleAuth } from '@/composables/useGoogleAuth'
+import { GOOGLE_CLIENT_ID } from '@/config/googleConfig'
 
 const router = useRouter()
 const error = ref('')
@@ -290,8 +288,18 @@ const password = ref('')
 const showPassword = ref(false)
 const keepLoggedIn = ref(false)
 
+const { signInWithGoogle, isLoading: googleLoading } = useGoogleAuth()
+
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
+}
+
+const handleGoogleLogin = async () => {
+  try {
+    await signInWithGoogle(GOOGLE_CLIENT_ID)
+  } catch (error) {
+    console.error('Error signing in with Google:', error)
+  }
 }
 
 const login = async () => {

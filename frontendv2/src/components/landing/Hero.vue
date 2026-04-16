@@ -81,7 +81,7 @@ const router = useRouter()
 const { t, locale } = useI18n()
 
 function goToRegister() {
-  router.push('/register')
+  router.push('/signup')
 }
 
 function scrollToDemo() {
