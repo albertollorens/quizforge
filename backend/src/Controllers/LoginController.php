@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Helpers\GoogleTokenHelper;
 use App\Config\Settings;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -98,6 +99,122 @@ class LoginController {
                 'message' => 'Usuario registrado correctamente'
             ]));
             return $response->withHeader('Content-Type', 'application/json');
+        }
+    }
+
+    // POST /api/auth/google
+    public function authWithGoogle(Request $request, Response $response): Response {
+        $data = $request->getParsedBody();
+
+        if (!isset($data['token'])) {
+            $response->getBody()->write(json_encode([
+                'error' => 'Token de Google requerido'
+            ]));
+            return $response->withStatus(400)
+                            ->withHeader('Content-Type', 'application/json');
+        }
+
+        try {
+            $googleToken = $data['token'];
+
+            // Detectar entorno
+            $isDevelopment = ($_ENV['APP_ENV'] ?? 'development') === 'development';
+
+            // Verificar token de Google
+            $decodedToken = GoogleTokenHelper::verifyAndDecode($googleToken, !$isDevelopment);
+
+            if (!$decodedToken) {
+                throw new \Exception('Token de Google inválido');
+            }
+
+            // Extraer datos
+            $googleId = $decodedToken['sub'] ?? null;
+            $email = $decodedToken['email'] ?? null;
+            $name = $decodedToken['name'] ?? $decodedToken['given_name'] ?? 'Usuario Google';
+            $picture = $decodedToken['picture'] ?? null;
+
+            if (!$googleId || !$email) {
+                throw new \Exception('Datos incompletos del token de Google');
+            }
+
+            /* =====================================
+            LÓGICA UNIFICADA (clave)
+            ===================================== */
+
+            // 1. Buscar por google_id
+            $user = $this->user->findByGoogleId($googleId);
+
+            if ($user) {
+                // ✔ Usuario ya existe con Google → login directo
+
+                // Actualizar foto si cambia
+                if ($picture && $user['profile_picture'] !== $picture) {
+                    $this->user->updateWithGoogle($user['id'], $googleId, $picture);
+                }
+
+            } else {
+                // 2. Buscar por email
+                $user = $this->user->findByEmail($email);
+
+                if ($user) {
+                    // ✔ Usuario existe (registro local) → vincular Google
+                    $this->user->updateWithGoogle($user['id'], $googleId, $picture);
+                    $user = $this->user->findById($user['id']);
+
+                } else {
+                    // 3. Usuario nuevo → crear
+                    $created = $this->user->createWithGoogle($googleId, $email, $name, $picture);
+
+                    if (!$created) {
+                        throw new \Exception('No se pudo crear usuario');
+                    }
+
+                    $user = $this->user->findByGoogleId($googleId);
+                }
+            }
+
+            // Añadir datos extra
+            $user['quizzes'] = $this->user->getNumQuizzes($user['id']);
+
+            /* =====================================
+            JWT
+            ===================================== */
+
+            $payload = [
+                'iss' => 'quizforge.local',
+                'iat' => time(),
+                'exp' => time() + 3600,
+                'sub' => $user['id'],
+                'email' => $user['email'],
+                'name' => $user['name'], // 🔥 corregido (no username)
+                'rol' => $user['rol'],
+                'plan' => $user['plan'],
+                'quizzes' => $user['quizzes'],
+                'provider' => $user['provider']
+            ];
+
+            $jwt = JWT::encode($payload, Settings::jwtSecret(), 'HS256');
+
+            $response->getBody()->write(json_encode([
+                'message' => 'Autenticación con Google exitosa',
+                'token' => $jwt,
+                'user' => [
+                    'id' => $user['id'],
+                    'email' => $user['email'],
+                    'name' => $user['name'],
+                    'provider' => $user['provider']
+                ]
+            ]));
+
+            return $response->withHeader('Content-Type', 'application/json');
+
+        } catch (\Exception $e) {
+            $response->getBody()->write(json_encode([
+                'error' => 'Error de autenticación: ' . $e->getMessage()
+            ]));
+
+            return $response->withStatus(401)
+                            ->withHeader('Content-Type', 'application/json');
         }
     }
 

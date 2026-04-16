@@ -37,10 +37,7 @@
                   class="mb-3 text-4xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-5xl"
                 >
                   Registra't
-                </h1>
-                <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                  Introdueix les següents dades per a crear el teu compte.
-                </p>
+                </h1>                
               </div>
               <div>
                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
@@ -104,6 +101,10 @@
                 </div>
               </div>
               </div>
+              <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  Introdueix les següents dades per a crear el teu compte.
+              </p>
+              <br/>
               <form @submit.prevent="handleSubmit">
                 <div class="space-y-5">
                   <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -356,9 +357,6 @@
               <router-link to="/" class="block mb-4">
                 <img width="100%" src="/images/logo/logo.png" alt="Logo" />
               </router-link>
-              <!--<p class="text-center text-gray-400 dark:text-white/60">
-                Craft your quizzes
-              </p>-->
             </div>
           </div>
         </div>
@@ -383,7 +381,7 @@ const confirmPassword = ref('')
 const showPassword = ref(false)
 const agreeToTerms = ref(false)
 
-const { registerWithGoogle, isLoading: googleLoading } = useGoogleAuth()
+const { authWithGoogle, isLoading: googleLoading } = useGoogleAuth()
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
@@ -391,7 +389,7 @@ const togglePasswordVisibility = () => {
 
 const handleGoogleRegister = async () => {
   try {
-    await registerWithGoogle(GOOGLE_CLIENT_ID)
+    await authWithGoogle(GOOGLE_CLIENT_ID)
   } catch (error) {
     console.error('Error registering with Google:', error)
   }

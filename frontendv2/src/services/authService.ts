@@ -36,8 +36,8 @@ api.interceptors.response.use(
       // Event global per mostrar missatge amigable
       window.dispatchEvent(new Event('session-expired'))
 
-      // Redirigir a login
-      window.location.href = '/login'
+      // Redirigir a signin
+      window.location.href = '/signin'
     }
 
     return Promise.reject(error)
@@ -125,7 +125,7 @@ export default {
    SOCIAL AUTH (Google via API)
   ================================ */
 
-  async loginWithGoogle(googleToken: string) {
+  async authWithGoogle(googleToken: string) {
     const response = await api.post('/auth/google', {
       token: googleToken
     })
@@ -137,16 +137,13 @@ export default {
     return response.data
   },
 
-  async registerWithGoogle(googleToken: string) {
-    const response = await api.post('/auth/google/register', {
-      token: googleToken
+  async authWithMicrosoft(microsoftToken: string) {
+    const response = await api.post('/auth/microsoft', {
+      token: microsoftToken
     })
-
-    // guardar JWT directament (auto login)
     if (response.data?.token) {
       this.saveToken(response.data.token)
     }
-
     return response.data
   },
 

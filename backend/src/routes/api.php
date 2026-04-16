@@ -9,6 +9,12 @@ $app->group('/api', function ($group) use ($loginController, $quizController, $o
     // Auth
     $group->post('/login',    [$loginController, 'login']);
     $group->post('/register', [$loginController, 'register']);
+    
+    // Social Google Auth (login or register)
+    $group->post('/auth/google',    [$loginController, 'authWithGoogle']);
+    
+    // Social Microsoft Auth
+    $group->post('/auth/microsoft',    [$loginController, 'authWithMicrosoft']);
 
     // User Profile (protegit per JWT)
     $group->group('', function ($group) use ($loginController) {   

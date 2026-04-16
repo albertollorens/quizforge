@@ -36,10 +36,7 @@
                   class="mb-3 text-4xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-5xl"
                 >
                   Inicieu la sessió
-                </h1>
-                <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
-                  Introdueix el teu correu electrònic i la contrasenya per iniciar sessió!
-                </p>
+                </h1>                
               </div>
               <div>
                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
@@ -103,6 +100,10 @@
                   <span class="p-2 text-slate-500 bg-white dark:bg-slate-950 sm:px-5 sm:py-2">O</span>
                 </div>
               </div>
+                <p class="max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  Introdueix el teu correu electrònic i la contrasenya per iniciar sessió!
+                </p>
+                <br/>
                 <form @submit.prevent="login">
                   <div class="space-y-5">
                     <!-- Email -->
@@ -278,7 +279,7 @@ import { useRouter } from 'vue-router'
 //import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
 import { useGoogleAuth } from '@/composables/useGoogleAuth'
-import { GOOGLE_CLIENT_ID } from '@/config/googleConfig'
+import { GOOGLE_CLIENT_ID } from '@/config/googleConfig.ts'
 
 const router = useRouter()
 const error = ref('')
