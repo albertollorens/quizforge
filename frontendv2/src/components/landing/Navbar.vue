@@ -3,7 +3,7 @@
 
     <!-- LOGO -->
     <div class="nav-left d-flex align-items-center">
-      <img src="/images/logo/logo.png" alt="QuizForge logo" class="logo" width="150px" />
+      <img src="/images/logo/logo.png" alt="QuizForge logo" class="logo" />
     </div>
 
     <!-- LINKS CENTRATS -->
@@ -157,6 +157,8 @@ onBeforeUnmount(() => {
 
 /* LOGO */
 .logo {
+  height: auto;
+  max-width: 140px;
   transition: transform 0.3s ease;
 }
 
@@ -273,13 +275,57 @@ onBeforeUnmount(() => {
 /* RESPONSIVE */
 @media (max-width: 768px) {
 
+  /* GRID */
+  .custom-navbar {
+    grid-template-columns: auto 1fr auto;
+    gap: 5px;
+  }
+
+  /* LOGO MÁS PEQUEÑO */
+  .logo {
+    max-width: 90px;
+  }
+
+  /* OCULTAMOS LINKS CENTRALES */
   .menu-links {
     display: none;
   }
 
+  /* HAMBURGER */
   .hamburger {
     display: block;
   }
+
+  /* NAV RIGHT MÁS COMPACTO */
+  .nav-right {
+    gap: 4px !important;
+  }
+
+  /* BOTONES MÁS PEQUEÑOS */
+  .btn {
+    padding: 4px 6px !important;
+    font-size: 11px !important;
+  }
+
+  /* BOTÓN IDIOMA */
+  .lang-btn {
+    padding: 4px 6px;
+    font-size: 11px;
+    gap: 3px;
+  }
+
+  /* ICONOS MÁS PEQUEÑOS */
+  .btn i,
+  .lang-btn i {
+    font-size: 12px;
+  }
+
+  /* TEXTO LARGO FUERA (clave) */
+  .btn-cta span,
+  .btn-contactus span {
+    display: none;
+  }
+
 }
 
 /* ACTIVE */
@@ -322,6 +368,10 @@ onBeforeUnmount(() => {
 /* Responsive: dropdown visible on desktop */
 @media (max-width: 768px) {
   .user-menu {
+    display: block;
+  }
+
+  .user-menu .btn span {
     display: none;
   }
 }
@@ -403,5 +453,10 @@ onBeforeUnmount(() => {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+.nav-right {
+  flex-wrap: nowrap;
+  white-space: nowrap;
 }
 </style>

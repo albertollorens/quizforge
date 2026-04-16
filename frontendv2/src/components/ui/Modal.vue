@@ -1,18 +1,21 @@
 <template>
-  <div class="fixed inset-0 flex items-center justify-center overflow-y-auto z-99999">
+  <div :class="['flex items-center justify-center min-h-screen overflow-y-auto', isFixed ? 'fixed inset-0 z-[99999]' : 'absolute inset-0 z-50']">
     <div
       v-if="fullScreenBackdrop"
-      class="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
+      class="absolute inset-0 bg-black/50 backdrop-blur-[32px]"
       aria-hidden="true"
       @click="$emit('close')"
     ></div>
-    <slot name="body"></slot>
+    <div class="relative z-[100000]">
+      <slot name="body"></slot>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 interface ModalProps {
   fullScreenBackdrop?: boolean
+  isFixed?: boolean
 }
 
 defineProps<ModalProps>()

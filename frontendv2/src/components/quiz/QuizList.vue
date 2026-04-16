@@ -6,14 +6,12 @@ const props = defineProps({
   loading: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['edit','delete'])
+const emit = defineEmits(['edit','delete','show-modal'])
 
 const handleEdit = id => emit('edit', id)
 
-const handleDelete = id => {
-  if (confirm('Aquesta acció esborrarà el quiz de la BD. Està segur que vol eliminar-lo?'))
-    emit('delete', id)
-}
+const handleDelete = id => emit('show-modal', id)
+
 
 // Descarrega de fitxers (GIFT o XML)
 function downloadFile(content, filename, type) {
@@ -42,7 +40,7 @@ function formatDate(quizDate) {
 </script>
 
 <template>
-  <div class="p-4">
+  <div class="p-4 relative">
 
     <!-- LOADING -->
     <div v-if="loading" class="flex items-center justify-center gap-2 text-gray-500 my-6">
@@ -85,42 +83,40 @@ function formatDate(quizDate) {
         </div>
 
         <!-- FOOTER -->
-        <div class="p-4 border-t dark:border-slate-700 flex flex-col gap-3">
+        <div class="p-4 border-t dark:border-slate-700">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex flex-wrap gap-2">
+              <button
+                class="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"
+                @click="downloadFile(quiz.gift, quiz.title + '.gift', 'text/plain')"
+              >
+                ⬇ GIFT
+              </button>
 
-          <!-- DOWNLOADS -->
-          <div class="flex gap-2 flex-wrap">
-            <button
-              class="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"
-              @click="downloadFile(quiz.gift, quiz.title + '.gift', 'text/plain')"
-            >
-              ⬇ GIFT
-            </button>
+              <button
+                class="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"
+                @click="downloadFile(quiz.xml, quiz.title + '.xml', 'application/xml')"
+              >
+                ⬇ XML
+              </button>
+            </div>
 
-            <button
-              class="flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"
-              @click="downloadFile(quiz.xml, quiz.title + '.xml', 'application/xml')"
-            >
-              ⬇ XML
-            </button>
+            <div class="flex flex-wrap gap-2 justify-end">
+              <button
+                class="flex items-center gap-1 px-3 py-1.5 text-sm bg-indigo-500 text-white rounded-lg hover:bg-indigo-600"
+                @click="handleEdit(quiz.id)"
+              >
+                ✏ Editar
+              </button>
+
+              <button
+                class="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600"
+                @click="handleDelete(quiz.id)"
+              >
+                🗑 Eliminar
+              </button>
+            </div>
           </div>
-
-          <!-- ACTIONS -->
-          <div class="flex gap-2 flex-wrap">
-            <button
-              class="flex items-center gap-1 px-3 py-1.5 text-sm bg-indigo-500 text-white rounded-lg hover:bg-indigo-600"
-              @click="handleEdit(quiz.id)"
-            >
-              ✏ Editar
-            </button>
-
-            <button
-              class="flex items-center gap-1 px-3 py-1.5 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600"
-              @click="handleDelete(quiz.id)"
-            >
-              🗑 Eliminar
-            </button>
-          </div>
-
         </div>
 
       </div>

@@ -39,6 +39,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/dashboard/editquiz/:id',
+      name: 'Editar Quiz',
+      component: () => import('../views/Quiz/DashboardQuiz.vue'),
+      props: true,
+      meta: {
+        title: 'Editar Quiz',
+      },
+    },
+    {
       path: '/dashboard/aiquiz',
       name: 'AI Quiz',
       component: () => import('../views/Quiz/DashboardAIQuiz.vue'),
@@ -92,6 +101,14 @@ const router = createRouter({
       component: () => import('../views/Support/TicketList.vue'),
       meta: {
         title: 'Tickets de suport',
+      },
+    },
+    {
+      path: '/ticketrequest',
+      name: 'Nou Ticket',
+      component: () => import('../views/Support/TicketRequest.vue'),
+      meta: {
+        title: 'Nou Ticket de Suport',
       },
     },
     {

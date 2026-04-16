@@ -324,11 +324,12 @@ const menuGroups = [
       {
         icon: SupportIcon,
         name: "Ticket",
-        path: "/ticket",
+        //path: "/ticket",
         state: 'inprogress',
         subItems: [
+          { name: "Nou ticket", path: "/ticketrequest", pro: false },
           { name: "Llistat", path: "/ticketlist", pro: false },
-          { name: "Respostes", path: "/ticketreply", pro: false },
+          //{ name: "Respostes", path: "/ticketreply", pro: false },
         ],      
       },
       {

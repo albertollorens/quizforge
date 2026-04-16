@@ -71,7 +71,7 @@ const dropdownRef = ref(null)
 
 const menuItems = [
   { href: '/profile', icon: UserCircleIcon, text: 'Editar compte' },
-  { href: '/settings', icon: SettingsIcon, text: 'Configuració' },
+  { href: '/settings', icon: SettingsIcon, text: 'Preferències' },
   { href: '/support', icon: InfoCircleIcon, text: 'Suport' },
 ]
 

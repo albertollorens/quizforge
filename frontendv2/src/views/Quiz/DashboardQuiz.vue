@@ -7,7 +7,7 @@
       <div class="mx-auto w-full text-center">
 
         <!-- QUIZ -->
-        <div class="dashboard-container">
+        <div class="dashboard-container" :class="{ 'opacity-50 pointer-events-none': showDeleteModal }">
           <section class="dashboard-content"> 
             <!-- Llistat de quizzes -->
             <QuizList 
@@ -15,6 +15,7 @@
               :quizzes="quizzes" 
               :loading="loading" 
               @edit="handleEditQuiz" 
+              @show-modal="openDeleteModal"
               @delete="handleDeleteQuiz" />
 
             <QuizBuilder 
@@ -29,11 +30,11 @@
           </section>
         </div>
         <!-- QUICK ACTIONS -->
-        <div class="col-span-12">
+        <div class="col-span-12" :class="{ 'opacity-50 pointer-events-none': showDeleteModal }">
           <div class="bg-white dark:bg-slate-900 shadow rounded-2xl p-6">
             <h3 class="text-lg font-semibold mb-4">Accions ràpides</h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
               <button class="p-4 rounded-xl border hover:bg-slate-50 transition text-left"
                     @click="handleNewQuiz"
@@ -50,15 +51,35 @@
               </button>
 
               <button class="p-4 rounded-xl border hover:bg-slate-50 transition text-left"
+                    @click="handleProfile"
+              >
+                <p class="font-semibold">⚙️ Perfil</p>
+                <p class="text-sm text-slate-500">Gestiona el teu compte</p>
+              </button>
+              
+              <button class="p-4 rounded-xl border hover:bg-slate-50 transition text-left"
                     @click="handleSettings"
               >
-                <p class="font-semibold">⚙️ Configuració</p>
-                <p class="text-sm text-slate-500">Gestiona el teu compte</p>
+                <p class="font-semibold">⚙️ Preferències</p>
+                <p class="text-sm text-slate-500">Gestiona les preferències</p>
               </button>
 
             </div>
           </div>
         </div>
+
+        <Modal v-if="showDeleteModal" fullScreenBackdrop @close="closeDeleteModal">
+          <template #body>
+            <div class="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md mx-auto shadow-lg">
+              <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Confirmar eliminació</h3>
+              <p class="mb-6 text-gray-600 dark:text-gray-300">Aquesta acció esborrarà el quiz de la BD. Està segur que vol eliminar-lo?</p>
+              <div class="flex gap-3 justify-end">
+                <button @click="closeDeleteModal" class="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded hover:bg-gray-400 dark:hover:bg-gray-500">Cancelar</button>
+                <button @click="confirmDelete" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Eliminar</button>
+              </div>
+            </div>
+          </template>
+        </Modal>
       </div>
     </div>
   </AdminLayout>
@@ -67,6 +88,7 @@
 <script setup>
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
+import Modal from "@/components/ui/Modal.vue";
 
 const currentPageTitle = ref("Qüestionaris");
 import { ref, computed, onMounted } from 'vue'
@@ -86,6 +108,8 @@ const quizzes = ref([])
 const editingQuiz = ref(null)
 const loading = ref(false)  //Per mostrar un loading mentre es carreguen els quizzes
 const saving = ref(false) // Per mostrar un loading mentre es guarda el quiz
+const showDeleteModal = ref(false)
+const deleteQuizId = ref(null)
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -113,6 +137,21 @@ onMounted(loadQuizzes)
 async function handleNewQuiz() {
   editingQuiz.value = null
   router.push('/dashboard/nouquiz')
+}
+
+async function handleNewAIQuiz() {
+  editingQuiz.value = null
+  router.push('/dashboard/aiquiz')
+}
+
+async function handleProfile() {
+  editingQuiz.value = null
+  router.push('/profile')
+}
+
+async function handleSettings() {
+  editingQuiz.value = null
+  router.push('/settings')
 }
 
 // Editar quiz → només enviem l'ID del quiz, després carreguem dades
@@ -152,7 +191,25 @@ async function handleSaveQuiz(payload) {
   }
 }
 
-// Elimina el quiz
+function openDeleteModal(id) {
+  deleteQuizId.value = id
+  showDeleteModal.value = true
+}
+
+function closeDeleteModal() {
+  showDeleteModal.value = false
+  deleteQuizId.value = null
+}
+
+async function confirmDelete() {
+  if (!deleteQuizId.value) return
+  showDeleteModal.value = false
+  await deleteQuiz(deleteQuizId.value)
+  deleteQuizId.value = null
+  await loadQuizzes()
+}
+
+// Elimina el quiz (directamente sin modal)
 async function handleDeleteQuiz(id) {
   await deleteQuiz(id)
   await loadQuizzes()

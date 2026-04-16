@@ -7,9 +7,7 @@
       Actualitza a un pla superior.
     </p>
     <a
-      href="/upgradeplan"
-      target="_blank"
-      rel="nofollow"
+      href="/userplan"
       class="flex items-center justify-center p-3 font-medium text-white rounded-lg bg-brand-500 text-theme-sm hover:bg-brand-600"
     >
       Millorar Pla
@@ -23,6 +21,4 @@ import { useAuth } from '@/composables/useAuth'
 // 🔐 Auth
 const { user, loadUser } = useAuth()
 loadUser()
-
-console.log(user.plan)
 </script>

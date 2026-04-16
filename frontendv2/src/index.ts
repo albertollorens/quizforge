@@ -95,6 +95,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/ticketrequest',
+      name: 'Nou Ticket',
+      component: () => import('../views/Support/TicketRequest.vue'),
+      meta: {
+        title: 'Nou Ticket',
+      },
+    },
+    {
       path: '/ticketreply',
       name: 'Resposta del Ticket',
       component: () => import('../views/Support/TicketReply.vue'),

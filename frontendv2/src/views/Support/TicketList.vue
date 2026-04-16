@@ -57,13 +57,24 @@
               </button>
             </div>
 
-            <!-- SEARCH -->
-            <input
-              v-model="search"
-              type="text"
-              placeholder="Buscar..."
-              class="px-4 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600"
-            />
+            <!-- ACTIONS -->
+            <div class="flex gap-2 items-center">
+              <!-- SEARCH -->
+              <input
+                v-model="search"
+                type="text"
+                placeholder="Buscar..."
+                class="px-4 py-2 border rounded-lg dark:bg-slate-700 dark:border-slate-600"
+              />
+
+              <!-- NEW TICKET BUTTON -->
+              <button
+                @click="createNewTicket"
+                class="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 text-sm font-medium"
+              >
+                <span class="text-white">+</span> Nou ticket
+              </button>
+            </div>
 
           </div>
 
@@ -136,13 +147,16 @@
 import AdminLayout from '../../components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import { ref, computed } from 'vue'
-const currentPageTitle = ref('Tickets de suport')
+import { useRouter } from 'vue-router'
 
+const currentPageTitle = ref('Tickets de suport')
 
 // 🔍 filtros
 const filters = ['Tots', 'Resolts', 'Pendents']
 const activeFilter = ref('All')
 const search = ref('')
+
+const router = useRouter()
 
 // 📊 datos mock
 const tickets = ref([
@@ -200,4 +214,10 @@ function statusClass(status) {
     ? 'bg-green-100 text-green-600'
     : 'bg-orange-100 text-orange-600'
 }
+
+// ➕ crear nuevo ticket
+function createNewTicket() {  
+  router.push('/ticketrequest')
+}
+
 </script>
