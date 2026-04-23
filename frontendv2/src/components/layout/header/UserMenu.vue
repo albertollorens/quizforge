@@ -5,7 +5,7 @@
       @click.prevent="toggleDropdown"
     >
       <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-        <img src="/images/user/owner.jpg" alt="User" />
+        <img :src="user.picture"/>
       </span>
 
       <span class="block mr-1 font-medium text-theme-sm">{{ user.username }} </span>
@@ -20,7 +20,7 @@
     >
       <div>
         <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-          {{ user.username }} ({{ user.rol }})
+          {{ user.username }} {{ user.rol==='admin' ? '(Admin)' : '' }}
         </span>
         <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
           {{ user.email }}

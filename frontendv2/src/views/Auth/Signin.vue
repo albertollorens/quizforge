@@ -253,7 +253,9 @@
                 </div>
             </div>
           </div>
+          <div id="googleButton"></div>
         </div>
+        <!-- Right panel -->
         <div
           class="relative items-center hidden w-full h-full lg:w-1/2 bg-brand-950 dark:bg-white/5 lg:grid"
         >
@@ -273,21 +275,20 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { AxiosError } from 'axios'
-import authService from '../../services/authService'
 import { useRouter } from 'vue-router'
-//import CommonGridShape from '@/components/common/CommonGridShape.vue'
-import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
-import { useGoogleAuth } from '@/composables/useGoogleAuth'
-import { GOOGLE_CLIENT_ID } from '@/config/googleConfig.ts'
+import authService from '../../services/authService'
+import FullScreenLayout from '../../components/layout/FullScreenLayout.vue'
+//import CommonGridShape from '../../components/layout/CommonGridShape.vue'
+import { useGoogleAuth } from '../../composables/useGoogleAuth'
+import { GOOGLE_CLIENT_ID } from '../../config/googleConfig'
 
 const router = useRouter()
-const error = ref('')
 
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const keepLoggedIn = ref(false)
+const error = ref('')
 
 const { signInWithGoogle, isLoading: googleLoading } = useGoogleAuth()
 
@@ -296,27 +297,20 @@ const togglePasswordVisibility = () => {
 }
 
 const handleGoogleLogin = async () => {
-  try {
-    await signInWithGoogle(GOOGLE_CLIENT_ID)
-  } catch (error) {
-    console.error('Error signing in with Google:', error)
-  }
+  await signInWithGoogle(GOOGLE_CLIENT_ID)
 }
 
 const login = async () => {
-  // Handle form submission
-  console.log('Form submitted', {
-    email: email.value,
-    password: password.value,
-    keepLoggedIn: keepLoggedIn.value,
-  })
   try {
     const res = await authService.login(email.value, password.value)
+
     authService.saveToken(res.data.token)
+
     router.push('/dashboard')
-  } catch (err: unknown) {
-    const axiosError = err as AxiosError<{ error: string }>
-    error.value = axiosError.response?.data?.error || 'Error desconocido'
+
+  } catch (err: any) {
+    error.value = err?.response?.data?.error || 'Error login'
+    console.error(err)
   }
 }
 </script>

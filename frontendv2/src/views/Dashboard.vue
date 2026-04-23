@@ -8,7 +8,7 @@
           <div class="bg-white dark:bg-slate-900 shadow rounded-2xl p-6 flex justify-between items-center">
             <div>
               <h2 class="text-2xl font-bold">
-                Benvingut, {{ user.username }} ({{ user.rol }}) 👋
+                Benvingut, {{ user.username }} ({{ user.rol}}) 👋
               </h2>
             </div>
           </div>
@@ -42,7 +42,7 @@
           <div class="bg-white dark:bg-slate-900 shadow rounded-2xl p-6 flex justify-between items-center">
             <div>
               <h2 class="text-2xl font-bold">
-                Benvingut, {{ user.username }} ({{ user.rol }})👋
+                Benvingut, {{ user.username }} 👋
               </h2>
               <p class="text-slate-500 mt-1">
                 Continua creant quizzes i millorant els resultats.

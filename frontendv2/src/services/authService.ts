@@ -75,6 +75,7 @@ export default {
     localStorage.setItem('user', JSON.stringify({
       id: payload.sub,
       username: payload.username,
+      picture: payload.picture,
       email: payload.email,
       rol: payload.rol,
       plan: payload.plan,
@@ -129,10 +130,10 @@ export default {
     const response = await api.post('/auth/google', {
       token: googleToken
     })
-
     if (response.data?.token) {
       this.saveToken(response.data.token)
     }
+    //console.log('Response from /auth/google:', response.data)
 
     return response.data
   },

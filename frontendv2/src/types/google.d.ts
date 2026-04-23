@@ -11,6 +11,19 @@ declare global {
             cancel_on_tap_outside?: boolean
           }) => void
           prompt: () => void
+
+          renderButton: (
+            parent: HTMLElement,
+            options?: {
+              theme?: string
+              size?: string
+              text?: string
+              shape?: string
+              width?: number
+            }
+          ) => void
+
+          cancel: () => void
         }
       }
     }

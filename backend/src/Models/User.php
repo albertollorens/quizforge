@@ -43,7 +43,11 @@ class User {
             "INSERT INTO users (name, email, password, provider) VALUES (?, ?, ?, 'local')"
         );
 
-        return $stmt->execute([$username, $email, $hash]);
+        if($stmt->execute([$username, $email, $hash])) {
+            return $this->db->lastInsertId();
+        }
+
+        return false;
     }
 
     // Crear usuario con Google OAuth
@@ -53,7 +57,11 @@ class User {
              VALUES (?, ?, ?, ?, 'google', 'free', 'user')"
         );
 
-        return $stmt->execute([$name, $email, $googleId, $profilePictureUrl]);
+        if($stmt->execute([$name, $email, $googleId, $profilePictureUrl])) {
+            return $this->db->lastInsertId();
+        }
+
+        return false;
     }
 
     // Crear usuario con Microsoft OAuth
@@ -63,7 +71,11 @@ class User {
              VALUES (?, ?, ?, ?, 'microsoft', 'free', 'user')"
         );
 
-        return $stmt->execute([$name, $email, $microsoftId, $profilePictureUrl]);
+        if($stmt->execute([$name, $email, $microsoftId, $profilePictureUrl])) {
+            return $this->db->lastInsertId();
+        }
+
+        return false;
     }
 
     // Actualizar usuario existente con datos de Google
