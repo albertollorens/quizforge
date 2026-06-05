@@ -122,7 +122,7 @@ class LoginController {
         $data = $request->getParsedBody();
 
         if (!isset($data['token'])) {
-            //error_log("AuthWithGoogle: Token no proporcionado");
+            error_log("AuthWithGoogle: Token no proporcionado");
             $response->getBody()->write(json_encode([
                 'error' => 'Token de Google requerido'
             ]));
@@ -132,7 +132,7 @@ class LoginController {
 
         try {
             $googleToken = $data['token'];
-            //error_log("AuthWithGoogle: Token recibido - " . $googleToken);
+            error_log("AuthWithGoogle: Token recibido - " . $googleToken);
 
             // Detectar entorno
             //$isDevelopment = ($_ENV['APP_ENV'] ?? 'development') === 'development';
@@ -144,7 +144,7 @@ class LoginController {
             );//GoogleTokenHelper::verifyAndDecode($googleToken, !$isDevelopment);
 
             if (!$decodedToken) {
-                //error_log("AuthWithGoogle:  Token de Google inválido");
+                error_log("AuthWithGoogle:  Token de Google inválido");
                 throw new \Exception('Token de Google inválido');
             }
 
@@ -155,7 +155,7 @@ class LoginController {
             $picture = $decodedToken['picture'] ?? null;
 
             if (!$googleId || !$email) {
-                //error_log("AuthWithGoogle: Datos incompletos del token de Google - googleId: " . ($googleId ?? 'null') . ", email: " . ($email ?? 'null'));
+                error_log("AuthWithGoogle: Datos incompletos del token de Google - googleId: " . ($googleId ?? 'null') . ", email: " . ($email ?? 'null'));
                 throw new \Exception('Datos incompletos del token de Google');
             }
 
@@ -168,7 +168,7 @@ class LoginController {
 
             if ($user) {
                 // ✔ Usuario ya existe con Google → login directo
-                //error_log("AuthWithGoogle: Usuario encontrado por google_id: " . $user['id']);
+                error_log("AuthWithGoogle: Usuario encontrado por google_id: " . $user['id']);
 
                 // Actualizar foto si cambia
                 if ($picture && $user['profile_picture'] !== $picture) {
@@ -177,18 +177,18 @@ class LoginController {
 
             } else {
                 // 2. Buscar por email
-                //error_log("AuthWithGoogle: Usuario no encontrado por google_id, buscando por email: " . $email);
+                error_log("AuthWithGoogle: Usuario no encontrado por google_id, buscando por email: " . $email);
                 $user = $this->user->findByEmail($email);
 
                 if ($user) {
                     // ✔ Usuario existe (registro local) → vincular Google
-                    //error_log("AuthWithGoogle: Usuario encontrado por email, vinculando Google - ID: " . $user['id']);
+                    error_log("AuthWithGoogle: Usuario encontrado por email, vinculando Google - ID: " . $user['id']);
                     $this->user->updateWithGoogle($user['id'], $googleId, $picture);
                     $user = $this->user->findById($user['id']);
 
                 } else {
                     // 3. Usuario nuevo → crear
-                    //error_log("AuthWithGoogle: Creando nuevo usuario con Google - ID: " . $googleId);
+                    error_log("AuthWithGoogle: Creando nuevo usuario con Google - ID: " . $googleId);
                     $created = $this->user->createWithGoogle($googleId, $email, $name, $picture);
 
                     if (!$created) {
@@ -207,7 +207,7 @@ class LoginController {
             ===================================== */
 
             $payload = [
-                'iss' => 'quizforge.local',
+                'iss' => 'quizforge.es',
                 'iat' => time(),
                 'exp' => time() + 3600,
                 'sub' => $user['id'],
