@@ -73,6 +73,8 @@
                   </button>
                   <button
                     class="inline-flex items-center justify-center gap-3 rounded-3xl bg-slate-100 px-7 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-800"
+                    @click="handleMicrosoftLogin"
+                    :disabled="msLoading"
                   >
                     <svg
                       width="21"
@@ -280,7 +282,7 @@ import authService from '../../services/authService'
 import FullScreenLayout from '../../components/layout/FullScreenLayout.vue'
 //import CommonGridShape from '../../components/layout/CommonGridShape.vue'
 import { useGoogleAuth } from '../../composables/useGoogleAuth'
-import { GOOGLE_CLIENT_ID } from '../../config/googleConfig'
+import { useMicrosoftAuth } from '../../composables/useMicrosoftAuth'
 
 const router = useRouter()
 
@@ -291,13 +293,18 @@ const keepLoggedIn = ref(false)
 const error = ref('')
 
 const { signInWithGoogle, isLoading: googleLoading } = useGoogleAuth()
+const { loginWithMicrosoft, isLoading: msLoading } = useMicrosoftAuth()
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
 }
 
 const handleGoogleLogin = async () => {
-  await signInWithGoogle(GOOGLE_CLIENT_ID)
+  await signInWithGoogle()
+}
+
+const handleMicrosoftLogin = async () => {
+  await loginWithMicrosoft()
 }
 
 const login = async () => {

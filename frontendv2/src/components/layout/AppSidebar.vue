@@ -217,7 +217,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRoute } from "vue-router";
-
+import { useAuth } from '@/composables/useAuth'
 import {
   AIIcon,
   UserCircleIcon,
@@ -244,11 +244,17 @@ import MailBox from "@/icons/MailBox.vue";
 import SupportIcon from "@/icons/SupportIcon.vue";
 import ChatIcon from "@/icons/ChatIcon.vue";
 
+// 🔐 Auth
+const { user, loadUser } = useAuth()
+loadUser()
+// 👑 Rol
+const isAdmin = computed(() => user.value?.rol === 'admin')
+
 const route = useRoute();
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 
-const menuGroups = [
+const menuGroupsData = [
   {
     title: "Menu",
     items: [
@@ -260,13 +266,14 @@ const menuGroups = [
       {
         icon: PlusIcon,
         name: "Nou qüestionari",
-        path: "/dashboard/nouquiz",
+        path: "/dashboard/nouquiz"
       },
       {
         icon: AIIcon,
         name: "AI quiz",
         path: "/dashboard/aiquiz",
-        state: 'new'
+        state: 'new',
+        rol: 'admin'
       },
       {
         icon: EcommerceIcon,
@@ -341,6 +348,11 @@ const menuGroups = [
     ]
   }
 ];
+
+const menuGroups = computed(() => menuGroupsData.map(group => ({
+  ...group,
+  items: group.items.filter(item => !item.rol || item.rol === user.value?.rol)
+})));
 
 const isActive = (path) => route.path === path;
 

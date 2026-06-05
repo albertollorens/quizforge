@@ -162,34 +162,98 @@ const router = useRouter()
 const tickets = ref([
   {
     id: 323534,
-    name: 'Lindsey Curtis',
-    email: 'demoemail@gmail.com',
-    subject: 'Issue with Dashboard Login Access',
+    name: 'María García',
+    email: 'maria.garcia@example.es',
+    subject: 'Problema con el acceso al panel de control',
     date: '12 Feb, 2027',
     status: 'Solved'
   },
   {
     id: 323535,
-    name: 'Kaiya George',
-    email: 'demoemail@gmail.com',
-    subject: 'Billing Information Not Updating Properly',
+    name: 'Juan Pérez',
+    email: 'juan.perez@example.es',
+    subject: 'La información de facturación no se actualiza correctamente',
     date: '13 Mar, 2027',
     status: 'Pending'
   },
   {
     id: 323536,
-    name: 'Zain Geidt',
-    email: 'demoemail@gmail.com',
-    subject: 'Bug Found in Dark Mode Layout',
+    name: 'Vicent Ferrer',
+    email: 'vicent.ferrer@example.es',
+    subject: 'Error en el mode fosc del layout',
     date: '19 Mar, 2027',
     status: 'Pending'
   },
   {
     id: 323537,
     name: 'Abram Schleifer',
-    email: 'demoemail@gmail.com',
+    email: 'abram.schleifer@example.com',
     subject: 'Request to Add New Integration Feature',
     date: '25 Apr, 2027',
+    status: 'Solved'
+  },
+  {
+    id: 323538,
+    name: 'Carmen López',
+    email: 'carmen.lopez@example.es',
+    subject: 'Dificultad para iniciar sesión en la aplicación',
+    date: '02 May, 2027',
+    status: 'Pending'
+  },
+  {
+    id: 323539,
+    name: 'John Smith',
+    email: 'john.smith@example.uk',
+    subject: 'Issue with User Profile Update',
+    date: '15 May, 2027',
+    status: 'Solved'
+  },
+  {
+    id: 323540,
+    name: 'Anna Martínez',
+    email: 'anna.martinez@example.es',
+    subject: 'Solicitud de nueva funcionalidad de integración',
+    date: '20 May, 2027',
+    status: 'Pending'
+  },
+  {
+    id: 323541,
+    name: 'David Wilson',
+    email: 'david.wilson@example.us',
+    subject: 'Bug in Mobile Responsiveness',
+    date: '28 May, 2027',
+    status: 'Solved'
+  },
+  {
+    id: 323542,
+    name: 'Pau Ribes',
+    email: 'pau.ribes@example.es',
+    subject: 'Problema amb l\'accés al dashboard',
+    date: '05 Jun, 2027',
+    status: 'Pending'
+  },
+  {
+    id: 323543,
+    name: 'Laura Fernández',
+    email: 'laura.fernandez@example.es',
+    subject: 'Error en la actualización de datos de usuario',
+    date: '10 Jun, 2027',
+    status: 'Solved'
+  },
+  {
+    id: 323544,
+    name: 'Michael Johnson',
+    email: 'michael.johnson@example.ca',
+    subject: 'Request for API Documentation Update',
+    date: '15 Jun, 2027',
+    status: 'Pending'
+  },
+  {
+    id: 323545,
+    name: 'Isabel Ruiz',
+    email: 'isabel.ruiz@example.es',
+    subject: 'Duda sobre la configuración de notificaciones',
+    date: '22 Jun, 2027',
     status: 'Solved'
   }
 ])

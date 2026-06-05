@@ -37,7 +37,7 @@ class LoginController {
 
         // Generar JWToken real
         $payload = [
-            'iss' => 'quizforge.local',          // Emisor
+            'iss' => 'quizforge.es',          // Emisor
             'iat' => time(),                      // Temps d'emisió
             'exp' => time() + 3600,               // Expira en 1 hora
             'sub' => $user['id'],                 // ID d'usuari

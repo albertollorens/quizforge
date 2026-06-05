@@ -34,7 +34,7 @@
           <div class="bg-white dark:bg-slate-900 shadow rounded-2xl p-6">
             <h3 class="text-lg font-semibold mb-4">Accions ràpides</h3>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div :class="isAdmin ? 'grid grid-cols-1 md:grid-cols-4 gap-4' : 'grid grid-cols-1 md:grid-cols-3 gap-3'">
 
               <button class="p-4 rounded-xl border hover:bg-slate-50 transition text-left"
                     @click="handleNewQuiz"
@@ -43,8 +43,10 @@
                 <p class="text-sm text-slate-500">Crea un nou quiz</p>
               </button>
               
-              <button class="p-4 rounded-xl border hover:bg-slate-50 transition text-left"
-                    @click="handleNewAIQuiz"
+              <button 
+                  v-if="isAdmin"
+                  class="p-4 rounded-xl border hover:bg-slate-50 transition text-left"
+                  @click="handleNewAIQuiz"
               >
                 <p class="font-semibold">➕ IA quiz</p>
                 <p class="text-sm text-slate-500">Crea un nou quiz amb IA</p>
@@ -89,8 +91,6 @@
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import PageBreadcrumb from "@/components/common/PageBreadcrumb.vue";
 import Modal from "@/components/ui/Modal.vue";
-
-const currentPageTitle = ref("Qüestionaris");
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import QuizList from '@/components/quiz/QuizList.vue'
@@ -102,7 +102,15 @@ import {
   getQuiz,
   deleteQuiz
 } from '@/services/quizService'
+import { useAuth } from '@/composables/useAuth'
 
+// 🔐 Auth
+const { user, loadUser } = useAuth()
+loadUser()
+
+// 👑 Rol
+const isAdmin = computed(() => user.value?.rol === 'admin')
+const currentPageTitle = ref("Qüestionaris");
 const router = useRouter()
 const quizzes = ref([])
 const editingQuiz = ref(null)

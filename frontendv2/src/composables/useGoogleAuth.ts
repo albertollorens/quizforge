@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import authService from '@/services/authService'
+import { GOOGLE_CLIENT_ID } from '../config/googleConfig'
 
 const isGoogleLoaded = ref(false)
 const isLoading = ref(false)
@@ -57,13 +58,13 @@ export function useGoogleAuth() {
     }
   }
 
-  const initializeGoogle = (clientId: string) => {
+  const initializeGoogle = (GOOGLE_CLIENT_ID: string) => {
     if (!window.google?.accounts) {
       throw new Error('Google SDK no carregat')
     }
 
     window.google.accounts.id.initialize({
-      client_id: clientId,
+      client_id: GOOGLE_CLIENT_ID,
       callback: handleGoogleResponse,
       auto_select: false,
       cancel_on_tap_outside: true
@@ -73,12 +74,12 @@ export function useGoogleAuth() {
   /**
    * 🔥 NUEVO: renderButton (RECOMENDADO para Firefox)
    */
-  const renderGoogleButton = (elementId: string, clientId: string) => {
+  const renderGoogleButton = (elementId: string, GOOGLE_CLIENT_ID: string) => {
     if (!window.google?.accounts) {
       throw new Error('Google SDK no carregat')
     }
 
-    initializeGoogle(clientId)
+    initializeGoogle(GOOGLE_CLIENT_ID)
 
     const container = document.getElementById(elementId)
 
@@ -97,13 +98,13 @@ export function useGoogleAuth() {
   /**
    * 🔥 Login manual (fallback + compatibilidad)
    */
-  const signInWithGoogle = async (clientId: string) => {
+  const signInWithGoogle = async () => {
     try {
       if (!isGoogleLoaded.value) {
         await loadGoogleScript()
       }
 
-      initializeGoogle(clientId)
+      initializeGoogle(GOOGLE_CLIENT_ID)
 
       /**
        * ❌ NO dependemos de prompt (Firefox lo bloquea a veces)

@@ -71,6 +71,8 @@
 
                   <!-- Microsoft (igual que tenías) -->
                   <button
+                    @click="handleMicrosoftRegister"
+                    :disabled="msLoading"
                     class="inline-flex items-center justify-center gap-3 rounded-3xl bg-slate-100 px-7 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-900/70 dark:text-slate-100 dark:hover:bg-slate-800"
                   >
                     <svg width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -174,7 +176,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import authService from '../../services/authService'
 import { useGoogleAuth } from '../../composables/useGoogleAuth'
-import { GOOGLE_CLIENT_ID } from '../../config/googleConfig'
+import { useMicrosoftAuth } from '../../composables/useMicrosoftAuth'
 
 const router = useRouter()
 
@@ -186,9 +188,14 @@ const confirmPassword = ref('')
 const agreeToTerms = ref(false)
 
 const { signInWithGoogle, isLoading: googleLoading } = useGoogleAuth()
+const { loginWithMicrosoft, isLoading: msLoading } = useMicrosoftAuth()
 
 const handleGoogleRegister = async () => {
-  await signInWithGoogle(GOOGLE_CLIENT_ID)
+  await signInWithGoogle()
+}
+
+const handleMicrosoftRegister = async () => {
+  await loginWithMicrosoft()
 }
 
 const handleSubmit = async () => {

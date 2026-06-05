@@ -33,6 +33,7 @@
             v-for="cat in categories"
             :key="cat.title"
             class="bg-white dark:bg-slate-800 p-5 rounded-xl shadow hover:shadow-md transition cursor-pointer"
+            @click="router.push(cat.url)"
           >
             <div class="text-2xl mb-2">{{ cat.icon }}</div>
             <h3 class="font-semibold text-gray-800 dark:text-white">
@@ -85,8 +86,9 @@
           </p>
           <button
             class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl"
+            @click="goToContact"
           >
-            Contactar suport
+            Contactar amb suport
           </button>
         </div>
 
@@ -100,35 +102,39 @@
 import AdminLayout from '../../components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 const currentPageTitle = ref('Ajuda')
 
 const search = ref('')
 const openIndex = ref(null)
+  
 
 // 📚 Categories
 const categories = [
-  { icon: '🚀', title: 'Com començar', desc: 'Primers passos amb l’app' },
-  { icon: '💳', title: 'Plans i facturació', desc: 'Subscripcions i pagaments' },
-  { icon: '⚙️', title: 'Configuració', desc: 'Preferències i perfil' }
+  { icon: '🚀', title: 'Com començar', desc: 'Primers passos amb l’app', url: '/getting-started' },
+  { icon: '💳', title: 'Plans i facturació', desc: 'Subscripcions i pagaments', url: '/userplan'},
+  { icon: '⚙️', title: 'Configuració', desc: 'Preferències i perfil', url: '/settings' }
 ]
 
 // ❓ FAQs
 const faqs = [
   {
     q: 'Com crear un quiz?',
-    a: 'Ves a Dashboard i fes clic a "Crear quiz".'
+    a: 'Ves a Dashboard i fes clic a "Nou qüestionari". Si disposes del pla Pro, podràs utilitzar l\'opció AI quiz per a generar qüestionaris automàtics amb IA.'
   },
   {
     q: 'Com funciona el pla Free?',
-    a: 'El pla Free té limitacions d’ús mensual.'
+    a: 'El pla Free té limitacions d’ús mensual. Pots crear 10 qüestionaris, sense límit de preguntes. Per a més funcionalitats, considera actualitzar al pla Pro.'
   },
   {
     q: 'Puc canviar el meu pla?',
-    a: 'Sí, des de la secció de facturació.'
+    a: 'Sí, des de la secció de Configuració->Canviar pla. També pots actualitzar el teu pla en qualsevol moment des del mateix menú de l\'esquerra al botó "Millorar pla" o des de la secció principal del dashboard. Finalment, pots contactar amb suport per a assistència personalitzada.'
   },
   {
     q: 'Com recuperar la contrasenya?',
-    a: 'Fes clic a "Has oblidat la contrasenya?" al login.'
+    a: 'Fes clic a "Has oblidat la contrasenya?" al login. Rebràs un correu amb instruccions per a restablir la teva contrasenya. Si no reps el correu, comprova la carpeta de spam o contacta amb suport.'
   }
 ]
 
@@ -138,6 +144,10 @@ const filteredFaqs = computed(() =>
     f.q.toLowerCase().includes(search.value.toLowerCase())
   )
 )
+
+function goToContact() {
+  router.push('/ticketrequest')
+}
 
 // 🔽 Toggle FAQ
 function toggle(index) {
