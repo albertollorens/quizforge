@@ -25,7 +25,7 @@ class LoginController {
         $plan = $data['plan'] ?? '';
 
         $user = $this->user->findByEmail($email);
-        $user['quizzes'] = $this->user->getNumQuizzes($user['id']);
+        $user['quizzes'] = $this->user?$this->user->getNumQuizzes($user['id']):0;
 
         if (!$user || !password_verify($password, $user['password'])) {
             $response->getBody()->write(json_encode([
