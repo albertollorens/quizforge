@@ -58,7 +58,7 @@
                 loop 
                 playsinline
               >
-                <source src="/images/video-thumb/demofinal.mp4" type="video/mp4" />
+                <source src="/images/video-thumb/demofinal2.mp4" type="video/mp4" />
               </video>
 
             </div>
